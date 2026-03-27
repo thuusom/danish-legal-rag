@@ -1,0 +1,77 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.9.2
+    container_name: danish-legal-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:6333/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  ingest:
+    build:
+      context: .
+      dockerfile: ingest/Dockerfile
+    container_name: danish-legal-ingest
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - EMBEDDING_PROVIDER=${EMBEDDING_PROVIDER:-sentence-transformers}
+      - ST_MODEL_NAME=${ST_MODEL_NAME:-paraphrase-multilingual-mpnet-base-v2}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_EMBEDDING_MODEL=${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
+      - FETCH_LIVE=${FETCH_LIVE:-false}
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: danish-legal-api
+    ports:
+      - "8000:8000"
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - EMBEDDING_PROVIDER=${EMBEDDING_PROVIDER:-sentence-transformers}
+      - ST_MODEL_NAME=${ST_MODEL_NAME:-paraphrase-multilingual-mpnet-base-v2}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_EMBEDDING_MODEL=${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
+      - LLM_PROVIDER=${LLM_PROVIDER:-anthropic}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-opus-4-6}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  mcp:
+    build:
+      context: .
+      dockerfile: mcp/Dockerfile
+    container_name: danish-legal-mcp
+    environment:
+      - API_BASE_URL=http://api:8000
+    depends_on:
+      - api
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  qdrant_data:

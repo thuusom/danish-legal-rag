@@ -1,0 +1,82 @@
+{
+  "law_code": "AFL",
+  "law_name": "Afskrivningsloven",
+  "law_title": "Bekendtgørelse af lov om skattemæssige afskrivninger",
+  "law_number": "LBK nr 1147 af 29/08/2016",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2016/1147",
+  "effective_date": "2016-08-29",
+  "provisions": [
+    {
+      "chapter": "Kapitel 1 – Afskrivning på bygninger og installationer",
+      "section": "§ 1",
+      "subsection": null,
+      "item": null,
+      "title": "Bygninger anvendt erhvervsmæssigt",
+      "text": "Erhvervsmæssigt benyttede bygninger kan afskrives efter reglerne i dette kapitel."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Immaterielle anlægsaktiver – særlige rettigheder",
+      "text": "Udgifter til erhvervelse af særlig fremstillingsmetode eller lignende (knowhow), patentret, forfatter- og kunstnerret og ret ifølge mønsterloven, samt udgifter til erhvervelse af licens til at benytte sådanne rettigheder, kan afskrives med indtil 1/7 af anskaffelsessummen for hvert indkomstår. Afskrivning sker med virkning fra og med det indkomstår, hvori udgifterne afholdes."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Goodwill og andre immaterielle aktiver",
+      "text": "Udgifter til erhvervelse af goodwill, herunder kundekreds, forretningsforbindelser og lignende, samt udgifter til erhvervelse af rettigheder, der ikke er nævnt i stk. 1, kan afskrives med indtil 1/7 af anskaffelsessummen for hvert indkomstår. Afskrivning sker med virkning fra og med det indkomstår, hvori udgifterne afholdes."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40",
+      "subsection": "stk. 3",
+      "item": null,
+      "title": "Negativ anskaffelsessum",
+      "text": "Udgifter til erhvervelse af aktiver som nævnt i stk. 1 og 2 kan straksafskrives, hvis anskaffelsessummen ikke overstiger et grundbeløb på 12.800 kr. (2010-niveau). Grundbeløbet reguleres efter personskattelovens § 20."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40 C",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "EDB-programmer (software) – skattemæssig behandling",
+      "text": "Udgifter til erhvervelse af EDB-programmer (software) kan enten fradrages fuldt ud i det indkomstår, hvori udgifterne er afholdt (straksafskrivning), eller afskrives med lige store beløb over 3 år (33⅓ pct. årligt). Den skattepligtige vælger selv metoden ved den første afskrivning, og valget er bindende for det pågældende programs levetid."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40 C",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "EDB-programmer – egenudviklet software",
+      "text": "Udgifter til udvikling af egne EDB-programmer behandles på samme måde som udgifter til erhvervelse, jf. stk. 1, forudsat at programmet benyttes erhvervsmæssigt. Udgifterne kan enten straksafskrives eller afskrives over 3 år."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40 C",
+      "subsection": "stk. 3",
+      "item": null,
+      "title": "EDB-programmer – bundtet software",
+      "text": "Udgifter til EDB-programmer, der er bundtet med anskaffelsen af hardware, og som ikke er særskilt prisfastsat, behandles skattemæssigt som en del af anskaffelsessummen for hardwaren og afskrives efter reglerne herfor."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 41",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afskrivning ved salg",
+      "text": "Sælges et aktiv, som der er afskrevet på efter §§ 40-40 C, medregnes en eventuel fortjeneste eller tab ved opgørelsen af den skattepligtige indkomst i det indkomstår, hvori salget finder sted. Fortjeneste eller tab opgøres som forskellen mellem afståelsessum og den afskrevne værdi."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 45",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Erhvervsmæssig brug – krav",
+      "text": "Afskrivning efter §§ 40-40 C forudsætter, at aktivet benyttes erhvervsmæssigt i den skattepligtiges virksomhed. Aktiver, der benyttes både erhvervsmæssigt og privat, kan kun afskrives for den del, der svarer til den erhvervsmæssige benyttelse."
+    }
+  ]
+}

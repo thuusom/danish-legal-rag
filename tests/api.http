@@ -1,0 +1,50 @@
+@baseUrl = http://localhost:8000
+
+### Health check
+GET {{baseUrl}}/health
+
+HTTP 200
+
+### Ask about software depreciation (primary test)
+POST {{baseUrl}}/ask
+Content-Type: application/json
+
+{
+  "question": "Hvordan afskrives immaterielle aktiver såsom software skattemæssigt?"
+}
+
+HTTP 200
+Content-Type: application/json
+
+?? js
+  const body = JSON.parse(response.body);
+  assert(body.answer && body.answer.length > 0, "answer skal være til stede");
+  assert(Array.isArray(body.references) && body.references.length > 0, "mindst én reference kræves");
+  assert(body.references[0].law, "reference skal indeholde lawnavn");
+  assert(body.references[0].section, "reference skal indeholde paragraf");
+
+### Ask about annual accounts
+POST {{baseUrl}}/ask
+Content-Type: application/json
+
+{
+  "question": "Hvad er reglerne for indregning af immaterielle aktiver i årsregnskabet?"
+}
+
+HTTP 200
+
+### List ingested laws
+GET {{baseUrl}}/laws
+
+HTTP 200
+
+### Search endpoint
+POST {{baseUrl}}/search
+Content-Type: application/json
+
+{
+  "query": "software afskrivning",
+  "limit": 5
+}
+
+HTTP 200

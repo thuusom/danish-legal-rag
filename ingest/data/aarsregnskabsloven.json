@@ -1,0 +1,74 @@
+{
+  "law_code": "ARL",
+  "law_name": "Årsregnskabsloven",
+  "law_title": "Bekendtgørelse af årsregnskabsloven",
+  "law_number": "LBK nr 1580 af 10/12/2015",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2015/1580",
+  "effective_date": "2015-12-10",
+  "provisions": [
+    {
+      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "section": "§ 33",
+      "subsection": null,
+      "item": null,
+      "title": "Immaterielle anlægsaktiver – definition og indregning",
+      "text": "Immaterielle anlægsaktiver er identificerbare ikke-monetære aktiver uden fysisk substans. Et immaterielt anlægsaktiv indregnes i balancen, når det er sandsynligt, at fremtidige økonomiske fordele, der kan henføres til aktivet, vil tilgå virksomheden, og aktivets kostpris kan måles pålideligt."
+    },
+    {
+      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "section": "§ 33",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Immaterielle anlægsaktiver – eksempler",
+      "text": "Immaterielle anlægsaktiver omfatter bl.a. udviklingsomkostninger, erhvervede patenter, licenser og lignende rettigheder, goodwill samt software (EDB-programmer), der er erhvervet separat eller udviklet internt til brug i virksomheden."
+    },
+    {
+      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "section": "§ 34",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afskrivning af immaterielle anlægsaktiver",
+      "text": "Immaterielle anlægsaktiver med begrænset brugstid afskrives systematisk over den forventede brugstid. Afskrivningsmetoden skal afspejle det forventede forbrug af de fremtidige økonomiske fordele, der er knyttet til aktivet."
+    },
+    {
+      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "section": "§ 34",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Afskrivningsperiode for software",
+      "text": "For software, der erhverves eller udvikles til brug i virksomheden, anvendes typisk en afskrivningsperiode på 3-5 år, medmindre en kortere eller længere periode kan begrundes ud fra aktivets forventede brugstid. Afskrivning påbegyndes, når aktivet er klar til brug."
+    },
+    {
+      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "section": "§ 35",
+      "subsection": null,
+      "item": null,
+      "title": "Immaterielle aktiver med ubegrænset brugstid",
+      "text": "Immaterielle anlægsaktiver, som vurderes at have ubegrænset brugstid, afskrives ikke, men testes i stedet for nedskrivningsbehov mindst én gang årligt. Brugstiden skal revurderes hvert år."
+    },
+    {
+      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "section": "§ 36",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Internt oparbejdede immaterielle aktiver",
+      "text": "Omkostninger i forskningsfasen for internt oparbejdede immaterielle aktiver indregnes altid som en omkostning i resultatopgørelsen i den periode, de afholdes. Det er ikke tilladt at aktivere udgifter i forskningsfasen."
+    },
+    {
+      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "section": "§ 36",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Udviklingsfasen",
+      "text": "Et internt oparbejdet immaterielt aktiv opstået i udviklingsfasen kan indregnes, hvis virksomheden kan påvise: (a) den tekniske gennemførlighed af at færdiggøre aktivet, (b) hensigten om at færdiggøre og bruge eller sælge aktivet, (c) evnen til at bruge eller sælge aktivet, (d) sandsynlighed for fremtidige ekonomiske fordele, (e) tilgængelighed af ressourcer til at færdiggøre aktivet, og (f) evnen til pålideligt at måle de udgifter, der kan henføres til aktivet under udviklingen."
+    },
+    {
+      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "section": "§ 37",
+      "subsection": null,
+      "item": null,
+      "title": "Oplysningskrav for immaterielle aktiver",
+      "text": "Virksomheden skal i noterne oplyse om de anvendte afskrivningsmetoder og afskrivningsperioder for immaterielle anlægsaktiver. Derudover skal der oplyses om kostpris, akkumulerede afskrivninger og eventuelle nedskrivninger for hver kategori af immaterielle aktiver."
+    }
+  ]
+}
