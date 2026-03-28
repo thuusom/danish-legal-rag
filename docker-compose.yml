@@ -24,8 +24,20 @@ services:
       # These override .env for service-internal networking
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
+      # Point HuggingFace to the shared cache volume so the embedding model
+      # is only downloaded once (shared with the api service).
+      - HF_HOME=/cache/huggingface
+      - TRANSFORMERS_CACHE=/cache/huggingface/hub
+    volumes:
+      # Shared model cache – avoids re-downloading ~440 MB on every restart.
+      - hf_model_cache:/cache/huggingface
     depends_on:
       - qdrant
+    # restart: "no" – ingest is a one-shot job.
+    # It runs to completion, writes chunks+vectors to Qdrant, then exits.
+    # This is intentional: Qdrant persists all data in qdrant_data volume,
+    # so there is nothing to keep running. Re-run manually with:
+    #   docker compose run --rm ingest
     restart: "no"
 
   api:
@@ -42,9 +54,14 @@ services:
       # These override .env for service-internal networking
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
+      # Point HuggingFace to the shared cache volume.
+      - HF_HOME=/cache/huggingface
+      - TRANSFORMERS_CACHE=/cache/huggingface/hub
     volumes:
-      # Mount answer-style.md so edits take effect without rebuilding the image.
-      # Delete or leave empty to use the version baked into the image.
+      # Same shared model cache as ingest – model downloaded only once total.
+      - hf_model_cache:/cache/huggingface
+      # Mount answer-style.md so tone/style edits take effect without rebuilding.
+      # Edit the file freely; changes are picked up on the next API call.
       - ./answer-style.md:/app/answer-style.md:ro
     depends_on:
       - qdrant
@@ -65,3 +82,7 @@ services:
 
 volumes:
   qdrant_data:
+    # Qdrant vector store – persists all ingested chunks and their embeddings.
+  hf_model_cache:
+    # HuggingFace model cache – the ~440 MB embedding model is downloaded here
+    # on first run and reused across restarts and rebuilds by both ingest and api.
