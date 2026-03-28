@@ -11,7 +11,9 @@ Endpoints:
 """
 from __future__ import annotations
 import logging
+import os
 import sys
+import time
 
 # Add app root to path
 sys.path.insert(0, "/app")
@@ -29,6 +31,22 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+
+def _wait_for_qdrant(max_retries: int = 30, delay: float = 2.0) -> None:
+    """Block at startup until Qdrant is reachable (no Docker healthcheck needed)."""
+    from qdrant_client import QdrantClient
+    host = os.environ.get("QDRANT_HOST", "localhost")
+    port = int(os.environ.get("QDRANT_PORT", "6333"))
+    for attempt in range(max_retries):
+        try:
+            QdrantClient(host=host, port=port).get_collections()
+            logger.info("Qdrant is ready")
+            return
+        except Exception as exc:
+            logger.info(f"Waiting for Qdrant ({attempt + 1}/{max_retries}): {exc}")
+            time.sleep(delay)
+    raise RuntimeError("Qdrant did not become ready in time")
 
 app = FastAPI(
     title="Dansk Juridisk RAG API",
@@ -50,8 +68,9 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    """Pre-warm the embedding model at startup."""
+    """Wait for Qdrant, then pre-warm the embedding model."""
     logger.info("Starting Danish Legal RAG API...")
+    _wait_for_qdrant()
     try:
         embedder = get_query_embedder()
         logger.info(f"Embedding model loaded: {embedder.model_name}")

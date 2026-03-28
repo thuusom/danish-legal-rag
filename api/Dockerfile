@@ -21,6 +21,10 @@ RUN pip install --no-cache-dir -r /app/api/requirements.txt
 COPY api/ /app/api/
 RUN touch /app/api/__init__.py
 
+# Copy tests
+COPY tests/ /app/tests/
+RUN touch /app/tests/__init__.py
+
 ENV PYTHONPATH=/app
 
 EXPOSE 8000

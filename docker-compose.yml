@@ -1,17 +1,15 @@
 services:
   qdrant:
-    image: qdrant/qdrant:v1.9.2
+    image: qdrant/qdrant:latest
     container_name: danish-legal-qdrant
     ports:
       - "6333:6333"
       - "6334:6334"
     volumes:
       - qdrant_data:/qdrant/storage
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:6333/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+    # No Docker health check: the qdrant image is a minimal Debian slim binary
+    # with no curl/wget/bash available. Readiness is handled by the retry loops
+    # in wait_for_qdrant() (ingest) and wait_for_qdrant_api() (api).
     restart: unless-stopped
 
   ingest:
@@ -19,17 +17,15 @@ services:
       context: .
       dockerfile: ingest/Dockerfile
     container_name: danish-legal-ingest
+    # env_file reads .env directly (bypasses shell env overrides)
+    env_file:
+      - .env
     environment:
+      # These override .env for service-internal networking
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
-      - EMBEDDING_PROVIDER=${EMBEDDING_PROVIDER:-sentence-transformers}
-      - ST_MODEL_NAME=${ST_MODEL_NAME:-paraphrase-multilingual-mpnet-base-v2}
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
-      - OPENAI_EMBEDDING_MODEL=${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
-      - FETCH_LIVE=${FETCH_LIVE:-false}
     depends_on:
-      qdrant:
-        condition: service_healthy
+      - qdrant
     restart: "no"
 
   api:
@@ -39,25 +35,15 @@ services:
     container_name: danish-legal-api
     ports:
       - "8000:8000"
+    # env_file reads .env directly (bypasses shell env overrides)
+    env_file:
+      - .env
     environment:
+      # These override .env for service-internal networking
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
-      - EMBEDDING_PROVIDER=${EMBEDDING_PROVIDER:-sentence-transformers}
-      - ST_MODEL_NAME=${ST_MODEL_NAME:-paraphrase-multilingual-mpnet-base-v2}
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
-      - OPENAI_EMBEDDING_MODEL=${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
-      - LLM_PROVIDER=${LLM_PROVIDER:-anthropic}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
-      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-opus-4-6}
-      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
     depends_on:
-      qdrant:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      - qdrant
     restart: unless-stopped
 
   mcp:

@@ -64,6 +64,9 @@ def search_similar(
     generated at query time (not during ingestion).
 
     Optionally filter by law_code for more targeted retrieval.
+
+    Uses query_points() (qdrant-client >= 1.10) which supersedes the
+    deprecated search() method removed in 1.17.
     """
     search_filter = None
     if filter_law:
@@ -71,16 +74,16 @@ def search_similar(
             must=[FieldCondition(key="law_code", match=MatchValue(value=filter_law))]
         )
 
-    results = client.search(
+    response = client.query_points(
         collection_name=COLLECTION_NAME,
-        query_vector=query_vector,
+        query=query_vector,
         limit=limit,
         query_filter=search_filter,
         with_payload=True,
     )
     return [
         {"score": r.score, "payload": r.payload}
-        for r in results
+        for r in response.points
     ]
 
 

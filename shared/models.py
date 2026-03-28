@@ -92,7 +92,7 @@ class LegalChunk(BaseModel):
 
 class AskRequest(BaseModel):
     question: str = Field(description="Natural language question in Danish")
-    limit: int = Field(default=5, ge=1, le=20, description="Max number of sources to retrieve")
+    limit: int = Field(default=8, ge=1, le=20, description="Max number of sources to retrieve")
     filter_law: Optional[str] = Field(default=None, description="Optional: filter by law_code, e.g. 'AFL'")
 
 
