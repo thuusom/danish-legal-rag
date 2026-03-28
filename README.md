@@ -205,7 +205,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
   "mcpServers": {
     "danish-legal-rag": {
       "command": "docker",
-      "args": ["exec", "-i", "danish-legal-mcp", "python", "/app/mcp/server.py"]
+      "args": ["exec", "-i", "danish-legal-mcp", "python", "/app/mcp/app.py"]
     }
   }
 }
@@ -250,7 +250,7 @@ danish-legal-rag/
 │   ├── embeddings.py  Query-time embedding
 │   └── models.py      Re-exports from shared/
 ├── mcp/               MCP server (Claude Desktop integration)
-│   └── server.py      legal_search + legal_answer tools
+│   └── app.py          legal_search + legal_answer tools
 ├── ingest/            One-shot ingestion job
 │   ├── main.py        Pipeline orchestration
 │   ├── chunker.py     Law JSON → LegalChunk objects
