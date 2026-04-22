@@ -119,6 +119,14 @@ components:
           type: string
           nullable: true
           description: Optional law_code filter (e.g. AFL, ARL)
+        retrieval_strategy:
+          type: string
+          enum: [dense, hybrid]
+          nullable: true
+          description: |
+            Retrieval strategy to use. If omitted, the server picks the
+            default (currently "dense"). "hybrid" enables combined dense
+            + sparse BM25 retrieval with RRF fusion.
 
     AskResponse:
       type: object
@@ -150,6 +158,14 @@ components:
         query: { type: string }
         limit: { type: integer, minimum: 1, maximum: 20, default: 5 }
         filter_law: { type: string, nullable: true }
+        retrieval_strategy:
+          type: string
+          enum: [dense, hybrid]
+          nullable: true
+          description: |
+            Retrieval strategy to use. If omitted, the server picks the
+            default (currently "dense"). "hybrid" enables combined dense
+            + sparse BM25 retrieval with RRF fusion.
 
     SearchResponse:
       type: object
