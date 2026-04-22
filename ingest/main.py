@@ -35,6 +35,7 @@ from shared.qdrant_utils import (
     upsert_points,
     point_exists_with_hash,
 )
+from shared.sparse import is_hybrid_enabled, get_sparse_provider
 from ingest.chunker import chunk_law
 from ingest.embedder import get_embedding_provider
 from ingest.fetcher import load_all_laws
@@ -134,12 +135,27 @@ def run_ingestion() -> None:
         vectors = embedder.embed(embedding_texts)
         logger.info("Embeddings generated successfully")
 
-        # Build Qdrant points
+        # Optionally generate sparse BM25 vectors for hybrid retrieval
+        sparse_vectors = None
+        if is_hybrid_enabled():
+            sparse_provider = get_sparse_provider()
+            logger.info(f"Generating BM25 sparse vectors for {len(embedding_texts)} texts...")
+            sparse_vectors = sparse_provider.embed(embedding_texts)
+            logger.info("Sparse vectors generated")
+
+        # Build Qdrant points with named vectors
         points = []
-        for chunk, vector in zip(chunks_to_embed, vectors):
+        for i, (chunk, vector) in enumerate(zip(chunks_to_embed, vectors)):
+            vec_dict: dict = {"dense": vector}
+            if sparse_vectors is not None:
+                sv = sparse_vectors[i]
+                from qdrant_client.models import SparseVector
+                vec_dict["bm25"] = SparseVector(
+                    indices=sv["indices"], values=sv["values"]
+                )
             point = PointStruct(
                 id=chunk.id,
-                vector=vector,
+                vector=vec_dict,
                 payload=chunk.to_qdrant_payload(),
             )
             points.append(point)

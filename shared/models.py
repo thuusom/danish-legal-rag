@@ -3,9 +3,24 @@ Shared domain models for the Danish Legal RAG system.
 """
 from __future__ import annotations
 from datetime import datetime
-from typing import Optional
+import os
+from typing import Literal, Optional
 from pydantic import BaseModel, Field
 import hashlib
+
+
+def get_effective_strategy(override: Optional[str] = None) -> str:
+    """
+    Resolve the retrieval strategy to use for a request.
+
+    Priority:
+    1. Per-request override (from request body)
+    2. RETRIEVAL_STRATEGY env var
+    3. Default: "dense"
+    """
+    if override:
+        return override.lower()
+    return os.environ.get("RETRIEVAL_STRATEGY", "dense").lower()
 
 
 class LegalChunk(BaseModel):
@@ -94,6 +109,10 @@ class AskRequest(BaseModel):
     question: str = Field(description="Natural language question in Danish")
     limit: int = Field(default=8, ge=1, le=20, description="Max number of sources to retrieve")
     filter_law: Optional[str] = Field(default=None, description="Optional: filter by law_code, e.g. 'AFL'")
+    retrieval_strategy: Optional[Literal["dense", "hybrid"]] = Field(
+        default=None,
+        description="Retrieval strategy override. Omit to use server default (RETRIEVAL_STRATEGY env var).",
+    )
 
 
 class LegalReference(BaseModel):
@@ -121,6 +140,10 @@ class SearchRequest(BaseModel):
     query: str
     limit: int = Field(default=5, ge=1, le=20)
     filter_law: Optional[str] = None
+    retrieval_strategy: Optional[Literal["dense", "hybrid"]] = Field(
+        default=None,
+        description="Retrieval strategy override. Omit to use server default (RETRIEVAL_STRATEGY env var).",
+    )
 
 
 class SearchResponse(BaseModel):

@@ -34,8 +34,9 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
-from shared.models import AskRequest, AskResponse, LegalReference, SearchResponse
+from shared.models import AskRequest, AskResponse, LegalReference, SearchResponse, get_effective_strategy
 from shared.qdrant_utils import get_qdrant_client, search_similar
+from shared.sparse import is_hybrid_enabled, get_sparse_provider
 from api.embeddings import get_query_embedder
 
 logger = logging.getLogger(__name__)
@@ -328,6 +329,13 @@ async def ask(request: AskRequest) -> AskResponse:
     embedder = get_query_embedder()
     query_vector = embedder.embed_query(request.question)
 
+    # 1b. Compute sparse vector if hybrid retrieval is active
+    strategy = get_effective_strategy(request.retrieval_strategy)
+    sparse_vec = None
+    if strategy == "hybrid":
+        sparse_vec = get_sparse_provider().embed_single(request.question)
+        logger.info("Using hybrid retrieval (dense + BM25 sparse)")
+
     # 2. Retrieve semantically similar legal provisions
     qdrant = get_qdrant_client()
     results = search_similar(
@@ -335,6 +343,7 @@ async def ask(request: AskRequest) -> AskResponse:
         query_vector=query_vector,
         limit=request.limit,
         filter_law=request.filter_law,
+        sparse_vector=sparse_vec,
     )
 
     if not results:
@@ -371,11 +380,20 @@ async def search(request) -> SearchResponse:
     from shared.models import SearchRequest
     embedder = get_query_embedder()
     query_vector = embedder.embed_query(request.query)
+
+    # Compute sparse vector if hybrid retrieval is active
+    strategy = get_effective_strategy(request.retrieval_strategy)
+    sparse_vec = None
+    if strategy == "hybrid":
+        sparse_vec = get_sparse_provider().embed_single(request.query)
+        logger.info("Search using hybrid retrieval (dense + BM25 sparse)")
+
     qdrant = get_qdrant_client()
     results = search_similar(
         qdrant,
         query_vector=query_vector,
         limit=request.limit,
         filter_law=request.filter_law,
+        sparse_vector=sparse_vec,
     )
     return SearchResponse(results=results_to_references(results), query=request.query)
