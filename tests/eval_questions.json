@@ -1,0 +1,107 @@
+[
+  {
+    "id": "term_1",
+    "question": "Hvad siger AFL § 40 C om straksafskrivning af EDB-software?",
+    "acceptable_sections": ["§ 40 C"],
+    "category": "terminology",
+    "hypothesis": "hybrid_wins"
+  },
+  {
+    "id": "term_2",
+    "question": "Afskrivningsloven § 5 C, stk. 1 — hvad er reglerne?",
+    "acceptable_sections": ["§ 5 C"],
+    "category": "terminology",
+    "hypothesis": "hybrid_wins"
+  },
+  {
+    "id": "term_3",
+    "question": "Hvad er definitionen af driftsmidler i AFL § 2?",
+    "acceptable_sections": ["§ 2"],
+    "category": "terminology",
+    "hypothesis": "hybrid_wins"
+  },
+  {
+    "id": "para_1",
+    "question": "Hvordan kan man afskrive udgifter til computerprogrammer skattemæssigt?",
+    "acceptable_sections": ["§ 40 C", "§ 2"],
+    "category": "paraphrase",
+    "hypothesis": "dense_wins"
+  },
+  {
+    "id": "para_2",
+    "question": "Hvornår kan man trække hele anskaffelsessummen fra med det samme?",
+    "acceptable_sections": ["§ 6", "§ 40 C", "§ 11"],
+    "category": "paraphrase",
+    "hypothesis": "dense_wins"
+  },
+  {
+    "id": "para_3",
+    "question": "Hvilke regler gælder for nedskrivning af immateriel ejendom i regnskabet?",
+    "acceptable_sections": ["§ 43", "§ 46", "§ 33"],
+    "category": "paraphrase",
+    "hypothesis": "dense_wins"
+  },
+  {
+    "id": "mix_1",
+    "question": "Hvad er afskrivningssatsen for bygninger efter afskrivningsloven?",
+    "acceptable_sections": ["§ 17"],
+    "category": "mixed",
+    "hypothesis": "neutral"
+  },
+  {
+    "id": "mix_2",
+    "question": "Hvordan behandles goodwill skattemæssigt efter AFL?",
+    "acceptable_sections": ["§ 40"],
+    "category": "mixed",
+    "hypothesis": "neutral"
+  },
+  {
+    "id": "mix_3",
+    "question": "Kan man afskrive på installationer i en bygning?",
+    "acceptable_sections": ["§ 15"],
+    "category": "mixed",
+    "hypothesis": "neutral"
+  },
+  {
+    "id": "mix_4",
+    "question": "Hvad siger årsregnskabsloven om indregning af immaterielle anlægsaktiver?",
+    "acceptable_sections": ["§ 33", "§ 43"],
+    "category": "mixed",
+    "hypothesis": "neutral"
+  },
+  {
+    "id": "mix_5",
+    "question": "Hvad er reglerne for forskudsafskrivning?",
+    "acceptable_sections": ["§ 29"],
+    "category": "mixed",
+    "hypothesis": "neutral"
+  },
+  {
+    "id": "mix_6",
+    "question": "Hvordan opgøres saldoværdien for driftsmidler?",
+    "acceptable_sections": ["§ 5", "§ 5 D"],
+    "category": "mixed",
+    "hypothesis": "neutral"
+  },
+  {
+    "id": "mix_7",
+    "question": "Hvilke aktiver er undtaget fra afskrivning?",
+    "acceptable_sections": ["§ 1", "§ 2"],
+    "category": "mixed",
+    "hypothesis": "neutral"
+  },
+  {
+    "id": "mix_8",
+    "question": "Hvad er reglerne for tabsfradrag ved salg af driftsmidler?",
+    "acceptable_sections": ["§ 5", "§ 5 A", "§ 9"],
+    "category": "mixed",
+    "hypothesis": "neutral"
+  },
+  {
+    "id": "mix_9",
+    "question": "Kan kunstnerisk udsmykning afskrives efter afskrivningsloven?",
+    "acceptable_sections": ["§ 44"],
+    "category": "mixed",
+    "hypothesis": "neutral"
+  }
+]

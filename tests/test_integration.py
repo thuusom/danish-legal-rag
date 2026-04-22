@@ -122,8 +122,15 @@ class TestEmbeddings:
             with_vectors=True,
         )
         assert records, "No records found"
-        assert records[0].vector is not None, "Vector not stored in Qdrant"
-        assert len(records[0].vector) > 0, "Vector is empty"
+        vector = records[0].vector
+        assert vector is not None, "Vector not stored in Qdrant"
+        # Named vectors: vector is a dict with at least a "dense" key
+        if isinstance(vector, dict):
+            assert "dense" in vector, "Named 'dense' vector missing"
+            assert len(vector["dense"]) > 0, "Dense vector is empty"
+        else:
+            # Legacy unnamed vector (pre-hybrid collections)
+            assert len(vector) > 0, "Vector is empty"
 
     def test_content_hash_stored(self):
         """Each chunk must have embedding_content_hash in payload."""
@@ -286,3 +293,86 @@ class TestAPI:
         assert data["count"] > 0
         law_codes = [l["law_code"] for l in data["laws"]]
         assert "AFL" in law_codes, "Afskrivningsloven not found in laws list"
+
+    def test_search_with_retrieval_strategy_dense(self):
+        """Search with explicit retrieval_strategy=dense must work."""
+        with httpx.Client(timeout=30.0) as client:
+            r = client.post(
+                f"{API_URL}/search",
+                json={"query": "software afskrivning", "limit": 3, "retrieval_strategy": "dense"},
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert len(data["results"]) > 0
+
+    def test_ask_with_retrieval_strategy_dense(self):
+        """Ask with explicit retrieval_strategy=dense must work."""
+        with httpx.Client(timeout=60.0) as client:
+            r = client.post(
+                f"{API_URL}/ask",
+                json={
+                    "question": "Hvad er reglerne for straksafskrivning?",
+                    "retrieval_strategy": "dense",
+                },
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert data["answer"], "Answer should not be empty"
+        assert len(data["references"]) > 0
+
+
+class TestHybridSearch:
+    """Tests for hybrid search. These require RETRIEVAL_STRATEGY=hybrid and re-ingested data."""
+
+    @pytest.fixture(autouse=True)
+    def _check_hybrid(self):
+        """Skip hybrid tests if the collection doesn't have sparse vectors."""
+        from qdrant_client import QdrantClient
+        from shared.qdrant_utils import COLLECTION_NAME
+
+        client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+        try:
+            info = client.get_collection(COLLECTION_NAME)
+            has_sparse = (
+                info.config.params.sparse_vectors is not None
+                and "bm25" in (info.config.params.sparse_vectors or {})
+            )
+        except Exception:
+            has_sparse = False
+
+        if not has_sparse:
+            pytest.skip("Collection has no sparse vectors (hybrid not enabled)")
+
+    def test_hybrid_search_returns_results(self):
+        """Hybrid search via /search must return results."""
+        with httpx.Client(timeout=30.0) as client:
+            r = client.post(
+                f"{API_URL}/search",
+                json={
+                    "query": "straksafskrivning af EDB-programmer",
+                    "limit": 5,
+                    "retrieval_strategy": "hybrid",
+                },
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert len(data["results"]) > 0, "Hybrid search returned no results"
+        # Verify result structure
+        ref = data["results"][0]
+        assert ref.get("citation_label"), "citation_label missing"
+        assert ref.get("law_code"), "law_code missing"
+
+    def test_dense_search_unaffected(self):
+        """Dense search must still work even when collection has sparse vectors."""
+        with httpx.Client(timeout=30.0) as client:
+            r = client.post(
+                f"{API_URL}/search",
+                json={
+                    "query": "goodwill afskrivning",
+                    "limit": 3,
+                    "retrieval_strategy": "dense",
+                },
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert len(data["results"]) > 0, "Dense search returned no results on hybrid collection"
