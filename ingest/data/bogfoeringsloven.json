@@ -1,0 +1,218 @@
+{
+  "law_code": "BOG",
+  "law_name": "Bogføringsloven",
+  "law_title": "Lov om bogføring",
+  "law_number": "LOV nr 700 af 24/05/2022",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2022/700",
+  "effective_date": "2022-05-24",
+  "provisions": [
+    {
+      "chapter": "Kapitel 1 – Lovens anvendelsesområde",
+      "section": "§ 1",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Lovens anvendelsesområde – erhvervsdrivende virksomheder",
+      "text": "Loven gælder for erhvervsdrivende virksomheder etableret her i landet. Ved erhvervsdrivende virksomheder forstås i denne lov virksomheder, der som hovedformål eller biaktivitet udøver økonomisk aktivitet."
+    },
+    {
+      "chapter": "Kapitel 1 – Lovens anvendelsesområde",
+      "section": "§ 1",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Lovens anvendelsesområde – offentlige virksomheder",
+      "text": "Loven gælder tillige for følgende virksomheder m.v., uanset om de er erhvervsdrivende: statslige virksomheder, regionale virksomheder, kommunale virksomheder og virksomheder, foreninger, fonde m.v., der er omfattet af § 1, stk. 1, i årsregnskabsloven."
+    },
+    {
+      "chapter": "Kapitel 1 – Lovens anvendelsesområde",
+      "section": "§ 2",
+      "subsection": null,
+      "item": null,
+      "title": "Definitioner",
+      "text": "I denne lov forstås ved: 1) Bogføring: registrering af transaktioner og andre økonomiske hændelser med det formål at producere regnskaber, der giver et retvisende billede af virksomhedens økonomi. 2) Bilag: enhver nødvendig dokumentation for transaktioner og andre økonomiske hændelser, der registreres i bogføringen. 3) Regnskabsmateriale: bogførte registreringer, herunder transaktionssporet, bilag og lignende dokumentation, årsregnskaber, ledelsesberetninger, revisorerklæringer og lignende rapporter."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 3",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Bogføringspligt",
+      "text": "Virksomheder omfattet af denne lov skal foretage bogføring. Bogføringen skal tilrettelægges og udføres i overensstemmelse med god bogføringsskik under hensyn til virksomhedens art og omfang."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 3",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "God bogføringsskik",
+      "text": "God bogføringsskik indebærer, at bogføringen foretages på en måde, der er pålidelig, overskuelig og dokumenterbar, så den kan danne grundlag for udarbejdelse af årsregnskaber og andre rapporter."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 4",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Registrering af transaktioner",
+      "text": "Transaktioner skal registreres nøjagtigt og snarest muligt efter, at de forhold foreligger, der er grund til registreringen. Registreringen skal indeholde oplysninger om transaktionens beløb, dato, art og modpart."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 4",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Transaktionssporet",
+      "text": "Alle registreringer skal kunne følges til årsregnskabet og andre rapporter, der udarbejdes på baggrund af bogføringen (transaktionssporet). Det skal ligeledes være muligt at gå fra årsregnskabet til de enkelte registreringer."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 5",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afstemninger",
+      "text": "Virksomheden skal foretage de afstemninger, der er nødvendige for at sikre, at bogføringen er fuldstændig og korrekt. Afstemningerne skal foretages med en hyppighed, der er passende i forhold til virksomhedens art og omfang."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 5",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Afstemning af bank og kasse",
+      "text": "Afstemning af virksomhedens bank- og kassekonti skal foretages mindst hver fjerde måned."
+    },
+    {
+      "chapter": "Kapitel 3 – Bilag",
+      "section": "§ 6",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Bilagskrav",
+      "text": "For hver registrering skal der foreligge et bilag, der dokumenterer grundlaget for registreringen. Bilaget skal indeholde de oplysninger, der er nødvendige for at identificere kontrolsporet, herunder bilagsnummer, dato og beløb."
+    },
+    {
+      "chapter": "Kapitel 3 – Bilag",
+      "section": "§ 6",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Eksterne bilag",
+      "text": "Er bilaget udstedt af ekstern part, skal det foreligge i sin originale form, medmindre det er en tro kopi i digital form."
+    },
+    {
+      "chapter": "Kapitel 3 – Bilag",
+      "section": "§ 7",
+      "subsection": null,
+      "item": null,
+      "title": "Interne bilag",
+      "text": "Registreringer, der ikke kan dokumenteres ved eksterne bilag, skal dokumenteres ved interne bilag, der er udarbejdet af virksomheden. Interne bilag skal indeholde en fyldestgørende beskrivelse af den registrerede transaktion."
+    },
+    {
+      "chapter": "Kapitel 4 – Digitale bogføringssystemer",
+      "section": "§ 8",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Krav om digitale bogføringssystemer",
+      "text": "Virksomheder omfattet af § 1 skal anvende et digitalt bogføringssystem til registrering af virksomhedens transaktioner. Erhvervsstyrelsen fastsætter nærmere regler om kravene til digitale bogføringssystemer."
+    },
+    {
+      "chapter": "Kapitel 4 – Digitale bogføringssystemer",
+      "section": "§ 8",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Undtagelse for små virksomheder",
+      "text": "Erhvervsministeren kan fastsætte regler om, at visse mindre virksomheder kan undtages fra kravet om digitale bogføringssystemer."
+    },
+    {
+      "chapter": "Kapitel 4 – Digitale bogføringssystemer",
+      "section": "§ 9",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Registrering af udbydere",
+      "text": "Udbydere af digitale bogføringssystemer skal anmelde deres systemer til Erhvervsstyrelsen. Erhvervsstyrelsen fører et register over anmeldte systemer."
+    },
+    {
+      "chapter": "Kapitel 4 – Digitale bogføringssystemer",
+      "section": "§ 9",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Krav til udbydere",
+      "text": "Udbydere af digitale bogføringssystemer skal sikre, at systemerne opfylder de krav, som Erhvervsstyrelsen fastsætter, herunder krav om sikkerhed, datatilgængelighed og automatisk sikkerhedskopiering."
+    },
+    {
+      "chapter": "Kapitel 4 – Digitale bogføringssystemer",
+      "section": "§ 10",
+      "subsection": null,
+      "item": null,
+      "title": "Automatisk sikkerhedskopiering",
+      "text": "Digitale bogføringssystemer skal automatisk tage sikkerhedskopi af alle registreringer og bilag. Sikkerhedskopien skal opbevares på et sikkert sted adskilt fra det primære system."
+    },
+    {
+      "chapter": "Kapitel 5 – Opbevaring af regnskabsmateriale",
+      "section": "§ 11",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Opbevaringspligt",
+      "text": "Virksomheden skal opbevare regnskabsmateriale i 5 år fra udgangen af det regnskabsår, materialet vedrører. Opbevaringen skal ske på betryggende vis, så materialet ikke ødelægges, bortskaffes eller forvanskes."
+    },
+    {
+      "chapter": "Kapitel 5 – Opbevaring af regnskabsmateriale",
+      "section": "§ 11",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Digital opbevaring",
+      "text": "Regnskabsmaterialet kan opbevares digitalt. Ved digital opbevaring skal virksomheden sikre, at materialet er tilgængeligt i hele opbevaringsperioden og kan udlæses i klarskrift."
+    },
+    {
+      "chapter": "Kapitel 5 – Opbevaring af regnskabsmateriale",
+      "section": "§ 12",
+      "subsection": null,
+      "item": null,
+      "title": "Opbevaring i Danmark eller EU/EØS",
+      "text": "Regnskabsmaterialet skal opbevares her i landet eller i et andet EU/EØS-land. Opbevares materialet uden for Danmark, skal virksomheden til enhver tid kunne give adgang til materialet."
+    },
+    {
+      "chapter": "Kapitel 6 – Tilsyn",
+      "section": "§ 13",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Erhvervsstyrelsens tilsyn",
+      "text": "Erhvervsstyrelsen fører tilsyn med overholdelsen af denne lov og regler udstedt i medfør af loven. Erhvervsstyrelsen kan kræve de oplysninger fra virksomheder og udbydere af digitale bogføringssystemer, der er nødvendige for tilsynets gennemførelse."
+    },
+    {
+      "chapter": "Kapitel 6 – Tilsyn",
+      "section": "§ 13",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Kontrolbesøg",
+      "text": "Erhvervsstyrelsen kan foretage kontrolbesøg hos virksomheder og udbydere af digitale bogføringssystemer med henblik på at kontrollere, at lovens krav overholdes."
+    },
+    {
+      "chapter": "Kapitel 7 – Straf og administrative sanktioner",
+      "section": "§ 14",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Straffebestemmelser",
+      "text": "Med bøde straffes den, der overtræder § 3, stk. 1, § 4, stk. 1 og 2, § 6, § 8, stk. 1, § 11 eller § 12."
+    },
+    {
+      "chapter": "Kapitel 7 – Straf og administrative sanktioner",
+      "section": "§ 14",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Straf for grov overtrædelse",
+      "text": "Den, der forsætligt eller ved grov uagtsomhed overtræder § 3, stk. 1, § 4, stk. 1, eller § 11, stk. 1, straffes med bøde eller fængsel i indtil 1 år og 6 måneder."
+    },
+    {
+      "chapter": "Kapitel 8 – Ikrafttræden og overgangsbestemmelser",
+      "section": "§ 15",
+      "subsection": null,
+      "item": null,
+      "title": "Ikrafttræden",
+      "text": "Loven træder i kraft den 1. juli 2022. § 8 træder dog først i kraft den 1. januar 2024 for virksomheder i regnskabsklasse B og den 1. januar 2026 for virksomheder i regnskabsklasse A."
+    },
+    {
+      "chapter": "Kapitel 8 – Ikrafttræden og overgangsbestemmelser",
+      "section": "§ 16",
+      "subsection": null,
+      "item": null,
+      "title": "Ophævelse af tidligere bogføringslov",
+      "text": "Lov nr. 1006 af 23. december 1998 om bogføring ophæves."
+    }
+  ]
+}

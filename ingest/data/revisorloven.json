@@ -1,0 +1,258 @@
+{
+  "law_code": "REVL",
+  "law_name": "Revisorloven",
+  "law_title": "Bekendtgørelse af lov om godkendte revisorer og revisionsvirksomheder",
+  "law_number": "LBK nr 25 af 16/01/2024",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2024/25",
+  "effective_date": "2024-01-16",
+  "provisions": [
+    {
+      "chapter": "Kapitel 1 – Lovens anvendelsesområde og definitioner",
+      "section": "§ 1",
+      "subsection": null,
+      "item": null,
+      "title": "Lovens formål",
+      "text": "Denne lov fastsætter regler om godkendelse af revisorer og revisionsvirksomheder, om revisors pligter ved udførelse af revision og andre erklæringsopgaver samt om tilsyn med revisorer og revisionsvirksomheder."
+    },
+    {
+      "chapter": "Kapitel 1 – Lovens anvendelsesområde og definitioner",
+      "section": "§ 2",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Definitioner – godkendt revisor",
+      "text": "Ved en godkendt revisor forstås en person, der er godkendt som statsautoriseret eller registreret revisor efter reglerne i denne lov."
+    },
+    {
+      "chapter": "Kapitel 1 – Lovens anvendelsesområde og definitioner",
+      "section": "§ 2",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Definitioner – revisionsvirksomhed",
+      "text": "Ved en revisionsvirksomhed forstås en virksomhed, der er godkendt efter § 13 til at udføre lovpligtig revision."
+    },
+    {
+      "chapter": "Kapitel 2 – Godkendelse af revisorer",
+      "section": "§ 3",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Godkendelse som statsautoriseret revisor",
+      "text": "Erhvervsstyrelsen godkender en person som statsautoriseret revisor, når den pågældende: 1) er myndig og ikke er under værgemål, 2) ikke er under konkurs, 3) har bestået en eksamen for statsautoriserede revisorer, 4) har gennemført en praktisk uddannelse af mindst 3 års varighed, og 5) har en ren straffeattest for forhold, der er relevante for udøvelsen af revisorerhvervet."
+    },
+    {
+      "chapter": "Kapitel 2 – Godkendelse af revisorer",
+      "section": "§ 3",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Godkendelse som registreret revisor",
+      "text": "Erhvervsstyrelsen godkender en person som registreret revisor, når den pågældende opfylder betingelserne i stk. 1, dog med den forskel, at den pågældende skal have bestået en eksamen for registrerede revisorer."
+    },
+    {
+      "chapter": "Kapitel 2 – Godkendelse af revisorer",
+      "section": "§ 4",
+      "subsection": null,
+      "item": null,
+      "title": "Løbende efteruddannelse",
+      "text": "Godkendte revisorer skal deltage i løbende obligatorisk efteruddannelse for at opretholde deres godkendelse. Erhvervsstyrelsen fastsætter nærmere regler om kravene til efteruddannelsen, herunder omfang og indhold."
+    },
+    {
+      "chapter": "Kapitel 2 – Godkendelse af revisorer",
+      "section": "§ 5",
+      "subsection": null,
+      "item": null,
+      "title": "Fratagelse af godkendelse",
+      "text": "Erhvervsstyrelsen kan fratage en revisor godkendelsen, hvis revisoren ikke længere opfylder betingelserne for godkendelse, eller hvis revisoren har gjort sig skyldig i grov eller gentagen tilsidesættelse af sine pligter."
+    },
+    {
+      "chapter": "Kapitel 3 – Godkendelse af revisionsvirksomheder",
+      "section": "§ 13",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Godkendelse af revisionsvirksomheder",
+      "text": "En revisionsvirksomhed skal godkendes af Erhvervsstyrelsen for at kunne udføre lovpligtig revision. Godkendelsen forudsætter, at flertallet af stemmerne i virksomheden indehaves af godkendte revisorer eller revisionsvirksomheder, og at flertallet af medlemmerne i virksomhedens øverste ledelsesorgan er godkendte revisorer."
+    },
+    {
+      "chapter": "Kapitel 3 – Godkendelse af revisionsvirksomheder",
+      "section": "§ 13",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Registrering af revisionsvirksomheder",
+      "text": "Revisionsvirksomheder skal registreres i det offentlige register over godkendte revisionsvirksomheder, som føres af Erhvervsstyrelsen."
+    },
+    {
+      "chapter": "Kapitel 4 – Revisors uafhængighed",
+      "section": "§ 24",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Uafhængighedskrav",
+      "text": "En revisor, der udfører opgaver efter denne lov, skal være uafhængig af den virksomhed, som opgaven vedrører. Revisoren må ikke have en økonomisk eller personlig interesse i den reviderede virksomhed, der kan påvirke eller synes at påvirke revisorens uafhængighed."
+    },
+    {
+      "chapter": "Kapitel 4 – Revisors uafhængighed",
+      "section": "§ 24",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Trusler mod uafhængighed",
+      "text": "Revisoren skal identificere og vurdere trusler mod uafhængigheden og skal træffe foranstaltninger til at eliminere eller reducere sådanne trusler til et acceptabelt niveau. Kan truslerne ikke reduceres til et acceptabelt niveau, skal revisoren afstå fra opgaven."
+    },
+    {
+      "chapter": "Kapitel 4 – Revisors uafhængighed",
+      "section": "§ 24 a",
+      "subsection": null,
+      "item": null,
+      "title": "Karensperiode",
+      "text": "En revisor, der har udført lovpligtig revision for en virksomhed, må ikke inden for en periode på 2 år efter sin fratræden som revisor tiltræde en stilling i virksomhedens ledelse eller en overordnet stilling i virksomheden."
+    },
+    {
+      "chapter": "Kapitel 4 – Revisors uafhængighed",
+      "section": "§ 25",
+      "subsection": null,
+      "item": null,
+      "title": "Rotation – PIE-virksomheder",
+      "text": "For virksomheder af interesse for offentligheden (PIE-virksomheder) skal den underskrivende revisor udskiftes senest efter 7 på hinanden følgende år. En ny underskrivende revisor kan tidligst genudpeges 3 år efter den seneste revision."
+    },
+    {
+      "chapter": "Kapitel 5 – Udførelse af revision",
+      "section": "§ 16",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "God revisionsskik",
+      "text": "Revision skal udføres i overensstemmelse med god revisionsskik, herunder de internationale revisionsstandarder, som er godkendt til anvendelse i EU."
+    },
+    {
+      "chapter": "Kapitel 5 – Udførelse af revision",
+      "section": "§ 16",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Revisionens indhold",
+      "text": "Revisor skal udføre revision med den professionelle skepsis og omhu, der kræves efter god revisionsskik. Revisionen skal tilrettelægges med henblik på at opnå høj grad af sikkerhed for, at årsregnskabet ikke indeholder væsentlig fejlinformation."
+    },
+    {
+      "chapter": "Kapitel 5 – Udførelse af revision",
+      "section": "§ 17",
+      "subsection": null,
+      "item": null,
+      "title": "Revisionspåtegning",
+      "text": "Revisor skal forsyne det reviderede årsregnskab med en revisionspåtegning. Revisionspåtegningen skal indeholde en udtalelse om, hvorvidt årsregnskabet giver et retvisende billede i overensstemmelse med den anvendte regnskabsmæssige begrebsramme."
+    },
+    {
+      "chapter": "Kapitel 5 – Udførelse af revision",
+      "section": "§ 18",
+      "subsection": null,
+      "item": null,
+      "title": "Forbehold og supplerende oplysninger",
+      "text": "Revisor skal tage forbehold i revisionspåtegningen, hvis årsregnskabet ikke giver et retvisende billede, eller hvis revisor ikke har kunnet opnå tilstrækkeligt revisionsbevis. Revisor skal endvidere give supplerende oplysninger, hvis der er forhold, som er relevante for regnskabsbrugerne."
+    },
+    {
+      "chapter": "Kapitel 5 – Udførelse af revision",
+      "section": "§ 19",
+      "subsection": null,
+      "item": null,
+      "title": "Revisionsprotokol",
+      "text": "Revisor skal føre en revisionsprotokol, hvori der gives oplysning om det udførte revisionsarbejde, herunder de væsentlige forhold, der er kommet til revisorens kendskab under revisionen. Revisionsprotokollen skal forelægges virksomhedens øverste ledelsesorgan."
+    },
+    {
+      "chapter": "Kapitel 6 – Andre erklæringsopgaver",
+      "section": "§ 20",
+      "subsection": null,
+      "item": null,
+      "title": "Erklæringer med sikkerhed",
+      "text": "Godkendte revisorer kan afgive erklæringer med sikkerhed om andre forhold end historiske finansielle oplysninger, herunder erklæringer om interne kontroller, miljørapporter og overholdelse af vilkår."
+    },
+    {
+      "chapter": "Kapitel 6 – Andre erklæringsopgaver",
+      "section": "§ 21",
+      "subsection": null,
+      "item": null,
+      "title": "Erklæringer uden sikkerhed",
+      "text": "Godkendte revisorer kan endvidere afgive erklæringer uden sikkerhed, herunder assistance med opstilling af regnskaber og assistance med skattemæssige forhold."
+    },
+    {
+      "chapter": "Kapitel 7 – Tilsyn",
+      "section": "§ 32",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Erhvervsstyrelsens tilsyn",
+      "text": "Erhvervsstyrelsen fører tilsyn med godkendte revisorer og revisionsvirksomheder. Tilsynet omfatter kontrol af, at revisorer og revisionsvirksomheder overholder lovens krav, herunder krav om uafhængighed, kvalitet og efteruddannelse."
+    },
+    {
+      "chapter": "Kapitel 7 – Tilsyn",
+      "section": "§ 32",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Kvalitetskontrol",
+      "text": "Erhvervsstyrelsen gennemfører regelmæssig kvalitetskontrol af revisorer og revisionsvirksomheder. For revisorer, der reviderer PIE-virksomheder, foretages kvalitetskontrol mindst hvert tredje år."
+    },
+    {
+      "chapter": "Kapitel 8 – Revisornævnet",
+      "section": "§ 43",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Revisornævnets kompetence",
+      "text": "Revisornævnet behandler klager over, at en godkendt revisor ved udførelsen af opgaver efter denne lov har tilsidesat de pligter, som stillingen medfører. Revisornævnet kan endvidere tage sager op af egen drift."
+    },
+    {
+      "chapter": "Kapitel 8 – Revisornævnet",
+      "section": "§ 44",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Sanktioner",
+      "text": "Revisornævnet kan tildele en godkendt revisor en advarsel, en irettesættelse, en bøde på indtil 300.000 kr. eller frakende revisoren godkendelsen betinget eller ubetinget."
+    },
+    {
+      "chapter": "Kapitel 8 – Revisornævnet",
+      "section": "§ 44",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Skærpende omstændigheder",
+      "text": "Ved fastsættelse af sanktion lægges der bl.a. vægt på overtrædelsens grovhed og omfang, om revisoren har handlet forsætligt eller uagtsomt, og om revisoren tidligere er blevet pålagt sanktioner."
+    },
+    {
+      "chapter": "Kapitel 9 – Straffebestemmelser",
+      "section": "§ 48",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Straffebestemmelser – uberettiget titelbrug",
+      "text": "Den, der uden at være godkendt som revisor betegner sig som statsautoriseret eller registreret revisor, straffes med bøde."
+    },
+    {
+      "chapter": "Kapitel 9 – Straffebestemmelser",
+      "section": "§ 48",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Straffebestemmelser – overtrædelse af loven",
+      "text": "Med bøde straffes den revisor, der overtræder bestemmelserne i § 16, § 17, § 24 eller § 25."
+    },
+    {
+      "chapter": "Kapitel 10 – Virksomheder af interesse for offentligheden (PIE)",
+      "section": "§ 21 a",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Særlige krav for PIE-virksomheder",
+      "text": "For virksomheder af interesse for offentligheden (PIE-virksomheder) gælder skærpede krav til revisionen. PIE-virksomheder omfatter børsnoterede virksomheder, pengeinstitutter, realkreditinstitutter, forsikringsselskaber og visse andre finansielle virksomheder."
+    },
+    {
+      "chapter": "Kapitel 10 – Virksomheder af interesse for offentligheden (PIE)",
+      "section": "§ 21 a",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Revisionsudvalg",
+      "text": "PIE-virksomheder skal have et revisionsudvalg. Revisionsudvalget skal overvåge regnskabsaflæggelsesprocessen, det interne kontrolsystem, revisionen af årsregnskabet og revisors uafhængighed."
+    },
+    {
+      "chapter": "Kapitel 10 – Virksomheder af interesse for offentligheden (PIE)",
+      "section": "§ 21 b",
+      "subsection": null,
+      "item": null,
+      "title": "Forbudte ikke-revisionsydelser",
+      "text": "Den revisor eller revisionsvirksomhed, der udfører lovpligtig revision for en PIE-virksomhed, må ikke levere visse ikke-revisionsydelser til den pågældende virksomhed, herunder bogføring, intern revision, ledelses- og rådgivningsydelser samt juridisk rådgivning."
+    },
+    {
+      "chapter": "Kapitel 11 – Ikrafttræden og overgangsbestemmelser",
+      "section": "§ 54",
+      "subsection": null,
+      "item": null,
+      "title": "Ikrafttræden",
+      "text": "Loven trådte i kraft den 1. juli 2008. Efterfølgende ændringer har virkning fra de i de pågældende ændringslove fastsatte tidspunkter."
+    }
+  ]
+}

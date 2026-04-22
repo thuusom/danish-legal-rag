@@ -1,0 +1,186 @@
+{
+  "law_code": "SKL",
+  "law_name": "Skattekontrolloven",
+  "law_title": "Lov om skattekontrol",
+  "law_number": "LOV nr 1535 af 19/12/2017",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2017/1535",
+  "effective_date": "2017-12-19",
+  "provisions": [
+    {
+      "chapter": "Afsnit I – Oplysningspligt",
+      "section": "§ 1",
+      "subsection": null,
+      "item": null,
+      "title": "Lovens formål",
+      "text": "Enhver, der er skattepligtig her til landet, skal årligt oplyse told- og skatteforvaltningen om sin indkomst og formue efter reglerne i denne lov."
+    },
+    {
+      "chapter": "Afsnit I – Oplysningspligt",
+      "section": "§ 2",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Oplysningspligtens omfang",
+      "text": "Skattepligtige personer og selskaber m.v. skal inden udløbet af oplysningsfristen give told- og skatteforvaltningen oplysning om den skattepligtige indkomst, herunder om indtægter, udgifter, aktiver og passiver."
+    },
+    {
+      "chapter": "Afsnit I – Oplysningspligt",
+      "section": "§ 2",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Oplysningspligt – særlige forhold",
+      "text": "Oplysningspligten omfatter tillige oplysninger om kontrollerede transaktioner, jf. ligningslovens § 2, samt oplysninger om udenlandske aktiver og passiver."
+    },
+    {
+      "chapter": "Afsnit I – Oplysningspligt",
+      "section": "§ 4",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Oplysningsfrist – personer",
+      "text": "For personer er oplysningsfristen den 1. juli i året efter indkomstårets udløb. Selvstændigt erhvervsdrivende og selskaber m.v. har dog frist til den 1. juli i det kalenderår, der følger efter indkomstårets udløb, dog tidligst 6 måneder efter indkomstårets udløb."
+    },
+    {
+      "chapter": "Afsnit I – Oplysningspligt",
+      "section": "§ 5",
+      "subsection": null,
+      "item": null,
+      "title": "Oplysningsskemaet",
+      "text": "Oplysningerne efter § 2 indgives digitalt via told- og skatteforvaltningens systemer (oplysningsskemaet). Told- og skatteforvaltningen kan fastsætte nærmere regler om indholdet af og formkravene til oplysningsskemaet."
+    },
+    {
+      "chapter": "Afsnit I – Oplysningspligt",
+      "section": "§ 6",
+      "subsection": null,
+      "item": null,
+      "title": "Skønsmæssig ansættelse",
+      "text": "Undlader en skattepligtig at give oplysninger efter § 2 inden oplysningsfristen, kan told- og skatteforvaltningen foretage en skønsmæssig ansættelse af den skattepligtige indkomst og formue."
+    },
+    {
+      "chapter": "Afsnit II – Tredjepartsoplysninger",
+      "section": "§ 7",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Arbejdsgiverens oplysningspligt",
+      "text": "Den, der har udbetalt eller godskrevet vederlag for personligt arbejde i tjenesteforhold, skal oplyse told- og skatteforvaltningen om det udbetalte eller godskrevne vederlag, herunder A-indkomst, bidrag til obligatoriske sociale ordninger og andre personalegoder."
+    },
+    {
+      "chapter": "Afsnit II – Tredjepartsoplysninger",
+      "section": "§ 8",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Finansielle institutters oplysningspligt",
+      "text": "Pengeinstitutter, realkreditinstitutter, forsikringsselskaber og pensionskasser skal oplyse told- og skatteforvaltningen om indestående, gæld, renter, udbytter og kursværdier for de konti og depoter, der tilhører skattepligtige personer og selskaber."
+    },
+    {
+      "chapter": "Afsnit II – Tredjepartsoplysninger",
+      "section": "§ 9",
+      "subsection": null,
+      "item": null,
+      "title": "Oplysningspligt for faglige foreninger m.v.",
+      "text": "Faglige foreninger, A-kasser og andre organisationer, der modtager kontingent, skal oplyse told- og skatteforvaltningen om kontingentindbetalinger fra medlemmer, der er skattepligtige her til landet."
+    },
+    {
+      "chapter": "Afsnit II – Tredjepartsoplysninger",
+      "section": "§ 10",
+      "subsection": null,
+      "item": null,
+      "title": "Oplysningspligt for handelsplatforme",
+      "text": "Operatører af digitale platforme, der formidler salg af varer, ydelser, udlejning af fast ejendom eller transportydelser, skal oplyse told- og skatteforvaltningen om sælgeres og udlejeres omsætning og øvrige oplysninger, der er nødvendige for skattekontrollen."
+    },
+    {
+      "chapter": "Afsnit III – Transfer pricing-dokumentation",
+      "section": "§ 37",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Transfer pricing-dokumentation – pligt",
+      "text": "Skattepligtige, der er omfattet af ligningslovens § 2, skal udarbejde og opbevare skriftlig transfer pricing-dokumentation, der gør det muligt for told- og skatteforvaltningen at vurdere, om priser og vilkår for kontrollerede transaktioner er fastsat i overensstemmelse med armslængdeprincippet."
+    },
+    {
+      "chapter": "Afsnit III – Transfer pricing-dokumentation",
+      "section": "§ 37",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Transfer pricing-dokumentation – indhold",
+      "text": "Dokumentationen skal indeholde en beskrivelse af koncernens juridiske og organisatoriske struktur, en beskrivelse af koncernens forretningsaktiviteter, en funktions- og risikoanalyse, en sammenlignelighedsanalyse samt en redegørelse for den valgte prisfastsættelsesmetode."
+    },
+    {
+      "chapter": "Afsnit III – Transfer pricing-dokumentation",
+      "section": "§ 38",
+      "subsection": null,
+      "item": null,
+      "title": "Country-by-country reporting",
+      "text": "Multinationale koncerner med en samlet konsolideret omsætning på mindst 5,6 mia. kr. skal udarbejde og indgive en land-for-land-rapport (country-by-country report) til told- og skatteforvaltningen. Rapporten skal indeholde oplysninger om omsætning, resultat før skat, betalt skat, akkumuleret resultat, antal ansatte, materielle aktiver og aktiviteter fordelt på de lande, hvor koncernen opererer."
+    },
+    {
+      "chapter": "Afsnit III – Transfer pricing-dokumentation",
+      "section": "§ 39",
+      "subsection": null,
+      "item": null,
+      "title": "Undtagelse for små koncerner",
+      "text": "Skattepligtige er fritaget fra kravet om transfer pricing-dokumentation, hvis den skattepligtige og de forbundne parter i det pågældende indkomstår har færre end 250 ansatte og enten har en omsætning på under 250 mio. kr. eller en balancesum på under 125 mio. kr."
+    },
+    {
+      "chapter": "Afsnit IV – Kontrol",
+      "section": "§ 55",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Told- og skatteforvaltningens kontrolbeføjelser",
+      "text": "Told- og skatteforvaltningen kan anmode enhver om at afgive oplysninger, der er af betydning for skatteligningen, herunder regnskaber, bilag, korrespondance og kontrakter."
+    },
+    {
+      "chapter": "Afsnit IV – Kontrol",
+      "section": "§ 55",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Adgang til virksomheders lokaler",
+      "text": "Told- og skatteforvaltningen har adgang til at foretage eftersyn i virksomheders lokaler med henblik på at kontrollere, at lovens bestemmelser overholdes."
+    },
+    {
+      "chapter": "Afsnit IV – Kontrol",
+      "section": "§ 57",
+      "subsection": null,
+      "item": null,
+      "title": "Bogførings- og regnskabskrav",
+      "text": "Erhvervsdrivende skal opbevare regnskaber og bilag i 5 år fra udløbet af det regnskabsår, materialet vedrører. Regnskabsmaterialet skal opbevares på en måde, der muliggør told- og skatteforvaltningens kontrol."
+    },
+    {
+      "chapter": "Afsnit V – Straf og sanktioner",
+      "section": "§ 82",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Straf for urigtige oplysninger",
+      "text": "Den, der forsætligt eller ved grov uagtsomhed afgiver urigtige eller vildledende oplysninger til brug for skatteansættelsen, straffes med bøde eller fængsel i indtil 1 år og 6 måneder."
+    },
+    {
+      "chapter": "Afsnit V – Straf og sanktioner",
+      "section": "§ 82",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Skærpet straf for skatteunddragelse",
+      "text": "Straffen kan stige til fængsel i 8 år, hvis overtrædelsen er begået med forsæt til at unddrage det offentlige skat af særlig grov karakter, herunder ved systematisk skatteunddragelse af betydeligt omfang."
+    },
+    {
+      "chapter": "Afsnit V – Straf og sanktioner",
+      "section": "§ 83",
+      "subsection": null,
+      "item": null,
+      "title": "Straf for manglende oplysning",
+      "text": "Med bøde straffes den, der undlader rettidigt at opfylde sin oplysningspligt efter §§ 2 og 7-10."
+    },
+    {
+      "chapter": "Afsnit V – Straf og sanktioner",
+      "section": "§ 84",
+      "subsection": null,
+      "item": null,
+      "title": "Skattetillæg",
+      "text": "Indgiver den skattepligtige ikke oplysninger efter § 2 rettidigt, betales et skattetillæg på 200 kr. for hver dag, fristen overskrides, dog højst 5.000 kr. i alt."
+    },
+    {
+      "chapter": "Afsnit VI – Ikrafttræden",
+      "section": "§ 90",
+      "subsection": null,
+      "item": null,
+      "title": "Ikrafttræden",
+      "text": "Loven træder i kraft den 1. januar 2019. Samtidig ophæves den hidtidige skattekontrollov, jf. lovbekendtgørelse nr. 1264 af 31. oktober 2013."
+    }
+  ]
+}
