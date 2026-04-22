@@ -77,21 +77,29 @@ def run_eval(strategy: str, limit: int = 5) -> dict:
             sparse_vector=sparse_vec,
         )
 
-        # Find rank of first acceptable section in results
+        # Find rank of first acceptable section in results.
+        # When "law" is specified in the question, require both law_code
+        # and section to match (avoids cross-law false positives like
+        # AFL § 17 matching a question about SEL § 17).
         acceptable = set(q["acceptable_sections"])
+        required_law = q.get("law")  # optional; older questions omit it
         rank = None
         for i, r in enumerate(results, 1):
             section = r["payload"].get("section", "")
+            law_code = r["payload"].get("law_code", "")
             if section in acceptable:
-                rank = i
-                break
+                if required_law is None or law_code == required_law:
+                    rank = i
+                    break
 
         per_question.append({
             "id": q["id"],
             "category": q["category"],
             "hypothesis": q["hypothesis"],
+            "expected_law": required_law or "any",
             "rank": rank,
             "hit": rank is not None,
+            "top_law": results[0]["payload"].get("law_code", "") if results else "",
             "top_section": results[0]["payload"].get("section", "") if results else "",
             "top_score": results[0]["score"] if results else 0.0,
         })
@@ -160,8 +168,9 @@ def print_report(result: dict) -> None:
         rank_str = str(pq["rank"]) if pq["rank"] is not None else "MISS"
         print(
             f"    {pq['id']:10s}  rank={rank_str:>4s}  "
-            f"top={pq['top_section']:>8s}  "
+            f"top={pq['top_law']:>4s} {pq['top_section']:>8s}  "
             f"score={pq['top_score']:.3f}  "
+            f"want={pq['expected_law']:>4s}  "
             f"cat={pq['category']}"
         )
     print()

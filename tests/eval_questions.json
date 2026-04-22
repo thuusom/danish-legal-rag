@@ -4,104 +4,199 @@
     "question": "Hvad siger AFL § 40 C om straksafskrivning af EDB-software?",
     "acceptable_sections": ["§ 40 C"],
     "category": "terminology",
-    "hypothesis": "hybrid_wins"
+    "hypothesis": "hybrid_wins",
+    "law": "AFL"
   },
   {
     "id": "term_2",
-    "question": "Afskrivningsloven § 5 C, stk. 1 — hvad er reglerne?",
-    "acceptable_sections": ["§ 5 C"],
+    "question": "Afskrivningsloven § 5 B — hvad er reglerne for blandet benyttede driftsmidler?",
+    "acceptable_sections": ["§ 5 B"],
     "category": "terminology",
-    "hypothesis": "hybrid_wins"
+    "hypothesis": "hybrid_wins",
+    "law": "AFL"
   },
   {
     "id": "term_3",
     "question": "Hvad er definitionen af driftsmidler i AFL § 2?",
     "acceptable_sections": ["§ 2"],
     "category": "terminology",
-    "hypothesis": "hybrid_wins"
+    "hypothesis": "hybrid_wins",
+    "law": "AFL"
+  },
+  {
+    "id": "term_4",
+    "question": "Hvad siger selskabsskatteloven § 11 om tynd kapitalisering?",
+    "acceptable_sections": ["§ 11"],
+    "category": "terminology",
+    "hypothesis": "hybrid_wins",
+    "law": "SEL"
+  },
+  {
+    "id": "term_5",
+    "question": "Hvad er momssatsen efter momslovens § 33?",
+    "acceptable_sections": ["§ 33"],
+    "category": "terminology",
+    "hypothesis": "hybrid_wins",
+    "law": "MOML"
+  },
+  {
+    "id": "term_6",
+    "question": "Hvad siger skatteforvaltningslovens § 26 om ordinær ansættelsesfrist?",
+    "acceptable_sections": ["§ 26"],
+    "category": "terminology",
+    "hypothesis": "hybrid_wins",
+    "law": "SFL"
   },
   {
     "id": "para_1",
     "question": "Hvordan kan man afskrive udgifter til computerprogrammer skattemæssigt?",
     "acceptable_sections": ["§ 40 C", "§ 2"],
     "category": "paraphrase",
-    "hypothesis": "dense_wins"
+    "hypothesis": "dense_wins",
+    "law": "AFL"
   },
   {
     "id": "para_2",
     "question": "Hvornår kan man trække hele anskaffelsessummen fra med det samme?",
-    "acceptable_sections": ["§ 6", "§ 40 C", "§ 11"],
+    "acceptable_sections": ["§ 6", "§ 40 C"],
     "category": "paraphrase",
-    "hypothesis": "dense_wins"
+    "hypothesis": "dense_wins",
+    "law": "AFL"
   },
   {
     "id": "para_3",
-    "question": "Hvilke regler gælder for nedskrivning af immateriel ejendom i regnskabet?",
+    "question": "Hvilke regler gaelder for nedskrivning af immateriel ejendom i regnskabet?",
     "acceptable_sections": ["§ 43", "§ 46", "§ 33"],
     "category": "paraphrase",
-    "hypothesis": "dense_wins"
+    "hypothesis": "dense_wins",
+    "law": "ARL"
+  },
+  {
+    "id": "para_4",
+    "question": "Hvornaar skal en virksomhed registreres for moms?",
+    "acceptable_sections": ["§ 47"],
+    "category": "paraphrase",
+    "hypothesis": "dense_wins",
+    "law": "MOML"
+  },
+  {
+    "id": "para_5",
+    "question": "Kan man faa fradrag for gaeldende udgifter til forskning i sin virksomhed?",
+    "acceptable_sections": ["§ 8 B"],
+    "category": "paraphrase",
+    "hypothesis": "dense_wins",
+    "law": "LL"
+  },
+  {
+    "id": "para_6",
+    "question": "Hvor laenge skal man gemme regnskabsbilag og bogfoeringsmateriale?",
+    "acceptable_sections": ["§ 11"],
+    "category": "paraphrase",
+    "hypothesis": "dense_wins",
+    "law": "BOG"
   },
   {
     "id": "mix_1",
     "question": "Hvad er afskrivningssatsen for bygninger efter afskrivningsloven?",
     "acceptable_sections": ["§ 17"],
     "category": "mixed",
-    "hypothesis": "neutral"
+    "hypothesis": "neutral",
+    "law": "AFL"
   },
   {
     "id": "mix_2",
     "question": "Hvordan behandles goodwill skattemæssigt efter AFL?",
     "acceptable_sections": ["§ 40"],
     "category": "mixed",
-    "hypothesis": "neutral"
+    "hypothesis": "neutral",
+    "law": "AFL"
   },
   {
     "id": "mix_3",
-    "question": "Kan man afskrive på installationer i en bygning?",
-    "acceptable_sections": ["§ 15"],
+    "question": "Hvad siger aarsregnskabsloven om indregning af immaterielle anlaegsaktiver?",
+    "acceptable_sections": ["§ 33", "§ 43"],
     "category": "mixed",
-    "hypothesis": "neutral"
+    "hypothesis": "neutral",
+    "law": "ARL"
   },
   {
     "id": "mix_4",
-    "question": "Hvad siger årsregnskabsloven om indregning af immaterielle anlægsaktiver?",
-    "acceptable_sections": ["§ 33", "§ 43"],
-    "category": "mixed",
-    "hypothesis": "neutral"
-  },
-  {
-    "id": "mix_5",
-    "question": "Hvad er reglerne for forskudsafskrivning?",
-    "acceptable_sections": ["§ 29"],
-    "category": "mixed",
-    "hypothesis": "neutral"
-  },
-  {
-    "id": "mix_6",
-    "question": "Hvordan opgøres saldoværdien for driftsmidler?",
-    "acceptable_sections": ["§ 5", "§ 5 D"],
-    "category": "mixed",
-    "hypothesis": "neutral"
-  },
-  {
-    "id": "mix_7",
-    "question": "Hvilke aktiver er undtaget fra afskrivning?",
-    "acceptable_sections": ["§ 1", "§ 2"],
-    "category": "mixed",
-    "hypothesis": "neutral"
-  },
-  {
-    "id": "mix_8",
-    "question": "Hvad er reglerne for tabsfradrag ved salg af driftsmidler?",
-    "acceptable_sections": ["§ 5", "§ 5 A", "§ 9"],
-    "category": "mixed",
-    "hypothesis": "neutral"
-  },
-  {
-    "id": "mix_9",
     "question": "Kan kunstnerisk udsmykning afskrives efter afskrivningsloven?",
     "acceptable_sections": ["§ 44"],
     "category": "mixed",
-    "hypothesis": "neutral"
+    "hypothesis": "neutral",
+    "law": "AFL"
+  },
+  {
+    "id": "mix_5",
+    "question": "Hvad er selskabsskattesatsen i Danmark?",
+    "acceptable_sections": ["§ 17"],
+    "category": "mixed",
+    "hypothesis": "neutral",
+    "law": "SEL"
+  },
+  {
+    "id": "mix_6",
+    "question": "Hvilke ydelser er fritaget for moms i Danmark?",
+    "acceptable_sections": ["§ 13"],
+    "category": "mixed",
+    "hypothesis": "neutral",
+    "law": "MOML"
+  },
+  {
+    "id": "mix_7",
+    "question": "Hvad er reglerne for befordringsfradrag mellem hjem og arbejde?",
+    "acceptable_sections": ["§ 9 C"],
+    "category": "mixed",
+    "hypothesis": "neutral",
+    "law": "LL"
+  },
+  {
+    "id": "mix_8",
+    "question": "Hvad er kravene til transfer pricing-dokumentation?",
+    "acceptable_sections": ["§ 37"],
+    "category": "mixed",
+    "hypothesis": "hybrid_wins",
+    "law": "SKL"
+  },
+  {
+    "id": "mix_9",
+    "question": "Hvad er kravene til revisors uafhaengighed?",
+    "acceptable_sections": ["§ 24"],
+    "category": "mixed",
+    "hypothesis": "neutral",
+    "law": "REVL"
+  },
+  {
+    "id": "mix_10",
+    "question": "Hvordan kan man klage over en skatteafgoerelse?",
+    "acceptable_sections": ["§ 35 a"],
+    "category": "mixed",
+    "hypothesis": "neutral",
+    "law": "SFL"
+  },
+  {
+    "id": "mix_11",
+    "question": "Skal virksomheder bruge digitale bogfoeringssystemer?",
+    "acceptable_sections": ["§ 8"],
+    "category": "mixed",
+    "hypothesis": "neutral",
+    "law": "BOG"
+  },
+  {
+    "id": "mix_12",
+    "question": "Hvad er EBITDA-reglen for rentefradragsbegrænsning i selskabsskatteloven?",
+    "acceptable_sections": ["§ 11 C"],
+    "category": "terminology",
+    "hypothesis": "hybrid_wins",
+    "law": "SEL"
+  },
+  {
+    "id": "mix_13",
+    "question": "Kan moms fradrages paa koeb af personbiler til virksomheden?",
+    "acceptable_sections": ["§ 39"],
+    "category": "paraphrase",
+    "hypothesis": "dense_wins",
+    "law": "MOML"
   }
 ]
