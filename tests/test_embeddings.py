@@ -206,6 +206,7 @@ class TestChunker:
             assert chunk.source_url == "https://www.retsinformation.dk/eli/lta/2016/1147"
 
 
+@pytest.mark.slow
 class TestEmbeddingProvider:
     """Test the embedding provider (requires sentence-transformers installed)."""
 

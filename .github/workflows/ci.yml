@@ -1,0 +1,188 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - 'feat/*'
+      - 'feat/**'
+  pull_request:
+    branches:
+      - main
+
+# Cancel in-progress runs for the same branch/PR.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Job 1: Unit tests (fast, no Docker, no model download)
+  # ---------------------------------------------------------------------------
+  unit:
+    name: Unit tests & lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pydantic>=2.7.2 pytest>=7.0 ruff>=0.4.0
+
+      - name: Ruff lint (non-negotiable gate)
+        run: ruff check .
+
+      - name: Run unit tests (skip slow / embedding-provider tests)
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          pytest tests/test_embeddings.py -m "not slow" -v
+
+  # ---------------------------------------------------------------------------
+  # Job 1b: Frontend lint (only when frontend/ exists)
+  # ---------------------------------------------------------------------------
+  frontend-lint:
+    name: Frontend lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Only run when the frontend directory exists in the repo.
+    # The job will still be triggered, but the first step checks and skips.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check if frontend exists
+        id: check
+        run: |
+          if [ -d "frontend" ]; then
+            echo "has_frontend=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_frontend=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.has_frontend == 'true'
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        if: steps.check.outputs.has_frontend == 'true'
+        run: cd frontend && npm ci
+
+      - name: ESLint (non-negotiable gate)
+        if: steps.check.outputs.has_frontend == 'true'
+        run: cd frontend && npx eslint .
+
+      - name: Svelte check (non-negotiable gate)
+        if: steps.check.outputs.has_frontend == 'true'
+        run: cd frontend && npm run check
+
+      - name: Skip — no frontend yet
+        if: steps.check.outputs.has_frontend != 'true'
+        run: echo "frontend/ directory not found, skipping frontend lint"
+
+  # ---------------------------------------------------------------------------
+  # Job 2: Integration tests (Docker compose)
+  # ---------------------------------------------------------------------------
+  integration:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env for Docker compose
+        run: |
+          cat > .env <<'EOF'
+          LLM_PROVIDER=mock
+          EMBEDDING_PROVIDER=sentence-transformers
+          EMBEDDING_MODEL=paraphrase-multilingual-mpnet-base-v2
+          QDRANT_HOST=qdrant
+          QDRANT_PORT=6333
+          EOF
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Cache Docker layers to speed up rebuilds.
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: docker-${{ runner.os }}-${{ hashFiles('api/Dockerfile', 'ingest/Dockerfile', 'api/requirements.txt', 'ingest/requirements.txt') }}
+          restore-keys: |
+            docker-${{ runner.os }}-
+
+      # Cache the HuggingFace model (~440 MB) across CI runs.
+      - name: Cache HuggingFace model
+        uses: actions/cache@v4
+        with:
+          path: /tmp/hf_cache
+          key: hf-model-${{ runner.os }}-paraphrase-multilingual-mpnet-base-v2
+          restore-keys: |
+            hf-model-${{ runner.os }}-
+
+      - name: Pre-seed hf_model_cache volume from cache
+        run: |
+          # Create the named volume and populate it from CI cache if available.
+          docker volume create danish-legal-rag_hf_model_cache || true
+          if [ -d "/tmp/hf_cache" ] && [ "$(ls -A /tmp/hf_cache 2>/dev/null)" ]; then
+            echo "Seeding hf_model_cache volume from CI cache..."
+            docker run --rm \
+              -v danish-legal-rag_hf_model_cache:/cache \
+              -v /tmp/hf_cache:/source:ro \
+              busybox sh -c "cp -a /source/. /cache/"
+          else
+            echo "No HuggingFace cache to seed."
+          fi
+
+      - name: Build and start services
+        run: |
+          docker compose up -d qdrant api
+
+      - name: Run ingestion
+        run: |
+          docker compose run --rm ingest
+
+      - name: Ruff lint (non-negotiable gate)
+        run: |
+          pip install ruff>=0.4.0
+          ruff check .
+
+      - name: Run integration tests
+        run: |
+          make test-integration
+
+      - name: Verify contract is in sync
+        run: |
+          pip install pyyaml
+          make contract-verify
+
+      - name: Save HuggingFace cache for next run
+        if: always()
+        run: |
+          # Extract the model cache from the Docker volume so actions/cache can persist it.
+          mkdir -p /tmp/hf_cache
+          docker run --rm \
+            -v danish-legal-rag_hf_model_cache:/cache:ro \
+            -v /tmp/hf_cache:/dest \
+            busybox sh -c "cp -a /cache/. /dest/" || true
+
+      - name: Collect logs on failure
+        if: failure()
+        run: |
+          docker compose logs --tail=100
+
+      - name: Tear down
+        if: always()
+        run: |
+          docker compose down -v
