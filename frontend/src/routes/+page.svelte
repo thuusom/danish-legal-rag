@@ -1,69 +1,81 @@
 <script lang="ts">
-	import { client } from '$lib/api/client';
+	import { chatStore, isInputDisabled } from '$lib/stores/chat';
+	import { sessionStore } from '$lib/stores/sessions';
+	import MessageList from '$lib/components/MessageList.svelte';
+	import ChatInput from '$lib/components/ChatInput.svelte';
+	import LawFilter from '$lib/components/LawFilter.svelte';
+	import SessionSidebar from '$lib/components/SessionSidebar.svelte';
 
-	// Health check state
-	let healthStatus: string | null = $state(null);
-	let healthError: string | null = $state(null);
-	let loading = $state(false);
+	let filterLaw = $state<string | null>(null);
 
-	async function checkHealth() {
-		loading = true;
-		healthError = null;
-
-		try {
-			const { data, error } = await client.GET('/health');
-			if (error) {
-				healthError = 'Kunne ikke forbinde til API';
-				return;
-			}
-			healthStatus = data?.status ?? 'ukendt';
-		} catch {
-			healthError = 'Kunne ikke forbinde til API';
-		} finally {
-			loading = false;
-		}
+	function handleSubmit(question: string) {
+		chatStore.sendMessage(question, filterLaw);
 	}
+
+	function handleFilterChange(lawCode: string | null) {
+		filterLaw = lawCode;
+	}
+
+	// Mobile sidebar toggle
+	let sidebarOpen = $state(false);
+
+	// Auto-save messages to session store whenever chat state changes
+	$effect(() => {
+		const messages = $chatStore.messages;
+		if (messages.length > 0) {
+			sessionStore.updateCurrentSession(messages);
+		}
+	});
+
+	// On mount, restore the active session if one exists
+	let mounted = false;
+	$effect(() => {
+		if (mounted) return;
+		mounted = true;
+		const activeId = sessionStore.getActiveSessionId();
+		if (activeId) {
+			const messages = sessionStore.loadSession(activeId);
+			if (messages && messages.length > 0) {
+				chatStore.setMessages(messages);
+			}
+		}
+	});
 </script>
 
 <svelte:head>
 	<title>Dansk Juridisk Assistent</title>
 </svelte:head>
 
-<main class="mx-auto max-w-prose px-4 py-16">
-	<h1 class="mb-4 text-3xl font-bold text-gray-900">
-		Dansk Juridisk Assistent
-	</h1>
+<div class="flex h-screen">
+	<!-- Session sidebar -->
+	<SessionSidebar
+		visible={sidebarOpen}
+		onclose={() => sidebarOpen = false}
+	/>
 
-	<p class="mb-8 leading-relaxed text-gray-600">
-		Stil et skattemæssigt eller regnskabsmæssigt spørgsmål og
-		få et begrundet svar med henvisninger til gældende lovgivning.
-	</p>
+	<!-- Main chat area -->
+	<main class="flex min-w-0 flex-1 flex-col">
+		<!-- Toolbar with mobile menu button and law filter -->
+		<div class="flex items-center gap-3 border-b border-gray-200 bg-white px-4 py-2">
+			<button
+				onclick={() => (sidebarOpen = !sidebarOpen)}
+				class="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 lg:hidden"
+				aria-label="Vis sidebar"
+				data-testid="sidebar-toggle"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+				</svg>
+			</button>
 
-	<div class="mb-8 rounded-lg border border-gray-200 bg-gray-50 p-6">
-		<p class="mb-4 text-sm text-gray-500">
-			Chat-grænsefladen er under udvikling. Brug knappen herunder
-			for at bekræfte, at forbindelsen til API'et virker.
-		</p>
+			<LawFilter value={filterLaw} onchange={handleFilterChange} />
+		</div>
 
-		<button
-			onclick={checkHealth}
-			disabled={loading}
-			class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white
-				hover:bg-gray-700 disabled:opacity-50"
-		>
-			{loading ? 'Tjekker...' : 'Tjek API-forbindelse'}
-		</button>
-
-		{#if healthStatus}
-			<p class="mt-3 text-sm text-green-700">
-				API-status: {healthStatus}
-			</p>
-		{/if}
-
-		{#if healthError}
-			<p class="mt-3 text-sm text-red-700">
-				{healthError}
-			</p>
-		{/if}
-	</div>
-</main>
+		<MessageList
+			messages={$chatStore.messages}
+			status={$chatStore.status}
+			error={$chatStore.error}
+		/>
+		<ChatInput disabled={$isInputDisabled} onsubmit={handleSubmit} />
+	</main>
+</div>
