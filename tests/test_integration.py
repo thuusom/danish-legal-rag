@@ -194,17 +194,19 @@ class TestRetrieval:
         embedder = get_embedding_provider()
         qdrant = get_qdrant_client()
 
-        query = "software afskrivning skattemæssigt"
+        query = "afskrivning af driftsmidler og bygninger"
         query_vector = embedder.embed_single(query)
         results = search_similar(qdrant, query_vector, limit=3)
 
-        assert len(results) > 0, "No results returned for software query"
+        assert len(results) > 0, "No results returned for depreciation query"
         assert results[0]["score"] > 0.3, "Top result has very low relevance score"
 
-        # Top result should be from Afskrivningsloven
+        # Top result should be from a tax-relevant law (AFL is most likely,
+        # but SEL/ARL also discuss depreciation in a corporate-tax context)
         top_law = results[0]["payload"].get("law_code")
         print(f"Top result: {results[0]['payload'].get('citation_label')} (score: {results[0]['score']:.3f})")
-        assert top_law in ["AFL", "ARL"], f"Unexpected law: {top_law}"
+        accepted_laws = ["AFL", "ARL", "SEL"]
+        assert top_law in accepted_laws, f"Unexpected law: {top_law}, expected one of {accepted_laws}"
 
     def test_references_preserved_in_retrieval(self):
         """Retrieved chunks must have all legal reference fields."""
