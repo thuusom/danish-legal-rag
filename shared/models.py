@@ -136,6 +136,45 @@ class AskResponse(BaseModel):
     model_used: str
 
 
+class StreamAskRequest(BaseModel):
+    """Request body for POST /ask/stream — like AskRequest but with optional conversation history."""
+    question: str = Field(description="Natural language question in Danish")
+    limit: int = Field(default=8, ge=1, le=20, description="Max number of sources to retrieve")
+    filter_law: Optional[str] = Field(default=None, description="Optional: filter by law_code, e.g. 'AFL'")
+    retrieval_strategy: Optional[Literal["dense", "hybrid"]] = Field(
+        default=None,
+        description="Retrieval strategy override. Omit to use server default (RETRIEVAL_STRATEGY env var).",
+    )
+    history: Optional[list[dict]] = Field(
+        default=None,
+        description="Optional conversation history for multi-turn context. Each entry has 'role' and 'content'.",
+    )
+
+
+class StreamChunkEvent(BaseModel):
+    """SSE event: partial answer text chunk."""
+    type: Literal["chunk"] = "chunk"
+    data: str
+
+
+class StreamReferencesEvent(BaseModel):
+    """SSE event: full reference array, sent once after answer completion."""
+    type: Literal["references"] = "references"
+    data: list[LegalReference]
+
+
+class StreamDoneEvent(BaseModel):
+    """SSE event: completion signal."""
+    type: Literal["done"] = "done"
+    data: dict
+
+
+class StreamErrorEvent(BaseModel):
+    """SSE event: error, sent on failure before stream closes."""
+    type: Literal["error"] = "error"
+    data: dict
+
+
 class SearchRequest(BaseModel):
     query: str
     limit: int = Field(default=5, ge=1, le=20)

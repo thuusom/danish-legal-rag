@@ -34,7 +34,12 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
-from shared.models import AskRequest, AskResponse, LegalReference, SearchResponse, get_effective_strategy
+from collections.abc import Generator
+from shared.models import (
+    AskRequest, AskResponse, LegalReference, SearchResponse,
+    StreamAskRequest, StreamChunkEvent, StreamReferencesEvent,
+    StreamDoneEvent, StreamErrorEvent, get_effective_strategy,
+)
 from shared.qdrant_utils import get_qdrant_client, search_similar
 from shared.sparse import is_hybrid_enabled, get_sparse_provider
 from api.embeddings import get_query_embedder
@@ -283,6 +288,161 @@ def _mock_answer(question: str, context: str) -> str:
         "---\n"
         "*Konfigurér en LLM-provider for at få et formuleret svar.*"
     )
+
+
+# ---------------------------------------------------------------------------
+# Streaming LLM provider dispatch
+# ---------------------------------------------------------------------------
+
+def call_llm_stream(
+    question: str,
+    context: str,
+    history: list[dict] | None = None,
+) -> Generator[str, None, str]:
+    """
+    Call the configured LLM provider in streaming mode.
+
+    Yields chunk strings as tokens arrive.
+    Returns the model name used (accessible via generator return value,
+    but callers should use get_model_name() instead for simplicity).
+
+    If history is provided, prior messages are prepended to the conversation.
+    """
+    provider = os.environ.get("LLM_PROVIDER", "anthropic").lower()
+
+    user_prompt = (
+        f"Kontekst (relevante lovbestemmelser):\n\n{context}\n\n"
+        f"---\n\n"
+        f"Spørgsmål: {question}\n\n"
+        f"Besvar spørgsmålet baseret udelukkende på ovenstående lovbestemmelser. "
+        f"Angiv præcise referencer og følg svarstilen beskrevet i systemprompt."
+    )
+
+    messages = []
+    if history:
+        for msg in history:
+            messages.append({"role": msg.get("role", "user"), "content": msg.get("content", "")})
+    messages.append({"role": "user", "content": user_prompt})
+
+    if provider == "anthropic":
+        yield from _call_anthropic_stream(messages)
+    elif provider == "openai":
+        yield from _call_openai_stream(messages)
+    elif provider == "ollama":
+        yield from _call_ollama_stream(messages)
+    else:
+        yield from _call_mock_stream(question, context)
+
+
+def _call_anthropic_stream(messages: list[dict]) -> Generator[str, None, None]:
+    """Stream from Anthropic Claude API."""
+    import anthropic
+
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        logger.warning("ANTHROPIC_API_KEY not set, falling back to mock stream")
+        yield from _call_mock_stream("", "")
+        return
+
+    model = os.environ.get("ANTHROPIC_MODEL", "claude-opus-4-5")
+    client = anthropic.Anthropic(api_key=api_key)
+    system_prompt = build_system_prompt()
+
+    logger.info(f"Streaming from Anthropic {model}")
+    with client.messages.stream(
+        model=model,
+        max_tokens=2048,
+        system=system_prompt,
+        messages=messages,
+    ) as stream:
+        for text in stream.text_stream:
+            yield text
+
+
+def _call_openai_stream(messages: list[dict]) -> Generator[str, None, None]:
+    """Stream from OpenAI ChatCompletion API."""
+    import openai
+
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        logger.warning("OPENAI_API_KEY not set, falling back to mock stream")
+        yield from _call_mock_stream("", "")
+        return
+
+    model = os.environ.get("OPENAI_MODEL", "gpt-4o")
+    client = openai.OpenAI(api_key=api_key)
+    system_prompt = build_system_prompt()
+
+    logger.info(f"Streaming from OpenAI {model}")
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "system", "content": system_prompt}] + messages,
+        max_tokens=2048,
+        stream=True,
+    )
+    for chunk in response:
+        if chunk.choices and chunk.choices[0].delta.content:
+            yield chunk.choices[0].delta.content
+
+
+def _call_ollama_stream(messages: list[dict]) -> Generator[str, None, None]:
+    """Stream from Ollama via its OpenAI-compatible /v1 endpoint."""
+    import openai
+
+    base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    model = os.environ.get("OLLAMA_MODEL", "llama3.3:70b")
+    system_prompt = build_system_prompt()
+
+    logger.info(f"Streaming from Ollama at {base_url} model={model}")
+    client = openai.OpenAI(base_url=base_url, api_key="ollama")
+
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "system", "content": system_prompt}] + messages,
+            max_tokens=2048,
+            temperature=0.1,
+            stream=True,
+        )
+        for chunk in response:
+            if chunk.choices and chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
+    except Exception as e:
+        logger.error(f"Ollama streaming failed: {e}")
+        raise RuntimeError(
+            f"Ollama at {base_url} with model '{model}' failed: {e}. "
+            f"Check that Ollama is running and the model is pulled."
+        ) from e
+
+
+def _call_mock_stream(question: str, context: str) -> Generator[str, None, None]:
+    """Mock streaming: yield the mock answer word-by-word."""
+    import time
+
+    mock_text = (
+        "**BEMÆRK: Mock-tilstand** — Ingen LLM er konfigureret. "
+        "Indstil LLM_PROVIDER (anthropic/openai/ollama) i .env.\n\n"
+        "Følgende lovbestemmelser blev fundet og ville blive sendt til LLM.\n\n"
+        "*Konfigurér en LLM-provider for at få et formuleret svar.*"
+    )
+    words = mock_text.split(" ")
+    for i, word in enumerate(words):
+        yield word if i == 0 else f" {word}"
+        time.sleep(0.02)
+
+
+def get_model_name() -> str:
+    """Return the model name string for the currently configured LLM provider."""
+    provider = os.environ.get("LLM_PROVIDER", "anthropic").lower()
+    if provider == "anthropic":
+        return os.environ.get("ANTHROPIC_MODEL", "claude-opus-4-5")
+    elif provider == "openai":
+        return os.environ.get("OPENAI_MODEL", "gpt-4o")
+    elif provider == "ollama":
+        model = os.environ.get("OLLAMA_MODEL", "llama3.3:70b")
+        return f"ollama/{model}"
+    else:
+        return "mock"
 
 
 # ---------------------------------------------------------------------------
