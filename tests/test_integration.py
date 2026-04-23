@@ -323,6 +323,106 @@ class TestAPI:
         assert len(data["references"]) > 0
 
 
+class TestAskStream:
+    """Tests for the /ask/stream SSE endpoint."""
+
+    def _parse_sse_events(self, text: str) -> list[dict]:
+        """Parse SSE text into a list of JSON event dicts."""
+        import json
+        events = []
+        for line in text.split("\n"):
+            line = line.strip()
+            if line.startswith("data: "):
+                payload = line[len("data: "):]
+                try:
+                    events.append(json.loads(payload))
+                except json.JSONDecodeError:
+                    pass
+        return events
+
+    def test_ask_stream_returns_sse(self):
+        """POST /ask/stream must return a valid SSE stream with chunk, references, and done events."""
+        with httpx.Client(timeout=120.0) as client:
+            r = client.post(
+                f"{API_URL}/ask/stream",
+                json={"question": "Hvordan afskrives software skattemæssigt?"},
+            )
+        assert r.status_code == 200
+        assert "text/event-stream" in r.headers.get("content-type", "")
+
+        events = self._parse_sse_events(r.text)
+        assert len(events) > 0, "No SSE events received"
+
+        event_types = [e["type"] for e in events]
+
+        # Must have at least one chunk
+        assert "chunk" in event_types, f"No 'chunk' events in stream. Got types: {event_types}"
+
+        # Must have exactly one references event
+        ref_events = [e for e in events if e["type"] == "references"]
+        assert len(ref_events) == 1, f"Expected 1 references event, got {len(ref_events)}"
+        refs = ref_events[0]["data"]
+        assert isinstance(refs, list), "References data must be a list"
+        if len(refs) > 0:
+            ref = refs[0]
+            assert "law" in ref, "Reference missing 'law' field"
+            assert "section" in ref, "Reference missing 'section' field"
+            assert "citation_label" in ref, "Reference missing 'citation_label' field"
+
+        # Must have exactly one done event
+        done_events = [e for e in events if e["type"] == "done"]
+        assert len(done_events) == 1, f"Expected 1 done event, got {len(done_events)}"
+        assert "model_used" in done_events[0]["data"], "Done event missing 'model_used'"
+
+        # done must be the last event
+        assert events[-1]["type"] == "done", f"Last event should be 'done', got '{events[-1]['type']}'"
+
+    def test_ask_stream_with_history(self):
+        """POST /ask/stream with history must still return valid SSE."""
+        with httpx.Client(timeout=120.0) as client:
+            r = client.post(
+                f"{API_URL}/ask/stream",
+                json={
+                    "question": "Hvad med goodwill?",
+                    "limit": 5,
+                    "history": [
+                        {"role": "user", "content": "Hvordan afskrives software?"},
+                        {"role": "assistant", "content": "Software kan straksafskrives."},
+                    ],
+                },
+            )
+        assert r.status_code == 200
+        events = self._parse_sse_events(r.text)
+        event_types = [e["type"] for e in events]
+        assert "chunk" in event_types, "No chunk events with history"
+        assert "done" in event_types, "No done event with history"
+
+    def test_ask_stream_chunks_form_answer(self):
+        """Concatenated chunk data should form a non-empty answer string."""
+        with httpx.Client(timeout=120.0) as client:
+            r = client.post(
+                f"{API_URL}/ask/stream",
+                json={"question": "Hvad er reglerne for straksafskrivning?"},
+            )
+        assert r.status_code == 200
+        events = self._parse_sse_events(r.text)
+        chunks = [e["data"] for e in events if e["type"] == "chunk"]
+        full_answer = "".join(chunks)
+        assert len(full_answer) > 10, f"Answer too short: '{full_answer}'"
+
+    def test_nonstreaming_ask_still_works(self):
+        """Regression: non-streaming /ask must still work after adding /ask/stream."""
+        with httpx.Client(timeout=60.0) as client:
+            r = client.post(
+                f"{API_URL}/ask",
+                json={"question": "Hvordan afskrives bygninger?"},
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert "answer" in data and data["answer"]
+        assert "references" in data
+
+
 class TestHybridSearch:
     """Tests for hybrid search. These require RETRIEVAL_STRATEGY=hybrid and re-ingested data."""
 
