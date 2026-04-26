@@ -1,0 +1,338 @@
+{
+  "law_code": "BOG-BEK",
+  "law_name": "Bogføringsbekendtgørelsen",
+  "law_title": "Bekendtgørelse om bogføring",
+  "law_number": "BEK nr 2006 af 26/10/2023",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2023/2006",
+  "effective_date": "2023-10-26",
+  "provisions": [
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde og definitioner",
+      "section": "§ 1",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Bekendtgørelsens anvendelsesområde",
+      "text": "Denne bekendtgørelse finder anvendelse på virksomheder, der er bogføringspligtige efter bogføringsloven, jf. lovens § 1."
+    },
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde og definitioner",
+      "section": "§ 1",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Undtagne virksomheder",
+      "text": "Bekendtgørelsen finder ikke anvendelse på virksomheder, der er undtaget fra bogføringsloven i medfør af lovens § 1, stk. 3."
+    },
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde og definitioner",
+      "section": "§ 2",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Definitioner – digitalt bogføringssystem",
+      "text": "Ved et digitalt bogføringssystem forstås i denne bekendtgørelse et it-system, der er indrettet med henblik på at registrere virksomhedens transaktioner digitalt og opbevare registreringerne og de tilhørende bilag i digital form."
+    },
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde og definitioner",
+      "section": "§ 2",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Definitioner – standardbogføringssystem",
+      "text": "Ved et standardbogføringssystem forstås et digitalt bogføringssystem, der udbydes til bogføringspligtige virksomheder, og som opfylder kravene i denne bekendtgørelses kapitel 3."
+    },
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde og definitioner",
+      "section": "§ 2",
+      "subsection": "stk. 3",
+      "item": null,
+      "title": "Definitioner – specialudviklet bogføringssystem",
+      "text": "Ved et specialudviklet bogføringssystem forstås et digitalt bogføringssystem, der er udviklet til brug for en enkelt eller en afgrænset gruppe af virksomheder, og som opfylder kravene i denne bekendtgørelses kapitel 3."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 3",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Registreringskrav",
+      "text": "Virksomheden skal registrere alle transaktioner og økonomiske hændelser i det digitale bogføringssystem. Registreringen skal ske i dansk eller udenlandsk mønt, jf. bogføringslovens § 4, stk. 1."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 3",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Tidspunkt for registrering",
+      "text": "Registreringen skal foretages snarest muligt efter, at transaktionen eller den økonomiske hændelse har fundet sted, og senest ved udgangen af den følgende måned."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 4",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Krav til registreringens indhold",
+      "text": "Hver registrering skal indeholde oplysninger om: 1) transaktionsdato, 2) beløb, 3) tekst, der beskriver transaktionens art, 4) bilagsnummer eller anden entydig reference til det underliggende bilag og 5) momsbeløb, hvor det er relevant."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 4",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Kontoplan",
+      "text": "Virksomheden skal anvende en kontoplan, der sikrer, at registreringerne kan danne grundlag for udarbejdelse af årsregnskab i overensstemmelse med den for virksomheden gældende regnskabslovgivning."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 5",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Transaktionssporet",
+      "text": "Det digitale bogføringssystem skal sikre, at der er et fuldstændigt transaktionsspor fra de enkelte registreringer til årsregnskabet og omvendt, jf. bogføringslovens § 4, stk. 2."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 5",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Ændring af registreringer",
+      "text": "En registrering, der er foretaget i det digitale bogføringssystem, må ikke efterfølgende ændres eller slettes. Korrektioner skal foretages ved nye registreringer."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 6",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afstemninger",
+      "text": "Virksomheden skal foretage afstemning af bankkonti mindst hver fjerde måned. Afstemningen skal dokumenteres og opbevares som en del af regnskabsmaterialet."
+    },
+    {
+      "chapter": "Kapitel 2 – Bogføring og registrering",
+      "section": "§ 6",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Afstemning af debitorer og kreditorer",
+      "text": "Virksomheden skal foretage afstemning af tilgodehavender fra salg (debitorer) og leverandørgæld (kreditorer) mindst en gang årligt ved regnskabsårets udløb."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til digitale bogføringssystemer",
+      "section": "§ 7",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Grundlæggende systemkrav",
+      "text": "Et digitalt bogføringssystem skal som minimum kunne: 1) registrere transaktioner med de oplysninger, der er nævnt i § 4, stk. 1, 2) sikre et fuldstændigt transaktionsspor, jf. § 5, stk. 1, 3) opbevare registreringer og bilag digitalt, jf. kapitel 4, og 4) forhindre ændring og sletning af registreringer, jf. § 5, stk. 2."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til digitale bogføringssystemer",
+      "section": "§ 7",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Standardkontoplan",
+      "text": "Erhvervsstyrelsen kan fastsætte krav om, at digitale bogføringssystemer skal understøtte en standardkontoplan, som sikrer ensartet rapportering."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til digitale bogføringssystemer",
+      "section": "§ 8",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Krav til sikkerhed",
+      "text": "Det digitale bogføringssystem skal have passende sikkerhedsforanstaltninger mod uautoriseret adgang, herunder brugerstyring med individuelle brugerkonti og adgangskoder."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til digitale bogføringssystemer",
+      "section": "§ 8",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Logning af handlinger",
+      "text": "Det digitale bogføringssystem skal logge alle handlinger, der foretages i systemet, herunder registreringer, korrektioner og sletningsforsøg, med angivelse af bruger, tidspunkt og handling."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til digitale bogføringssystemer",
+      "section": "§ 9",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Automatisk sikkerhedskopiering",
+      "text": "Det digitale bogføringssystem skal automatisk sikkerhedskopiere virksomhedens registreringer og bilag til en ekstern server eller en cloudbaseret løsning mindst en gang dagligt."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til digitale bogføringssystemer",
+      "section": "§ 9",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Krav til sikkerhedskopien",
+      "text": "Sikkerhedskopien skal opbevares adskilt fra det primære system, så den er beskyttet mod tab, ødelæggelse og kompromittering. Udbyderen skal sikre, at virksomheden til enhver tid kan genskabe sine data fra sikkerhedskopien."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til digitale bogføringssystemer",
+      "section": "§ 10",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Grænseflader og dataudveksling",
+      "text": "Digitale bogføringssystemer skal understøtte dataudveksling med offentlige myndigheder via anerkendte standardformater. Erhvervsstyrelsen fastsætter nærmere krav til de standardformater, der skal understøttes."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til digitale bogføringssystemer",
+      "section": "§ 10",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "E-fakturering",
+      "text": "Digitale bogføringssystemer skal kunne modtage og afsende elektroniske fakturaer i det format, der er fastsat af Erhvervsstyrelsen, herunder OIOUBL- og Peppol BIS-formater."
+    },
+    {
+      "chapter": "Kapitel 4 – Digital opbevaring af bilag",
+      "section": "§ 11",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Digital opbevaring af bilag",
+      "text": "Virksomheden skal opbevare alle bilag digitalt i det digitale bogføringssystem eller i et tilknyttet digitalt arkiv. Fysiske bilag skal digitaliseres og opbevares digitalt."
+    },
+    {
+      "chapter": "Kapitel 4 – Digital opbevaring af bilag",
+      "section": "§ 11",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Krav til digitalisering",
+      "text": "Ved digitalisering af fysiske bilag skal virksomheden sikre, at den digitale kopi er fuldstændig og læsbar. Digitaliseringen skal foretages snarest muligt og senest ved udgangen af den måned, hvor bilaget modtages."
+    },
+    {
+      "chapter": "Kapitel 4 – Digital opbevaring af bilag",
+      "section": "§ 12",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Sammenhæng mellem registrering og bilag",
+      "text": "Det digitale bogføringssystem skal sikre en entydig sammenhæng mellem registreringer og de tilhørende bilag, således at bilaget kan fremfindes direkte fra registreringen."
+    },
+    {
+      "chapter": "Kapitel 4 – Digital opbevaring af bilag",
+      "section": "§ 12",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Bilagsformater",
+      "text": "Bilag kan opbevares i følgende formater: PDF, JPEG, PNG, TIFF, XML (herunder OIOUBL og Peppol BIS) og andre formater godkendt af Erhvervsstyrelsen. Formaterne skal sikre langtidsbevarelse og læsbarhed."
+    },
+    {
+      "chapter": "Kapitel 5 – Opbevaring af regnskabsmateriale",
+      "section": "§ 13",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Opbevaringsperiode",
+      "text": "Regnskabsmaterialet skal opbevares i 5 år fra udgangen af det regnskabsår, som materialet vedrører, jf. bogføringslovens § 11, stk. 1."
+    },
+    {
+      "chapter": "Kapitel 5 – Opbevaring af regnskabsmateriale",
+      "section": "§ 13",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Tilgængelighed",
+      "text": "Regnskabsmaterialet skal til enhver tid inden for opbevaringsperioden kunne fremfindes og udleveres til offentlige myndigheder inden for en rimelig frist, der normalt ikke overstiger 5 arbejdsdage."
+    },
+    {
+      "chapter": "Kapitel 5 – Opbevaring af regnskabsmateriale",
+      "section": "§ 14",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Opbevaring i Danmark eller EU/EØS",
+      "text": "Regnskabsmateriale, herunder digitale registreringer og bilag, skal opbevares her i landet eller i et andet EU/EØS-land, jf. bogføringslovens § 12."
+    },
+    {
+      "chapter": "Kapitel 5 – Opbevaring af regnskabsmateriale",
+      "section": "§ 14",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Opbevaring hos tredjemand",
+      "text": "Opbevares regnskabsmaterialet hos en tredjemand, herunder i en cloudbaseret løsning, har virksomheden fortsat ansvaret for, at opbevaringskravene overholdes. Virksomheden skal sikre, at der foreligger en skriftlig aftale med tredjemanden om adgang og datasikkerhed."
+    },
+    {
+      "chapter": "Kapitel 6 – Anmeldelse og registrering af udbydere",
+      "section": "§ 15",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Anmeldelsespligt for udbydere",
+      "text": "Udbydere af standardbogføringssystemer skal anmelde deres systemer til Erhvervsstyrelsen, inden systemet udbydes til bogføringspligtige virksomheder, jf. bogføringslovens § 9."
+    },
+    {
+      "chapter": "Kapitel 6 – Anmeldelse og registrering af udbydere",
+      "section": "§ 15",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Anmeldelsens indhold",
+      "text": "Anmeldelsen skal indeholde oplysninger om: 1) udbyderens navn, CVR-nummer og kontaktoplysninger, 2) systemets navn og version, 3) en beskrivelse af, hvordan systemet opfylder kravene i denne bekendtgørelses kapitel 3, og 4) en erklæring fra udbyderen om, at systemet opfylder kravene."
+    },
+    {
+      "chapter": "Kapitel 6 – Anmeldelse og registrering af udbydere",
+      "section": "§ 16",
+      "subsection": null,
+      "item": null,
+      "title": "Erhvervsstyrelsens register",
+      "text": "Erhvervsstyrelsen fører et offentligt tilgængeligt register over anmeldte standardbogføringssystemer. Registeret offentliggøres på Erhvervsstyrelsens hjemmeside og indeholder oplysninger om udbydernes navne, systemernes navne og registreringsdatoer."
+    },
+    {
+      "chapter": "Kapitel 6 – Anmeldelse og registrering af udbydere",
+      "section": "§ 17",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Tilbagetrækning af registrering",
+      "text": "Erhvervsstyrelsen kan tilbagetrække registreringen af et standardbogføringssystem, hvis systemet ikke længere opfylder kravene i denne bekendtgørelse."
+    },
+    {
+      "chapter": "Kapitel 6 – Anmeldelse og registrering af udbydere",
+      "section": "§ 17",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Varsel ved tilbagetrækning",
+      "text": "Inden tilbagetrækning af registreringen giver Erhvervsstyrelsen udbyderen et varsel på mindst 3 måneder til at bringe systemet i overensstemmelse med kravene."
+    },
+    {
+      "chapter": "Kapitel 7 – Erhvervsstyrelsens tilsyn",
+      "section": "§ 18",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Tilsyn med virksomheder",
+      "text": "Erhvervsstyrelsen kan som led i sit tilsyn med overholdelsen af bogføringslovgivningen kræve, at virksomheden inden for en fastsat frist fremlægger regnskabsmateriale og giver adgang til det digitale bogføringssystem."
+    },
+    {
+      "chapter": "Kapitel 7 – Erhvervsstyrelsens tilsyn",
+      "section": "§ 18",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Tilsyn med udbydere",
+      "text": "Erhvervsstyrelsen kan kræve, at udbydere af digitale bogføringssystemer fremlægger dokumentation for, at systemet opfylder kravene i denne bekendtgørelse, og kan foretage test og kontrolbesøg."
+    },
+    {
+      "chapter": "Kapitel 7 – Erhvervsstyrelsens tilsyn",
+      "section": "§ 19",
+      "subsection": null,
+      "item": null,
+      "title": "Påbud og forbud",
+      "text": "Erhvervsstyrelsen kan meddele påbud om, at virksomheden eller udbyderen bringer et forhold i overensstemmelse med bekendtgørelsen inden for en fastsat frist. Ved grov eller gentagen overtrædelse kan Erhvervsstyrelsen forbyde udbyderen at udbyde systemet."
+    },
+    {
+      "chapter": "Kapitel 8 – Ikrafttræden og overgangsbestemmelser",
+      "section": "§ 20",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Ikrafttræden",
+      "text": "Bekendtgørelsen træder i kraft den 1. november 2023."
+    },
+    {
+      "chapter": "Kapitel 8 – Ikrafttræden og overgangsbestemmelser",
+      "section": "§ 20",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Overgangsbestemmelse for digitale bogføringssystemer",
+      "text": "Virksomheder, der anvender et digitalt bogføringssystem, der ikke opfylder kravene i kapitel 3 og 4, skal senest den 1. januar 2025 overgå til et system, der opfylder kravene, eller sikre, at det eksisterende system bringes i overensstemmelse med kravene."
+    },
+    {
+      "chapter": "Kapitel 8 – Ikrafttræden og overgangsbestemmelser",
+      "section": "§ 20",
+      "subsection": "stk. 3",
+      "item": null,
+      "title": "Overgangsbestemmelse for udbydere",
+      "text": "Udbydere af standardbogføringssystemer, der allerede udbyder systemer på tidspunktet for bekendtgørelsens ikrafttræden, skal anmelde deres systemer til Erhvervsstyrelsen senest den 1. april 2024."
+    },
+    {
+      "chapter": "Kapitel 8 – Ikrafttræden og overgangsbestemmelser",
+      "section": "§ 21",
+      "subsection": null,
+      "item": null,
+      "title": "Ophævelse",
+      "text": "Bekendtgørelse nr. 184 af 26. februar 2022 om bogføring ophæves."
+    }
+  ]
+}

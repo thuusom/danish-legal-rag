@@ -1,8 +1,10 @@
 # Plan: CI + Chat Frontend
 
+> **Status: Executed** -- all 7 issues (#3-#9) completed and closed. See reports/2026-04-23.md
+
 **Date:** 2026-04-23
 **Branch:** `feat/multi-agent-setup`
-**Status:** Approved — issues filed 2026-04-23
+**Status:** Executed
 
 ---
 

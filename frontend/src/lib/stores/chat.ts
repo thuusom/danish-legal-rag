@@ -33,8 +33,9 @@ const NO_SOURCES_MARKERS = [
 	'Ingen relevante lovbestemmelser'
 ];
 
-// Base URL for raw fetch calls (same as the openapi-fetch client)
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
+// Base URL for raw fetch calls (same as the openapi-fetch client).
+// Defaults to server-side proxy; override with VITE_API_BASE_URL for bare-metal dev.
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
 function createChatStore() {
 	const { subscribe, update, set } = writable<ChatState>({

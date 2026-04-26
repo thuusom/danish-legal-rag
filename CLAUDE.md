@@ -133,6 +133,23 @@ finished.
   stack via docker compose
 - Every PR must include or update a test; no PR merges on "looks fine"
 
+## Issue tracking (mandatory)
+
+Every feature, bug fix, or corpus change MUST have a GitHub Issue filed
+BEFORE work begins. This is non-negotiable — work without a tracking issue
+is invisible and uncoordinated.
+
+- **Before starting work:** File or confirm a GitHub Issue exists using
+  `gh issue create`. Include: user story, owner (which agent), acceptance
+  criteria, and dependencies.
+- **During work:** Reference the Issue number in all commit messages
+  (e.g., `#12`).
+- **On completion:** Close the Issue via commit message or `gh issue close`.
+- **For multi-step features:** File a parent Issue and break into sub-issues.
+  The PM agent tracks the parent; agents work the sub-issues.
+- **Agents must never pick up work that has no Issue.** If asked to do
+  something ad-hoc, file the Issue first, then implement.
+
 ## Non-goals
 
 - Do not replace Qdrant with OpenSearch. Qdrant 1.10+ supports sparse vectors,

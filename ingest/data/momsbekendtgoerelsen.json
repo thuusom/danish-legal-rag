@@ -1,0 +1,410 @@
+{
+  "law_code": "MOML-BEK",
+  "law_name": "Momsbekendtgørelsen",
+  "law_title": "Bekendtgørelse om merværdiafgift (momsbekendtgørelsen)",
+  "law_number": "BEK nr 1435 af 29/11/2023",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2023/1435",
+  "effective_date": "2023-11-29",
+  "provisions": [
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde",
+      "section": "§ 1",
+      "subsection": null,
+      "item": null,
+      "title": "Bekendtgørelsens anvendelsesområde",
+      "text": "Denne bekendtgørelse indeholder nærmere regler om registrering, fakturering, regnskab, angivelse og betaling af afgift samt om fradragsret i henhold til momsloven."
+    },
+    {
+      "chapter": "Kapitel 2 – Registrering",
+      "section": "§ 2",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Registreringspligt",
+      "text": "Afgiftspligtige personer, der driver virksomhed med levering af varer og ydelser, skal anmelde sig til registrering hos Skatteforvaltningen, inden virksomheden påbegyndes, jf. momslovens § 47, stk. 1."
+    },
+    {
+      "chapter": "Kapitel 2 – Registrering",
+      "section": "§ 2",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Registreringsgrænse",
+      "text": "Virksomheder med en årlig omsætning under 50.000 kr. er fritaget for registrering, jf. momslovens § 48, stk. 1. Virksomheden kan dog vælge at lade sig registrere frivilligt."
+    },
+    {
+      "chapter": "Kapitel 2 – Registrering",
+      "section": "§ 3",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Frivillig registrering for udlejning af fast ejendom",
+      "text": "Udlejning af fast ejendom, der er fritaget for afgift efter momslovens § 13, stk. 1, nr. 8, kan efter ansøgning til Skatteforvaltningen registreres frivilligt, jf. momslovens § 51."
+    },
+    {
+      "chapter": "Kapitel 2 – Registrering",
+      "section": "§ 3",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Betingelser for frivillig registrering af udlejning",
+      "text": "Frivillig registrering for udlejning af fast ejendom kan kun ske for den del af ejendommen, der udlejes eller forsøges udlejet til erhvervsmæssig brug. Registreringen kan ikke omfatte udlejning til boligformål."
+    },
+    {
+      "chapter": "Kapitel 2 – Registrering",
+      "section": "§ 4",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Registrering af udenlandske virksomheder",
+      "text": "Udenlandske virksomheder, der leverer varer og ydelser med leveringssted i Danmark, og som ikke har forretningssted her i landet, skal registreres ved en herboende repræsentant, jf. momslovens § 47, stk. 2."
+    },
+    {
+      "chapter": "Kapitel 2 – Registrering",
+      "section": "§ 4",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Undtagelse fra repræsentantkrav",
+      "text": "Kravet om registrering ved en herboende repræsentant gælder ikke for virksomheder hjemmehørende i et EU-land, på Færøerne, i Grønland, Island eller Norge."
+    },
+    {
+      "chapter": "Kapitel 2 – Registrering",
+      "section": "§ 5",
+      "subsection": null,
+      "item": null,
+      "title": "Afmeldelse fra registrering",
+      "text": "Ophører den registreringspligtige virksomhed, skal virksomheden afmeldes fra registrering hos Skatteforvaltningen senest 8 dage efter ophøret. Ved afmeldelsen skal virksomheden angive og betale afgift for den sidste afgiftsperiode."
+    },
+    {
+      "chapter": "Kapitel 3 – Fakturering",
+      "section": "§ 6",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Fakturapligt",
+      "text": "Registrerede virksomheder skal udstede en faktura for enhver levering af varer og ydelser, jf. momslovens § 52 a. Fakturaen skal udstedes senest 15 dage efter den måned, hvori leveringen har fundet sted."
+    },
+    {
+      "chapter": "Kapitel 3 – Fakturering",
+      "section": "§ 6",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Fakturaens indhold",
+      "text": "Fakturaen skal indeholde følgende oplysninger: 1) udstedelsesdato, 2) et fortløbende nummer, der bygger på en eller flere serier, som entydigt identificerer fakturaen, 3) sælgers momsregistreringsnummer (CVR-nummer), 4) købers momsregistreringsnummer ved EU-handel, 5) sælgers og købers navn og adresse, 6) mængden og arten af de leverede varer eller omfanget og arten af de leverede ydelser, 7) den dato, hvor leveringen af varer eller ydelser foretages, 8) afgiftsgrundlaget for hver momssats, 9) den gældende momssats, og 10) det momsbeløb, der skal betales."
+    },
+    {
+      "chapter": "Kapitel 3 – Fakturering",
+      "section": "§ 7",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Forenklet faktura",
+      "text": "Skatteforvaltningen kan tillade, at der udstedes forenklede fakturaer, når fakturabeløbet inklusive afgift ikke overstiger 3.000 kr. En forenklet faktura skal som minimum indeholde: 1) udstedelsesdato, 2) sælgers momsregistreringsnummer, 3) en beskrivelse af de leverede varer eller ydelser, og 4) det samlede afgiftsbeløb eller oplysninger, der gør det muligt at beregne det."
+    },
+    {
+      "chapter": "Kapitel 3 – Fakturering",
+      "section": "§ 7",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Kassebon som forenklet faktura",
+      "text": "En kassebon fra et registreret kasseapparat, der opfylder mindstekravene i stk. 1, kan anvendes som forenklet faktura."
+    },
+    {
+      "chapter": "Kapitel 3 – Fakturering",
+      "section": "§ 8",
+      "subsection": null,
+      "item": null,
+      "title": "Elektronisk fakturering",
+      "text": "Fakturaer kan udstedes elektronisk, forudsat at modtageren har accepteret elektronisk fakturering. Autenticiteten af fakturaens oprindelse, integriteten af fakturaens indhold og fakturaens læsbarhed skal sikres fra udstedelsestidspunktet og i hele opbevaringsperioden."
+    },
+    {
+      "chapter": "Kapitel 3 – Fakturering",
+      "section": "§ 9",
+      "subsection": null,
+      "item": null,
+      "title": "Kreditnota",
+      "text": "Ved ændring af afgiftsgrundlaget efter leveringen, herunder ved returnering af varer eller ydelse af rabatter, skal der udstedes en kreditnota, der indeholder en entydig reference til den oprindelige faktura samt de ændrede beløb."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 10",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Generel fradragsret",
+      "text": "Registrerede virksomheder kan fradrage afgiften af virksomhedens indkøb af varer og ydelser, der udelukkende anvendes til brug for virksomhedens afgiftspligtige leverancer, jf. momslovens § 37, stk. 1."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 10",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Dokumentation for fradrag",
+      "text": "Fradragsretten er betinget af, at virksomheden er i besiddelse af en faktura, der opfylder kravene i § 6, stk. 2, eller en forenklet faktura, jf. § 7, stk. 1."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 11",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Delvis fradragsret",
+      "text": "For varer og ydelser, der anvendes til både afgiftspligtige og afgiftsfrie formål, kan der foretages fradrag for den del af afgiften, der skønsmæssigt svarer til den afgiftspligtige anvendelse, jf. momslovens § 38, stk. 1."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 11",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Opgørelse af delvis fradragsret",
+      "text": "Den delvise fradragsret opgøres som forholdet mellem virksomhedens afgiftspligtige omsætning og den samlede omsætning i det pågældende regnskabsår. Fradragsprocenten afrundes opad til nærmeste hele procent."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 12",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Fradrag for hotelovernatning",
+      "text": "Afgiften af hotelovernatning kan fradrages med 100 pct., forudsat at overnatningen er strengt erhvervsmæssig."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 12",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Fradrag for restaurationsydelser",
+      "text": "Afgiften af restaurationsydelser kan fradrages med 25 pct., jf. momslovens § 42, stk. 2. Fradraget er betinget af, at udgiften er af strengt erhvervsmæssig karakter."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 13",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Ingen fradragsret – privatforbrug",
+      "text": "Der er ikke fradragsret for afgift af indkøb, der anvendes til virksomhedens indehavers eller personalets private brug, jf. momslovens § 42, stk. 1, nr. 1."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 13",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Ingen fradragsret – personbiler",
+      "text": "Der er ikke fradragsret for afgift af anskaffelse og drift af personmotorkøretøjer, der er indrettet til befordring af højst 9 personer, jf. momslovens § 42, stk. 1, nr. 7, medmindre køretøjet udelukkende anvendes erhvervsmæssigt."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 14",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Regulering af fradrag for investeringsgoder",
+      "text": "Fradrag for afgift af investeringsgoder skal reguleres, hvis den fradragsberettigede anvendelse ændres inden for reguleringsperioden, jf. momslovens § 43. Reguleringsperioden er 5 år for driftsmidler og 10 år for fast ejendom."
+    },
+    {
+      "chapter": "Kapitel 4 – Fradragsret",
+      "section": "§ 14",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Opgørelse af reguleringsbeløb",
+      "text": "Reguleringsbeløbet beregnes som forskellen mellem det fradrag, der er foretaget, og det fradrag, der kunne foretages på grundlag af den ændrede anvendelse, fordelt over reguleringsperiodens resterende år."
+    },
+    {
+      "chapter": "Kapitel 5 – Regnskab",
+      "section": "§ 15",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Momsregnskab",
+      "text": "Registrerede virksomheder skal føre et regnskab, der kan danne grundlag for opgørelsen af afgiftstilsvaret for hver afgiftsperiode og for Skatteforvaltningens kontrol med afgiftens berigtigelse, jf. momslovens § 55."
+    },
+    {
+      "chapter": "Kapitel 5 – Regnskab",
+      "section": "§ 15",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Regnskabets indhold",
+      "text": "Regnskabet skal indeholde en konto for indgående afgift (købsmoms) og en konto for udgående afgift (salgsmoms). Kontiene skal afstemmes for hver afgiftsperiode."
+    },
+    {
+      "chapter": "Kapitel 5 – Regnskab",
+      "section": "§ 16",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Særskilte regnskaber",
+      "text": "Virksomheder, der både foretager afgiftspligtige og afgiftsfrie leverancer, skal føre særskilte regnskaber for de to former for leverancer, jf. momslovens § 55, stk. 2."
+    },
+    {
+      "chapter": "Kapitel 5 – Regnskab",
+      "section": "§ 16",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Regnskab for EU-handel",
+      "text": "Virksomheder, der foretager leverancer til eller erhvervelser fra andre EU-lande, skal føre et særskilt regnskab for disse transaktioner med angivelse af modpartens momsregistreringsnummer."
+    },
+    {
+      "chapter": "Kapitel 5 – Regnskab",
+      "section": "§ 17",
+      "subsection": null,
+      "item": null,
+      "title": "Opbevaring af regnskabsmateriale",
+      "text": "Regnskabsmateriale, herunder fakturaer, kreditnotaer og afstemninger, skal opbevares i 5 år efter udløbet af det regnskabsår, som materialet vedrører, jf. bogføringslovens § 11."
+    },
+    {
+      "chapter": "Kapitel 6 – Angivelse og betaling",
+      "section": "§ 18",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afgiftsperioder",
+      "text": "Afgiftsperioden er kvartalet for virksomheder med en årlig omsætning mellem 50.000 kr. og 5 mio. kr. For virksomheder med en årlig omsætning over 50 mio. kr. er afgiftsperioden måneden. For virksomheder med en årlig omsætning mellem 5 mio. kr. og 50 mio. kr. er afgiftsperioden halvåret."
+    },
+    {
+      "chapter": "Kapitel 6 – Angivelse og betaling",
+      "section": "§ 18",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Frivillig kortere afgiftsperiode",
+      "text": "Virksomheder kan efter ansøgning til Skatteforvaltningen vælge en kortere afgiftsperiode end den, der følger af stk. 1. Valget er bindende i mindst 2 kalenderår."
+    },
+    {
+      "chapter": "Kapitel 6 – Angivelse og betaling",
+      "section": "§ 19",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Angivelse af afgiftstilsvar",
+      "text": "Virksomheden skal efter udløbet af hver afgiftsperiode angive størrelsen af den udgående og indgående afgift samt afgiftstilsvaret til Skatteforvaltningen. Angivelsen skal ske digitalt via Skatteforvaltningens angivelsessystem."
+    },
+    {
+      "chapter": "Kapitel 6 – Angivelse og betaling",
+      "section": "§ 19",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Angivelsesfrist",
+      "text": "Angivelsen skal indgives senest 1 måned og 25 dage efter afgiftsperiodens udløb, jf. opkrævningslovens § 2, stk. 2. For virksomheder med halvårlig afgiftsperiode er fristen 1 måned og 10 dage."
+    },
+    {
+      "chapter": "Kapitel 6 – Angivelse og betaling",
+      "section": "§ 20",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Betaling af afgift",
+      "text": "Afgiftstilsvaret forfalder til betaling samtidig med udløbet af angivelsesfristen, jf. § 19, stk. 2. Betaling skal ske til Skatteforvaltningens bankkonto."
+    },
+    {
+      "chapter": "Kapitel 6 – Angivelse og betaling",
+      "section": "§ 20",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Negativt afgiftstilsvar",
+      "text": "Er virksomhedens indgående afgift større end den udgående afgift i en afgiftsperiode, udbetaler Skatteforvaltningen det overskydende beløb til virksomheden senest 3 uger efter, at angivelsen er modtaget."
+    },
+    {
+      "chapter": "Kapitel 6 – Angivelse og betaling",
+      "section": "§ 21",
+      "subsection": null,
+      "item": null,
+      "title": "Rentegodtgørelse og renter ved forsinket betaling",
+      "text": "Betales afgiftstilsvaret ikke rettidigt, skal virksomheden betale renter efter opkrævningslovens § 7. Renten udgør den rente, der er fastsat i rentelovens § 5, med et tillæg på 0,7 procentpoint pr. påbegyndt måned."
+    },
+    {
+      "chapter": "Kapitel 7 – Særlige ordninger",
+      "section": "§ 22",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Brugtmomsordningen",
+      "text": "Virksomheder, der handler med brugte varer, kunstgenstande, samlerobjekter og antikviteter, kan anvende den særlige brugtmomsordning, jf. momslovens § 69-71. Ved brugtmomsordningen beregnes afgiften af forskellen mellem salgsprisen og købsprisen (avancen)."
+    },
+    {
+      "chapter": "Kapitel 7 – Særlige ordninger",
+      "section": "§ 22",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Betingelser for brugtmomsordningen",
+      "text": "Brugtmomsordningen kan kun anvendes, når varen er købt af en ikke-registreret person eller en registreret virksomhed, der har leveret varen under brugtmomsordningen. Virksomheden skal føre et særskilt regnskab for køb og salg under ordningen."
+    },
+    {
+      "chapter": "Kapitel 7 – Særlige ordninger",
+      "section": "§ 23",
+      "subsection": null,
+      "item": null,
+      "title": "Omvendt betalingspligt (reverse charge)",
+      "text": "Ved køb af ydelser fra udenlandske leverandører, der ikke er etableret i Danmark, påhviler betalingspligten for afgiften den danske aftager, jf. momslovens § 46, stk. 1, nr. 3. Aftageren skal angive afgiften som både udgående og indgående afgift."
+    },
+    {
+      "chapter": "Kapitel 7 – Særlige ordninger",
+      "section": "§ 24",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "One Stop Shop (OSS) – EU-ordning",
+      "text": "Virksomheder, der sælger ydelser eller foretager fjernsalg af varer til forbrugere i andre EU-lande, kan anvende One Stop Shop-ordningen, jf. momslovens § 66. Ved brug af ordningen angives og betales afgiften af leverancer til andre EU-lande samlet til Skatteforvaltningen."
+    },
+    {
+      "chapter": "Kapitel 7 – Særlige ordninger",
+      "section": "§ 24",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Registrering til OSS",
+      "text": "Virksomheder, der ønsker at anvende One Stop Shop-ordningen, skal registreres hertil hos Skatteforvaltningen. Angivelse og betaling af afgift under ordningen sker kvartalsvist, med en frist på den sidste dag i den måned, der følger efter kvartalets udløb."
+    },
+    {
+      "chapter": "Kapitel 7 – Særlige ordninger",
+      "section": "§ 25",
+      "subsection": null,
+      "item": null,
+      "title": "Import One Stop Shop (IOSS)",
+      "text": "Virksomheder, der foretager fjernsalg af varer importeret fra tredjelande i forsendelser med en reel værdi på højst 150 EUR, kan anvende Import One Stop Shop-ordningen, jf. momslovens § 66 a. Ved brug af ordningen opkræver sælger momsen ved salget og angiver den samlet til Skatteforvaltningen."
+    },
+    {
+      "chapter": "Kapitel 8 – Godtgørelse af afgift",
+      "section": "§ 26",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Godtgørelse til udenlandske virksomheder",
+      "text": "Udenlandske virksomheder, der ikke er registreret i Danmark, kan søge om godtgørelse af den danske moms, der er betalt ved køb af varer og ydelser her i landet, jf. momslovens § 45, stk. 1."
+    },
+    {
+      "chapter": "Kapitel 8 – Godtgørelse af afgift",
+      "section": "§ 26",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Ansøgning om godtgørelse – EU-virksomheder",
+      "text": "Virksomheder etableret i andre EU-lande skal indgive ansøgning om godtgørelse elektronisk via myndighederne i deres hjemland. Ansøgningen skal indgives senest den 30. september i kalenderåret efter den periode, ansøgningen vedrører."
+    },
+    {
+      "chapter": "Kapitel 8 – Godtgørelse af afgift",
+      "section": "§ 27",
+      "subsection": null,
+      "item": null,
+      "title": "Turistgodtgørelse",
+      "text": "Rejsende med bopæl uden for EU kan få godtgjort afgiften af varer, der er købt i Danmark og udføres som rejsegods til steder uden for EU, jf. momslovens § 34, stk. 1, nr. 5. Godtgørelsen er betinget af, at den samlede købesum for det enkelte køb overstiger 300 kr. inklusive afgift."
+    },
+    {
+      "chapter": "Kapitel 9 – Kontrol og sanktioner",
+      "section": "§ 28",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Skatteforvaltningens kontrol",
+      "text": "Skatteforvaltningen kan foretage kontrol af virksomhedens momsregnskab, fakturaer og øvrigt regnskabsmateriale for at sikre, at momsloven og denne bekendtgørelse overholdes."
+    },
+    {
+      "chapter": "Kapitel 9 – Kontrol og sanktioner",
+      "section": "§ 28",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Skønsmæssig ansættelse",
+      "text": "Har virksomheden ikke indgivet angivelse rettidigt, eller er regnskabet mangelfuldt, kan Skatteforvaltningen foretage en skønsmæssig ansættelse af afgiftstilsvaret, jf. opkrævningslovens § 5."
+    },
+    {
+      "chapter": "Kapitel 9 – Kontrol og sanktioner",
+      "section": "§ 29",
+      "subsection": null,
+      "item": null,
+      "title": "Straffebestemmelser",
+      "text": "Med bøde straffes den, der forsætligt eller groft uagtsomt afgiver urigtige eller vildledende oplysninger til brug for afgiftskontrollen, jf. momslovens § 81. Der kan pålægges selskaber m.v. strafansvar efter straffelovens 5. kapitel."
+    },
+    {
+      "chapter": "Kapitel 10 – Ikrafttræden",
+      "section": "§ 30",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Ikrafttræden",
+      "text": "Bekendtgørelsen træder i kraft den 1. december 2023."
+    },
+    {
+      "chapter": "Kapitel 10 – Ikrafttræden",
+      "section": "§ 30",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Ophævelse af tidligere bekendtgørelse",
+      "text": "Bekendtgørelse nr. 808 af 30. juni 2015 om merværdiafgift ophæves."
+    }
+  ]
+}

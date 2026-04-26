@@ -1,166 +1,70 @@
 # Danish Legal RAG
 
-A fully working Retrieval-Augmented Generation (RAG) system for Danish tax and accounting law. Ask natural language questions in Danish and receive answers grounded in actual legal provisions with precise citations (lov, §, stk.).
+A fully working Retrieval-Augmented Generation (RAG) system for Danish tax, accounting, and corporate law. Ask natural language questions in Danish and receive answers grounded in actual legal provisions with precise citations (lov, section, stk.).
 
 ## Architecture
 
 ```
-                         ┌─────────────────────────────────────────┐
-                         │              docker-compose              │
-                         │                                          │
-  ┌──────────┐           │  ┌──────────┐      ┌─────────────────┐  │
-  │  Client  │──HTTP────►│  │   API    │      │     Qdrant      │  │
-  │(curl/    │           │  │ :8000    │◄────►│  vector store   │  │
-  │ httpyac) │           │  │          │      │  :6333          │  │
-  └──────────┘           │  │ FastAPI  │      └─────────────────┘  │
-                         │  │ + RAG    │               ▲           │
-  ┌──────────┐           │  └──────────┘               │           │
-  │  Claude  │           │       ▲                     │           │
-  │  Desktop │──MCP─────►│  ┌────┴─────┐               │           │
-  │          │           │  │   MCP    │      ┌─────────────────┐  │
-  └──────────┘           │  │ :stdio   │      │  Ingest job     │  │
-                         │  └──────────┘      │  (one-shot,     │  │
-                         │                    │  exits when done)│  │
-                         └────────────────────┴─────────────────┘──┘
+                         ┌─────────────────────────────────────────────┐
+                         │              docker-compose                  │
+                         │                                              │
+  ┌──────────────┐       │  ┌──────────┐      ┌─────────────────┐      │
+  │  Frontend    │─HTTP──│─►│   API    │      │     Qdrant      │      │
+  │  SvelteKit   │       │  │ :8000    │◄────►│  vector store   │      │
+  │  :3000       │       │  │          │      │  :6333          │      │
+  └──────────────┘       │  │ FastAPI  │      └─────────────────┘      │
+                         │  │ + RAG    │               ▲               │
+  ┌──────────┐           │  └──────────┘               │               │
+  │  Client  │──HTTP────►│       ▲                     │               │
+  │(curl/    │           │       │                     │               │
+  │ httpyac) │           │  ┌────┴─────┐               │               │
+  └──────────┘           │  │   MCP    │      ┌─────────────────┐      │
+                         │  │ :stdio   │      │  Ingest job     │      │
+  ┌──────────┐           │  └──────────┘      │  (one-shot,     │      │
+  │  Claude  │──MCP─────►│                    │  exits when done)│     │
+  │  Desktop │           │                    │                  │      │
+  └──────────┘           └────────────────────┴──────────────────┘─────┘
 ```
+
+The SvelteKit frontend is the primary user interface. It talks to the same
+FastAPI backend as curl, httpyac, and the MCP server for Claude Desktop.
 
 ### Docker volumes
 
 ```
-hf_model_cache   ← HuggingFace embedding model (~440 MB, downloaded once)
-qdrant_data      ← Qdrant vector store (all chunks + embeddings)
+hf_model_cache   <- HuggingFace embedding model (~440 MB, downloaded once)
+qdrant_data      <- Qdrant vector store (all chunks + embeddings)
 ```
-
----
-
-## Ingest-jobbet: kører én gang og stopper
-
-`ingest`-containeren er et **one-shot job** med `restart: "no"`. Det er tilsigtet:
-
-1. Jobbet starter, henter lovteksterne, genererer embeddings og skriver alt til Qdrant
-2. Når det er færdigt logger det `=== Ingestion Complete ===` og **afslutter med exit code 0**
-3. Alle data lever herefter i `qdrant_data`-volumet – der er intet behov for at holde ingest kørende
-
-```
-docker compose ps
-```
-```
-NAME                    STATUS
-danish-legal-qdrant     running
-danish-legal-api        running
-danish-legal-mcp        running
-danish-legal-ingest     exited (0)   ← korrekt og forventet
-```
-
-**Genkør ingestion** (f.eks. efter du har tilføjet nye lovtekster):
-```bash
-docker compose run --rm ingest
-# eller:
-make ingest
-```
-Jobbet er idempotent – uændrede paragraffer springer embedding-trinnet over (se "Idempotent ingestion" nedenfor).
-
----
-
-## HuggingFace-requests: hvad og hvorfor
-
-Systemet bruger en **lokal embedding-model** fra HuggingFace til at konvertere lovtekster og spørgsmål til vektorer. Der kræves **ingen HuggingFace API-nøgle**.
-
-### Modellen der downloades
-
-| Egenskab | Værdi |
-|----------|-------|
-| Navn | `paraphrase-multilingual-mpnet-base-v2` |
-| Udgiver | `sentence-transformers` (UKP Lab) |
-| Størrelse | ~440 MB |
-| Sprog | Understøtter dansk og 50+ andre sprog |
-| Dimensioner | 768 |
-| Kræver API-nøgle | Nej – frit tilgængelig |
-| Formål | Konverterer tekst → 768-dim vektor til semantisk søgning |
-
-### Hvornår sker download?
-
-```
-Første docker compose up
-  │
-  ├── ingest container starter
-  │     └── sentence-transformers forsøger at loade modellen
-  │           └── ikke i cache → download fra huggingface.co (~440 MB)
-  │                 └── gemmes i Docker-volumen: hf_model_cache
-  │
-  └── api container starter (parallelt)
-        └── sentence-transformers forsøger at loade modellen
-              └── HF_HOME peger på hf_model_cache → allerede der → ingen download
-```
-
-Fra **anden opstart og fremefter**: Modellen er i `hf_model_cache`-volumen. Der sendes kun korte metadata-requests til HuggingFace (HEAD-requests for at tjekke om modellen er opdateret) – ingen re-download.
-
-### Hvad requesterne er
-
-De mange `httpx`-loglinjer under opstart er HuggingFace's snapshot-download-protokol:
-
-```
-HEAD /resolve/main/modules.json          ← tjek om modellen er ændret
-GET  /api/resolve-cache/…/modules.json   ← hent cache-metadata
-HEAD /resolve/main/model.safetensors     ← tjek model-weights
-GET  /api/models/…/xet-read-token/…      ← hent download-token
-...
-```
-
-Alle requests er **read-only** og **til HuggingFace's CDN**. Der sendes ingen brugerdata.
-
-### Kør helt offline
-
-Sæt `TRANSFORMERS_OFFLINE=1` i `.env` efter første download for at forhindre alle HF-requests:
-
-```env
-TRANSFORMERS_OFFLINE=1
-HF_DATASETS_OFFLINE=1
-```
-
-### Skift embeddingmodel
-
-```env
-# .env
-EMBEDDING_PROVIDER=sentence-transformers
-ST_MODEL_NAME=intfloat/multilingual-e5-large   # alternativ model
-```
-
-> ⚠️ Hvis du skifter model skal du genskabe Qdrant-kollektionen:
-> `docker compose down -v && docker compose up --build`
-> (vektordimensionerne ændrer sig, og eksisterende vektorer er ugyldige)
-
----
-
-## Embedding strategy
-
-Embeddings genereres **ved ingestion** for hver lovparagraf og **ved query-tid** for brugerens spørgsmål. Samme model bruges begge steder.
-
-**Beriget embedding-input:** I stedet for kun at embedde den rå paragraftekst beriger chunkeren teksten med lovnavn og paragrafhenvisning:
-
-```
-Afskrivningsloven § 40 C, stk. 1 [EDB-programmer (software)]:
-Udgifter til erhvervelse af EDB-programmer (software) kan enten fradrages fuldt ud...
-```
-
-Dette forbedrer semantisk matching for både:
-- Emnebaserede forespørgsler: "software afskrivning"
-- Referencebaserede forespørgsler: "hvad siger § 40 C"
 
 ---
 
 ## Laws ingested
 
-| Code | Name | Coverage |
-|------|------|----------|
-| AFL | Afskrivningsloven | Tax depreciation of intangible assets including software (§ 40, § 40 C) |
-| ARL | Årsregnskabsloven | Accounting/financial reporting rules for intangible assets (§ 33–37) |
+The corpus covers 9 Danish laws and 3 executive orders (bekendtgorelser):
 
-The system uses local JSON files with realistic legal content based on:
-- AFL: LBK nr 1147 af 29/08/2016
-- ARL: LBK nr 1580 af 10/12/2015
+### Love (Acts)
 
-Set `FETCH_LIVE=true` to attempt live fetching from retsinformation.dk (requires custom parsing logic).
+| Code | Name | Subject |
+|------|------|---------|
+| AFL | Afskrivningsloven | Tax depreciation (LBK nr 1147 af 29/08/2016) |
+| ARL | Aarsregnskabsloven | Financial reporting / accounting (LBK nr 1580 af 10/12/2015) |
+| BOG | Bogforingsloven | Bookkeeping requirements (LOV nr 700 af 2022) |
+| SEL | Selskabsskatteloven | Corporate income tax (LBK nr 1241 af 2022) |
+| MOML | Momsloven | Value-added tax / VAT (LBK nr 1021 af 2019) |
+| LL | Ligningsloven | Personal and corporate income tax deductions (LBK nr 1735 af 2021) |
+| SKL | Skattekontrolloven | Tax reporting obligations and control (LOV nr 1535 af 2017) |
+| REVL | Revisorloven | Auditor regulation (LBK nr 25 af 2024) |
+| SFL | Skatteforvaltningsloven | Tax administration, appeals, deadlines (LBK nr 835 af 2022) |
+
+### Bekendtgorelser (Executive orders)
+
+| Code | Name | Subject |
+|------|------|---------|
+| BOG-BEK | Bogforingsbekendtgorelsen | Digital bookkeeping system requirements (BEK nr 2006 af 2023) |
+| BOG-MBK | Mindstekravsbekendtgorelsen | Minimum voucher/receipt requirements (BEK nr 98 af 2024) |
+| MOML-BEK | Momsbekendtgorelsen | VAT registration, invoicing, deductions, reporting (BEK nr 1435 af 2023) |
+
+The system uses local JSON files with realistic legal content based on the above consolidation acts. Set `FETCH_LIVE=true` to attempt live fetching from retsinformation.dk.
 
 ---
 
@@ -181,14 +85,20 @@ ANTHROPIC_API_KEY=sk-ant-...
 ### 2. Build and start
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
 
 What happens:
 1. **Qdrant** starts (vector database, persists in `qdrant_data` volume)
-2. **Ingest job** starts → downloads embedding model to `hf_model_cache` on first run (~440 MB) → embeds all provisions → writes to Qdrant → **exits**
-3. **API** starts → loads embedding model from `hf_model_cache` (no re-download) → ready on :8000
-4. **MCP server** starts → ready for Claude Desktop
+2. **Ingest job** starts -- downloads embedding model to `hf_model_cache` on first run (~440 MB) -- embeds all provisions -- writes to Qdrant -- **exits**
+3. **API** starts -- loads embedding model from `hf_model_cache` (no re-download) -- ready on :8000
+4. **Frontend** starts -- SvelteKit chat UI on :3000, proxies API calls to the backend
+5. **MCP server** starts -- ready for Claude Desktop
+
+Open http://localhost:3000 in your browser.
+
+> **Frontend dev mode:** For hot-reload during frontend development, run
+> `cd frontend && npm install && npm run dev` instead (serves on :5173).
 
 ### 3. Wait for ingestion
 
@@ -204,6 +114,86 @@ When you see `=== Ingestion Complete ===` and the container shows `exited (0)`, 
 curl -s http://localhost:8000/health
 ```
 
+### Full rebuild (e.g. after changing embedding model)
+
+```bash
+docker compose down -v && docker compose up --build -d
+```
+
+---
+
+## Frontend
+
+The frontend is a SvelteKit chat application built with TypeScript and Tailwind CSS.
+
+Features:
+- **Streaming chat:** Answers arrive token-by-token via SSE from `/ask/stream`
+- **Session history:** Conversations persist in localStorage; sidebar lets you switch between sessions
+- **Law filter:** Dropdown populated from `/laws` endpoint; filter questions to a specific law
+- **Markdown rendering:** Assistant answers rendered as formatted markdown
+- **Legal references:** Each answer shows cited provisions with law name, section, source link, and relevance score
+- **Responsive:** Usable on mobile viewports (375px+)
+- **Danish UI:** All user-facing copy in Danish
+
+Types are generated from `contracts/openapi.yaml` -- the frontend never hand-writes API types.
+
+---
+
+## API endpoints
+
+### REST
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/health` | Health check |
+| POST | `/ask` | Ask a question, get a complete JSON response with answer + references |
+| POST | `/ask/stream` | Ask a question, receive answer via Server-Sent Events (SSE) |
+| POST | `/search` | Semantic search only (no LLM), returns ranked provisions |
+| GET | `/laws` | List all ingested laws with metadata |
+
+### `/ask/stream` SSE events
+
+The streaming endpoint returns `text/event-stream` with four event types:
+
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `chunk` | `{"text": "..."}` | Partial answer text (one token or small group) |
+| `references` | `[{...}, ...]` | Full references array, sent once after answer is complete |
+| `done` | `{}` | Stream finished successfully |
+| `error` | `{"message": "..."}` | Error during generation |
+
+**Swagger UI:** http://localhost:8000/docs
+
+---
+
+## Ingest-jobbet: korer en gang og stopper
+
+`ingest`-containeren er et **one-shot job** med `restart: "no"`. Det er tilsigtet:
+
+1. Jobbet starter, henter lovteksterne, genererer embeddings og skriver alt til Qdrant
+2. Naar det er faerdigt logger det `=== Ingestion Complete ===` og **afslutter med exit code 0**
+3. Alle data lever herefter i `qdrant_data`-volumet -- der er intet behov for at holde ingest korende
+
+```
+docker compose ps
+```
+```
+NAME                    STATUS
+danish-legal-qdrant     running
+danish-legal-api        running
+danish-legal-frontend   running
+danish-legal-mcp        running
+danish-legal-ingest     exited (0)   <- korrekt og forventet
+```
+
+**Genkor ingestion** (f.eks. efter du har tilfojet nye lovtekster):
+```bash
+docker compose run --rm ingest
+# eller:
+make ingest
+```
+Jobbet er idempotent -- uaendrede paragraffer springer embedding-trinnet over (se "Idempotent ingestion" nedenfor).
+
 ---
 
 ## Usage
@@ -214,8 +204,15 @@ curl -s http://localhost:8000/health
 ```bash
 curl -s -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "Hvordan afskrives immaterielle aktiver såsom software skattemæssigt?"}' \
+  -d '{"question": "Hvordan afskrives immaterielle aktiver sasom software skattemassigt?"}' \
   | python3 -m json.tool
+```
+
+**Streaming (SSE):**
+```bash
+curl -N -X POST http://localhost:8000/ask/stream \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Hvad er reglerne for goodwill?"}' 
 ```
 
 **Semantic search (no LLM):**
@@ -239,8 +236,6 @@ curl -s -X POST http://localhost:8000/ask \
   | python3 -m json.tool
 ```
 
-**Swagger UI:** http://localhost:8000/docs
-
 ### httpyac tests
 
 Install httpyac: `npm install -g httpyac`
@@ -256,27 +251,123 @@ Or run individual requests from VS Code with the httpyac extension.
 ```bash
 make up              # Build and start all services in background
 make down            # Stop all services
+make build           # Build containers
 make logs            # Follow all logs
 make ingest          # Re-run ingestion (e.g. after adding new laws)
 make test-integration  # Run integration tests inside API container
 make test-embeddings   # Run embedding unit tests inside API container
 make curl-test       # Quick curl test of primary question
+make contract        # Generate OpenAPI spec from FastAPI
+make contract-verify # Verify contract hasn't drifted
+make client          # Generate TypeScript client from contract
+make frontend-dev    # Start frontend dev server
+make frontend-test   # Run frontend tests
+make report          # Generate daily report
+make prod-build      # Build production images tagged with VERSION
+make prod-push       # Push production images to GHCR
+make prod-up         # Start production stack (only port 80 exposed)
+make prod-down       # Stop production stack
 ```
+
+---
+
+## CI
+
+GitHub Actions runs on push to `feat/*` branches and on pull requests to `main`.
+
+Two jobs:
+1. **Unit tests (fast, no Docker):** Runs model and chunker tests, frontend lint and type check
+2. **Integration tests (Docker):** Spins up the full stack with `LLM_PROVIDER=mock`, runs API integration tests, verifies contract consistency
+
+No API keys required -- CI uses the mock LLM provider throughout.
+
+---
+
+## HuggingFace-requests: hvad og hvorfor
+
+Systemet bruger en **lokal embedding-model** fra HuggingFace til at konvertere lovtekster og sporgsmal til vektorer. Der kraeves **ingen HuggingFace API-nogle**.
+
+### Modellen der downloades
+
+| Egenskab | Vaerdi |
+|----------|--------|
+| Navn | `paraphrase-multilingual-mpnet-base-v2` |
+| Udgiver | `sentence-transformers` (UKP Lab) |
+| Storrelse | ~440 MB |
+| Sprog | Understotter dansk og 50+ andre sprog |
+| Dimensioner | 768 |
+| Kraever API-nogle | Nej -- frit tilgaengelig |
+| Formal | Konverterer tekst til 768-dim vektor til semantisk sogning |
+
+### Hvornaar sker download?
+
+```
+Forste docker compose up
+  |
+  +-- ingest container starter
+  |     +-- sentence-transformers forsoger at loade modellen
+  |           +-- ikke i cache -> download fra huggingface.co (~440 MB)
+  |                 +-- gemmes i Docker-volumen: hf_model_cache
+  |
+  +-- api container starter (parallelt)
+        +-- sentence-transformers forsoger at loade modellen
+              +-- HF_HOME peger pa hf_model_cache -> allerede der -> ingen download
+```
+
+Fra **anden opstart og fremefter**: Modellen er i `hf_model_cache`-volumen. Der sendes kun korte metadata-requests til HuggingFace (HEAD-requests for at tjekke om modellen er opdateret) -- ingen re-download.
+
+### Kor helt offline
+
+Saet `TRANSFORMERS_OFFLINE=1` i `.env` efter forste download for at forhindre alle HF-requests:
+
+```env
+TRANSFORMERS_OFFLINE=1
+HF_DATASETS_OFFLINE=1
+```
+
+### Skift embeddingmodel
+
+```env
+# .env
+EMBEDDING_PROVIDER=sentence-transformers
+ST_MODEL_NAME=intfloat/multilingual-e5-large   # alternativ model
+```
+
+> NB: Hvis du skifter model skal du genskabe Qdrant-kollektionen:
+> `docker compose down -v && docker compose up --build`
+> (vektordimensionerne aendrer sig, og eksisterende vektorer er ugyldige)
+
+---
+
+## Embedding strategy
+
+Embeddings genereres **ved ingestion** for hver lovparagraf og **ved query-tid** for brugerens sporgsmal. Samme model bruges begge steder.
+
+**Beriget embedding-input:** I stedet for kun at embedde den ra paragraftekst beriger chunkeren teksten med lovnavn og paragrafhenvisning:
+
+```
+Afskrivningsloven par. 40 C, stk. 1 [EDB-programmer (software)]:
+Udgifter til erhvervelse af EDB-programmer (software) kan enten fradrages fuldt ud...
+```
+
+Dette forbedrer semantisk matching for bade:
+- Emnebaserede forespørgsler: "software afskrivning"
+- Referencebaserede forespørgsler: "hvad siger par. 40 C"
 
 ---
 
 ## Answer style (answer-style.md)
 
-The file `answer-style.md` in the project root controls the **tone and format** of answers. It is mounted read-only into the API container and read on every request — no restart required.
+The file `answer-style.md` in the project root controls the **tone and format** of answers. It is mounted read-only into the API container and read on every request -- no restart required.
 
 Edit it freely to change style:
 ```bash
 # Example: switch to ultra-brief legal style
 cat > answer-style.md << 'EOF'
 ## Tone
-Vær kortfattet og præcis som en Højesteretsdommer.
+Vaer kortfattet og praecis som en Hojesteretsdommer.
 Ingen eksempler medmindre specifikt bedt om det.
-Brug aldrig mere end 3 sætninger per punkt.
+Brug aldrig mere end 3 saetninger per punkt.
 EOF
 ```
 
@@ -286,7 +377,7 @@ The file is layered on top of the immutable legal accuracy rules (never hallucin
 
 ## Testing without Claude (mock mode)
 
-If you don't have an API key, the system still works — it retrieves real legal provisions but generates a template-based answer:
+If you don't have an API key, the system still works -- it retrieves real legal provisions but generates a template-based answer:
 
 ```env
 # .env
@@ -312,10 +403,10 @@ Recommended models for Danish legal text:
 
 | Model | RAM | Quality |
 |-------|-----|---------|
-| `llama3.3:70b` | ~40 GB | ⭐⭐⭐⭐⭐ Best Danish + legal reasoning |
-| `qwen2.5:32b` | ~20 GB | ⭐⭐⭐⭐ Strong multilingual, structured output |
-| `qwen2.5:14b` | ~9 GB | ⭐⭐⭐ Good compromise for limited RAM |
-| `mistral-nemo` | ~8 GB | ⭐⭐⭐ Fast, reasonable Danish |
+| `llama3.3:70b` | ~40 GB | Best Danish + legal reasoning |
+| `qwen2.5:32b` | ~20 GB | Strong multilingual, structured output |
+| `qwen2.5:14b` | ~9 GB | Good compromise for limited RAM |
+| `mistral-nemo` | ~8 GB | Fast, reasonable Danish |
 
 Pull a model on your Ollama server:
 ```bash
@@ -337,6 +428,10 @@ docker compose exec api python -m pytest /app/tests/test_embeddings.py -v
 
 # All tests
 docker compose exec api python -m pytest /app/tests/ -v
+
+# Frontend tests
+cd frontend && npm run test:unit
+cd frontend && npx playwright test
 ```
 
 ---
@@ -357,8 +452,8 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 ```
 
 Available MCP tools:
-- `legal_search` — semantic search, returns ranked provisions with citations
-- `legal_answer` — ask a question, returns structured answer + references
+- `legal_search` -- semantic search, returns ranked provisions with citations
+- `legal_answer` -- ask a question, returns structured answer + references
 
 ---
 
@@ -389,25 +484,35 @@ On re-ingestion, unchanged chunks are skipped. Only new or modified provisions a
 danish-legal-rag/
 ├── answer-style.md    Tone/style guide (hot-reloadable, edit freely)
 ├── api/               REST API (FastAPI)
-│   ├── main.py        Endpoints: /ask /search /laws /health
+│   ├── main.py        Endpoints: /ask /ask/stream /search /laws /health
 │   ├── rag.py         RAG pipeline + LLM providers (anthropic/openai/ollama/mock)
 │   ├── embeddings.py  Query-time embedding
 │   └── models.py      Re-exports from shared/
+├── frontend/          SvelteKit chat application
+│   └── src/
+│       ├── lib/api/   Generated TypeScript client from OpenAPI contract
+│       ├── lib/       Stores, components, utilities
+│       └── routes/    SvelteKit pages
 ├── mcp/               MCP server (Claude Desktop integration)
 │   └── app.py         legal_search + legal_answer tools
 ├── ingest/            One-shot ingestion job (exits after completion)
 │   ├── main.py        Pipeline orchestration
-│   ├── chunker.py     Law JSON → LegalChunk objects
+│   ├── chunker.py     Law JSON -> LegalChunk objects
 │   ├── embedder.py    Embedding providers (sentence-transformers / OpenAI)
 │   ├── fetcher.py     Load laws (local file / retsinformation.dk)
-│   └── data/          Local law JSON files (AFL + ARL)
+│   └── data/          Local law JSON files (12 sources)
 ├── shared/            Shared domain models and Qdrant utilities
 │   ├── models.py      LegalChunk, AskRequest/Response, etc.
 │   └── qdrant_utils.py Qdrant client, collection management, search
-└── tests/
-    ├── api.http       httpyac test file
-    ├── test_integration.py  End-to-end tests
-    └── test_embeddings.py   Unit tests for embeddings/chunking
+├── contracts/
+│   └── openapi.yaml   API contract (source of truth for frontend types)
+├── docs/              Architecture docs, ADRs, archived plans
+├── tests/
+│   ├── api.http       httpyac test file
+│   ├── test_integration.py  End-to-end tests
+│   └── test_embeddings.py   Unit tests for embeddings/chunking
+└── .github/workflows/
+    └── ci.yml         GitHub Actions CI (unit + integration)
 ```
 
 ---

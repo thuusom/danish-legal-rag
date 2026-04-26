@@ -67,6 +67,19 @@ services:
       - qdrant
     restart: unless-stopped
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: danish-legal-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - API_INTERNAL_URL=http://api:8000
+    depends_on:
+      - api
+    restart: unless-stopped
+
   mcp:
     build:
       context: .

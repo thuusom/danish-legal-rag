@@ -31,6 +31,10 @@ DATA_DIR = Path(__file__).parent / "data"
 # - Skattekontrolloven (SKL): Tax reporting obligations and control
 # - Revisorloven (REVL): Auditor regulation
 # - Skatteforvaltningsloven (SFL): Tax administration, appeals, deadlines
+# Bekendtgørelser (executive orders supplementing the above):
+# - Bogføringsbekendtgørelsen (BOG-BEK): Digital bookkeeping system requirements
+# - Mindstekravsbekendtgørelsen (BOG-MBK): Minimum voucher/receipt requirements
+# - Momsbekendtgørelsen (MOML-BEK): VAT registration, invoicing, deductions, reporting
 LAWS_TO_INGEST = [
     {
         "law_code": "AFL",
@@ -76,6 +80,22 @@ LAWS_TO_INGEST = [
         "law_code": "SFL",
         "retsinformation_id": "2022-835",  # LBK nr 835
         "fallback_file": DATA_DIR / "skatteforvaltningsloven.json",
+    },
+    # Bekendtgørelser (executive orders)
+    {
+        "law_code": "BOG-BEK",
+        "retsinformation_id": "2023-2006",  # BEK nr 2006
+        "fallback_file": DATA_DIR / "bogfoeringsbekendtgoerelsen.json",
+    },
+    {
+        "law_code": "BOG-MBK",
+        "retsinformation_id": "2024-98",  # BEK nr 98
+        "fallback_file": DATA_DIR / "mindstekravsbekendtgoerelsen.json",
+    },
+    {
+        "law_code": "MOML-BEK",
+        "retsinformation_id": "2023-1435",  # BEK nr 1435
+        "fallback_file": DATA_DIR / "momsbekendtgoerelsen.json",
     },
 ]
 
