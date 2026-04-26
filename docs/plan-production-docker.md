@@ -2,7 +2,7 @@
 
 **Date:** 2026-04-26
 **Branch:** `feat/tier1-bekendtgoerelser`
-**Status:** Draft — awaiting approval before filing sub-issues
+**Status:** Approved — filing sub-issues 2026-04-26
 
 ---
 
@@ -148,9 +148,9 @@ Issue A (frontend Dockerfile + adapter-node)
 - **MCP server**: Unchanged — talks to `http://api:8000` internally.
 - **contracts/openapi.yaml**: No changes — proxy is transparent.
 
-## Open questions for Thomas
+## Decisions (answered by Thomas 2026-04-26)
 
-1. **Image registry:** Push to GHCR/Docker Hub, or local build + tag for now?
-2. **TLS:** Add Caddy/Traefik in the prod compose, or handle externally?
-3. **Hot reload in dev:** The Docker frontend service builds the image (no hot reload). Keep `npm run dev` for active frontend work on bare metal?
-4. **Version strategy:** Single `VERSION` file at repo root, or `IMAGE_TAG` in `.env`?
+1. **Image registry:** Push to **GHCR** (`ghcr.io/thuusom/danish-legal-rag-{service}`)
+2. **TLS:** Handle **externally** — no Caddy/Traefik in compose
+3. **Hot reload:** `npm run dev` for active development. Docker frontend service for prod AND local compose (both include it, but dev workflow uses bare-metal for speed)
+4. **Version strategy:** `VERSION` file at repo root, read by Makefile and CI
