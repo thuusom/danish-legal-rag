@@ -1,0 +1,194 @@
+{
+  "law_code": "BOG-MBK",
+  "law_name": "Mindstekravsbekendtgørelsen for bilag",
+  "law_title": "Bekendtgørelse om krav til bogføringsbilag",
+  "law_number": "BEK nr 98 af 26/01/2024",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2024/98",
+  "effective_date": "2024-01-26",
+  "provisions": [
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde og definitioner",
+      "section": "§ 1",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Anvendelsesområde",
+      "text": "Denne bekendtgørelse fastsætter mindstekrav til indholdet af bogføringsbilag for virksomheder, der er bogføringspligtige efter bogføringsloven, jf. lovens § 1."
+    },
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde og definitioner",
+      "section": "§ 1",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Formål",
+      "text": "Formålet med bekendtgørelsen er at sikre, at bogføringsbilag indeholder tilstrækkelige oplysninger til at dokumentere de registrerede transaktioner og understøtte kontrolsporet, jf. bogføringslovens § 4, stk. 2, og § 6."
+    },
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde og definitioner",
+      "section": "§ 2",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Definition af bilag",
+      "text": "Ved et bilag forstås i denne bekendtgørelse enhver form for dokumentation, der danner grundlag for en registrering i bogføringen, uanset om dokumentationen foreligger i fysisk eller digital form."
+    },
+    {
+      "chapter": "Kapitel 1 – Anvendelsesområde og definitioner",
+      "section": "§ 2",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Typer af bilag",
+      "text": "Bilag omfatter eksterne bilag, herunder fakturaer, kreditnotaer, kvitteringer, bankudskrifter og kontrakter, samt interne bilag, herunder omposteringsbilag, afskrivningsbilag og lønbilag."
+    },
+    {
+      "chapter": "Kapitel 2 – Generelle mindstekrav til bilag",
+      "section": "§ 3",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Generelle krav til alle bilag",
+      "text": "Ethvert bilag skal som minimum indeholde oplysninger om: 1) dato for den transaktion eller økonomiske hændelse, som bilaget dokumenterer, 2) beløb og valuta, 3) en beskrivelse af transaktionens art, og 4) identifikation af de involverede parter."
+    },
+    {
+      "chapter": "Kapitel 2 – Generelle mindstekrav til bilag",
+      "section": "§ 3",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Bilagsnummerering",
+      "text": "Hvert bilag skal have et entydigt bilagsnummer eller en entydig reference, der sikrer sammenhængen mellem bilaget og den tilhørende registrering i bogføringen."
+    },
+    {
+      "chapter": "Kapitel 2 – Generelle mindstekrav til bilag",
+      "section": "§ 4",
+      "subsection": null,
+      "item": null,
+      "title": "Læsbarhed og sprog",
+      "text": "Bilag skal være læsbare i hele opbevaringsperioden, jf. bogføringslovens § 11. Bilag på andre sprog end dansk, svensk, norsk eller engelsk skal på forlangende kunne oversættes til dansk."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til salgsbilag (fakturaer)",
+      "section": "§ 5",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Mindstekrav til salgsfakturaer",
+      "text": "En salgsfaktura skal som minimum indeholde: 1) sælgers navn, adresse og CVR-nummer, 2) købers navn og adresse, 3) fakturanummer, 4) fakturadato, 5) leveringsdato eller -periode, 6) beskrivelse af de leverede varer eller ydelser, 7) mængde og enhedspris, 8) samlet beløb eksklusive moms, 9) momsbeløb specificeret pr. momssats, og 10) samlet beløb inklusive moms."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til salgsbilag (fakturaer)",
+      "section": "§ 5",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Yderligere krav ved salg til erhvervsdrivende",
+      "text": "Ved salg til erhvervsdrivende skal salgsfakturaen tillige indeholde købers CVR-nummer samt betalingsbetingelser, herunder betalingsfrist og eventuelle oplysninger om renter ved forsinket betaling."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til salgsbilag (fakturaer)",
+      "section": "§ 6",
+      "subsection": null,
+      "item": null,
+      "title": "Kreditnotaer",
+      "text": "En kreditnota skal indeholde de samme oplysninger som en salgsfaktura, jf. § 5, og skal herudover indeholde en entydig reference til den oprindelige faktura, som kreditnotaen vedrører."
+    },
+    {
+      "chapter": "Kapitel 3 – Krav til salgsbilag (fakturaer)",
+      "section": "§ 7",
+      "subsection": null,
+      "item": null,
+      "title": "Forenklede fakturaer",
+      "text": "Ved detailsalg og andre transaktioner, hvor den samlede betaling inklusive moms ikke overstiger 3.000 kr., kan der udstedes en forenklet faktura, der som minimum indeholder: 1) sælgers navn og CVR-nummer, 2) fakturadato, 3) beskrivelse af de leverede varer eller ydelser, og 4) samlet beløb inklusive moms."
+    },
+    {
+      "chapter": "Kapitel 4 – Krav til købs- og udgiftsbilag",
+      "section": "§ 8",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Mindstekrav til købsbilag",
+      "text": "Et købsbilag skal som minimum indeholde de oplysninger, der er nævnt i § 3, stk. 1, samt oplysning om leverandørens navn, adresse og CVR-nummer."
+    },
+    {
+      "chapter": "Kapitel 4 – Krav til købs- og udgiftsbilag",
+      "section": "§ 8",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Kontant køb – kassebon",
+      "text": "Ved kontant køb kan en kassebon eller kvittering tjene som bilag, forudsat at den indeholder sælgers navn og CVR-nummer, dato, beløb inklusive moms og en kort beskrivelse af det købte."
+    },
+    {
+      "chapter": "Kapitel 4 – Krav til købs- og udgiftsbilag",
+      "section": "§ 9",
+      "subsection": null,
+      "item": null,
+      "title": "Rejse- og transportudgifter",
+      "text": "Bilag for rejse- og transportudgifter skal indeholde oplysninger om rejsens formål, destination, dato og varighed samt en specifikation af de enkelte udgifter. Er det ikke muligt at fremskaffe et eksternt bilag, skal der udarbejdes et internt bilag med de nævnte oplysninger."
+    },
+    {
+      "chapter": "Kapitel 5 – Krav til lønbilag",
+      "section": "§ 10",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Lønbilag – generelle krav",
+      "text": "Lønbilag skal som minimum indeholde: 1) medarbejderens navn og CPR-nummer eller anden entydig identifikation, 2) lønperiode, 3) bruttoløn, 4) indeholdt A-skat og AM-bidrag, 5) nettoløn, og 6) virksomhedens bidrag til pension og andre lønrelaterede ydelser."
+    },
+    {
+      "chapter": "Kapitel 5 – Krav til lønbilag",
+      "section": "§ 10",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Lønbilag – specifikationer",
+      "text": "Lønbilag skal herudover specificere eventuelle tillæg, fradrag, feriepenge og andre løndele, der er nødvendige for at kontrollere lønberegningen."
+    },
+    {
+      "chapter": "Kapitel 6 – Krav til interne bilag",
+      "section": "§ 11",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Generelle krav til interne bilag",
+      "text": "Interne bilag skal som minimum indeholde: 1) dato, 2) beløb, 3) en beskrivelse af den registrerede transaktion eller hændelse, og 4) angivelse af den person, der har udarbejdet bilaget."
+    },
+    {
+      "chapter": "Kapitel 6 – Krav til interne bilag",
+      "section": "§ 11",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Dokumentation ved manglende eksternt bilag",
+      "text": "Kan et eksternt bilag ikke fremskaffes, skal virksomheden udarbejde et internt bilag med en udførlig beskrivelse af transaktionen og årsagen til det manglende eksterne bilag."
+    },
+    {
+      "chapter": "Kapitel 6 – Krav til interne bilag",
+      "section": "§ 12",
+      "subsection": null,
+      "item": null,
+      "title": "Afskrivningsbilag",
+      "text": "Afskrivningsbilag skal indeholde oplysninger om det afskrivningsberettigede aktiv, anskaffelsessum, afskrivningsmetode, afskrivningssats og det beregnede afskrivningsbeløb."
+    },
+    {
+      "chapter": "Kapitel 7 – Digitale bilag",
+      "section": "§ 13",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Digitalisering af fysiske bilag",
+      "text": "Fysiske bilag skal digitaliseres i overensstemmelse med bogføringsbekendtgørelsens § 11, stk. 2. Den digitale kopi skal være en fuldstændig og nøjagtig gengivelse af det fysiske bilag."
+    },
+    {
+      "chapter": "Kapitel 7 – Digitale bilag",
+      "section": "§ 13",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Originale digitale bilag",
+      "text": "Bilag, der er udstedt digitalt, herunder elektroniske fakturaer og bankbilag, skal opbevares i det format, hvori de er modtaget. Konvertering til et andet format er tilladt, hvis det sikres, at alle oplysninger bevares uændret."
+    },
+    {
+      "chapter": "Kapitel 8 – Ikrafttræden",
+      "section": "§ 14",
+      "subsection": null,
+      "item": null,
+      "title": "Ikrafttræden",
+      "text": "Bekendtgørelsen træder i kraft den 1. februar 2024."
+    },
+    {
+      "chapter": "Kapitel 8 – Ikrafttræden",
+      "section": "§ 15",
+      "subsection": null,
+      "item": null,
+      "title": "Overgangsbestemmelse",
+      "text": "Virksomheder, der på tidspunktet for bekendtgørelsens ikrafttræden anvender bilag, der ikke opfylder kravene i denne bekendtgørelse, skal senest den 1. juli 2024 sikre, at deres bilagspraksis er i overensstemmelse med bekendtgørelsens krav."
+    }
+  ]
+}
