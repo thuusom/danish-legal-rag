@@ -1,0 +1,76 @@
+# Production compose — versioned GHCR images, network isolation, persistent volumes.
+# Only port 80 (frontend) is exposed to the host.
+#
+# Usage:
+#   make prod-up        # starts the stack
+#   make prod-down      # stops the stack
+#
+# Set IMAGE_TAG in your environment or .env to override the version from VERSION.
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: danish-legal-qdrant
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - backend
+    restart: unless-stopped
+
+  ingest:
+    image: ghcr.io/thuusom/danish-legal-rag-ingest:${IMAGE_TAG:-0.1.0}
+    container_name: danish-legal-ingest
+    env_file: .env
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - HF_HOME=/cache/huggingface
+      - TRANSFORMERS_CACHE=/cache/huggingface/hub
+    volumes:
+      - hf_model_cache:/cache/huggingface
+    networks:
+      - backend
+    depends_on:
+      - qdrant
+    restart: "no"
+
+  api:
+    image: ghcr.io/thuusom/danish-legal-rag-api:${IMAGE_TAG:-0.1.0}
+    container_name: danish-legal-api
+    # NO ports exposed to host — only frontend can reach it via backend network
+    env_file: .env
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - HF_HOME=/cache/huggingface
+      - TRANSFORMERS_CACHE=/cache/huggingface/hub
+    volumes:
+      - hf_model_cache:/cache/huggingface
+      - ./answer-style.md:/app/answer-style.md:ro
+    networks:
+      - backend
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/thuusom/danish-legal-rag-frontend:${IMAGE_TAG:-0.1.0}
+    container_name: danish-legal-frontend
+    ports:
+      - "80:3000"
+    environment:
+      - API_INTERNAL_URL=http://api:8000
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - api
+    restart: unless-stopped
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  qdrant_data:
+  hf_model_cache:

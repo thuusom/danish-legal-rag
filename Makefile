@@ -1,3 +1,6 @@
+VERSION  := $(shell cat VERSION)
+REGISTRY := ghcr.io/thuusom
+
 .PHONY: up down build logs ingest test
 
 up:
@@ -60,3 +63,25 @@ frontend-test:
 # Example: claude -p "write today's report" --agent pm
 report:
 	@echo "Run: claude -p 'Write reports/$$(date +%Y-%m-%d).md covering commits, PRs, and open issues.' --agent pm"
+
+# =============================================================================
+# Production targets (GHCR images, docker-compose.prod.yml)
+# =============================================================================
+
+.PHONY: prod-build prod-push prod-up prod-down
+
+prod-build:
+	docker build -t $(REGISTRY)/danish-legal-rag-api:$(VERSION) -f api/Dockerfile .
+	docker build -t $(REGISTRY)/danish-legal-rag-ingest:$(VERSION) -f ingest/Dockerfile .
+	docker build -t $(REGISTRY)/danish-legal-rag-frontend:$(VERSION) -f frontend/Dockerfile frontend/
+
+prod-push:
+	docker push $(REGISTRY)/danish-legal-rag-api:$(VERSION)
+	docker push $(REGISTRY)/danish-legal-rag-ingest:$(VERSION)
+	docker push $(REGISTRY)/danish-legal-rag-frontend:$(VERSION)
+
+prod-up:
+	IMAGE_TAG=$(VERSION) docker compose -f docker-compose.prod.yml up -d
+
+prod-down:
+	docker compose -f docker-compose.prod.yml down

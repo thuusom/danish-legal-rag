@@ -263,6 +263,10 @@ make client          # Generate TypeScript client from contract
 make frontend-dev    # Start frontend dev server
 make frontend-test   # Run frontend tests
 make report          # Generate daily report
+make prod-build      # Build production images tagged with VERSION
+make prod-push       # Push production images to GHCR
+make prod-up         # Start production stack (only port 80 exposed)
+make prod-down       # Stop production stack
 ```
 
 ---
