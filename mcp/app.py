@@ -34,13 +34,12 @@ import logging
 import os
 import sys
 
-import httpx
-
-from mcp.server import Server
-from mcp.server.stdio import stdio_server
-from mcp.types import TextContent, Tool
-
 sys.path.insert(0, "/app")
+
+import httpx  # noqa: E402
+from mcp.server import Server  # noqa: E402
+from mcp.server.stdio import stdio_server  # noqa: E402
+from mcp.types import TextContent, Tool  # noqa: E402
 
 logging.basicConfig(
     level=logging.INFO,
