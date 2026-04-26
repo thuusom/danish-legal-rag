@@ -1,2 +1,8 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+/* Prevent long words/URLs from causing horizontal overflow on mobile */
+body {
+	overflow-wrap: break-word;
+	word-break: break-word;
+}

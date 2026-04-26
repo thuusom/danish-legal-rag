@@ -40,7 +40,7 @@
 
 <div
 	bind:this={scrollContainer}
-	class="flex-1 overflow-y-auto px-4 py-6"
+	class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-6 sm:px-4"
 	data-testid="message-list"
 >
 	{#if messages.length === 0}
@@ -56,7 +56,7 @@
 			</div>
 		</div>
 	{:else}
-		<div class="mx-auto max-w-[65ch] space-y-6">
+		<div class="mx-auto max-w-[65ch] min-w-0 space-y-6">
 			{#each messages as message (message.id)}
 				{#if message.role === 'user'}
 					<div class="flex justify-end" data-testid="user-message">
