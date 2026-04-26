@@ -417,9 +417,7 @@ def _call_ollama_stream(messages: list[dict]) -> Generator[str, None, None]:
 
 
 def _call_mock_stream(question: str, context: str) -> Generator[str, None, None]:
-    """Mock streaming: yield the mock answer word-by-word."""
-    import time
-
+    """Mock streaming: yield the mock answer word-by-word (no delay in mock mode)."""
     mock_text = (
         "**BEMÆRK: Mock-tilstand** — Ingen LLM er konfigureret. "
         "Indstil LLM_PROVIDER (anthropic/openai/ollama) i .env.\n\n"
@@ -429,7 +427,6 @@ def _call_mock_stream(question: str, context: str) -> Generator[str, None, None]
     words = mock_text.split(" ")
     for i, word in enumerate(words):
         yield word if i == 0 else f" {word}"
-        time.sleep(0.02)
 
 
 def get_model_name() -> str:

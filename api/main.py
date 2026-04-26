@@ -210,7 +210,6 @@ async def ask_stream_endpoint(request: StreamAskRequest):
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
             "X-Accel-Buffering": "no",
         },
     )
