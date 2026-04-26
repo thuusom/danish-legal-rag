@@ -17,6 +17,7 @@ Providers:
 - 'openai': text-embedding-3-small via OpenAI API
 """
 from __future__ import annotations
+
 import logging
 import os
 from abc import ABC, abstractmethod

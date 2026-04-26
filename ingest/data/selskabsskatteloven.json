@@ -1,0 +1,250 @@
+{
+  "law_code": "SEL",
+  "law_name": "Selskabsskatteloven",
+  "law_title": "Bekendtgørelse af lov om indkomstbeskatning af aktieselskaber m.v.",
+  "law_number": "LBK nr 1241 af 22/08/2022",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2022/1241",
+  "effective_date": "2022-08-22",
+  "provisions": [
+    {
+      "chapter": "Kapitel 1 – Skattepligt",
+      "section": "§ 1",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Skattepligt for selskaber",
+      "text": "Skattepligt i henhold til denne lov påhviler følgende selskaber og foreninger m.v., der er hjemmehørende her i landet: 1) Indregistrerede aktieselskaber og anpartsselskaber. 2) Andre selskaber, i hvilke ingen af deltagerne hæfter personligt for selskabets forpligtelser, og som fordeler overskuddet i forhold til deltagernes i selskabet indskudte kapital, herunder selskaber omfattet af § 2 C. 3) Brugsforeninger. 4) Sparekasser, andelskasser og banker. 5) Gensidige forsikringsforeninger. 6) Fonde og foreninger omfattet af fondsbeskatningsloven. 7) Hovedaktionærselskaber."
+    },
+    {
+      "chapter": "Kapitel 1 – Skattepligt",
+      "section": "§ 1",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Hjemmehørende i Danmark",
+      "text": "Et selskab anses for hjemmehørende her i landet, hvis selskabet er registreret her i landet eller har ledelsens sæde her i landet."
+    },
+    {
+      "chapter": "Kapitel 1 – Skattepligt",
+      "section": "§ 2",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Begrænset skattepligt",
+      "text": "Skattepligt i henhold til denne lov påhviler endvidere selskaber og foreninger m.v. som nævnt i § 1, stk. 1, der har hjemsted i udlandet, for så vidt de: a) udøver et erhverv med fast driftssted her i landet, b) modtager udbytte fra selskaber, der er hjemmehørende her i landet, c) modtager royalty fra kilder her i landet, d) ejer fast ejendom her i landet."
+    },
+    {
+      "chapter": "Kapitel 1 – Skattepligt",
+      "section": "§ 2 A",
+      "subsection": null,
+      "item": null,
+      "title": "Fast driftssted",
+      "text": "Ved fast driftssted forstås et fast forretningssted, hvorfra selskabets virksomhed helt eller delvis udøves. Udtrykket fast driftssted omfatter navnlig: et sted, hvorfra selskabet ledes, en filial, et kontor, en fabrik, et værksted, en grube, en olie- eller gaskilde, et stenbrud eller ethvert andet sted, hvor naturforekomster udvindes."
+    },
+    {
+      "chapter": "Kapitel 1 – Skattepligt",
+      "section": "§ 2 C",
+      "subsection": null,
+      "item": null,
+      "title": "Transparente enheder – omklassificering",
+      "text": "Hvis en transparent enhed efter udenlandske regler anses for et selvstændigt skattesubjekt, anses enheden tillige for et selvstændigt skattesubjekt efter dansk skatteret, når enheden er registreret i Danmark."
+    },
+    {
+      "chapter": "Kapitel 2 – Opgørelse af den skattepligtige indkomst",
+      "section": "§ 8",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Opgørelse af skattepligtig indkomst",
+      "text": "Den skattepligtige indkomst opgøres efter skattelovgivningens almindelige regler, for så vidt de efter deres indhold er anvendelige på de i denne lov omhandlede selskaber og foreninger m.v., med de undtagelser og tilføjelser, som følger af bestemmelserne i denne lov."
+    },
+    {
+      "chapter": "Kapitel 2 – Opgørelse af den skattepligtige indkomst",
+      "section": "§ 8",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Fradragsberettigede udgifter",
+      "text": "Ved opgørelsen af den skattepligtige indkomst kan fradrages udgifter, som i årets løb er anvendt til at erhverve, sikre og vedligeholde indkomsten, jf. statsskattelovens § 6, litra a."
+    },
+    {
+      "chapter": "Kapitel 2 – Opgørelse af den skattepligtige indkomst",
+      "section": "§ 9",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Udbytte – skattefrihed for datterselskabsudbytte",
+      "text": "Til den skattepligtige indkomst medregnes ikke udbytte, som et moderselskab modtager fra et datterselskab, når moderselskabet ejer mindst 10 pct. af aktiekapitalen i datterselskabet i en sammenhængende periode på mindst et år, inden for hvilken periode udbytteudlodningen skal ligge."
+    },
+    {
+      "chapter": "Kapitel 2 – Opgørelse af den skattepligtige indkomst",
+      "section": "§ 10",
+      "subsection": null,
+      "item": null,
+      "title": "Indkomstår",
+      "text": "Selskabets indkomstår er det kalenderår, der svarer til regnskabsåret. Selskabet kan dog anvende et andet indkomstår end kalenderåret, hvis regnskabsåret afviger fra kalenderåret."
+    },
+    {
+      "chapter": "Kapitel 2 – Opgørelse af den skattepligtige indkomst",
+      "section": "§ 11",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Rentefradragsbegrænsning – tynd kapitalisering",
+      "text": "Hvis et selskab eller en forening m.v. har en gæld til koncernforbundne selskaber, der overstiger forholdet 4:1 til egenkapitalen (standardforholdet), kan den del af gælden, der overstiger standardforholdet, ikke begrunde fradrag for renter og kurstab."
+    },
+    {
+      "chapter": "Kapitel 2 – Opgørelse af den skattepligtige indkomst",
+      "section": "§ 11 B",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Renteloft",
+      "text": "Nettofinansieringsudgifter, der overstiger den skattemæssige værdi af selskabets aktiver ganget med en standardrente, kan ikke fradrages. Standardrenten fastsættes af Skatterådet."
+    },
+    {
+      "chapter": "Kapitel 2 – Opgørelse af den skattepligtige indkomst",
+      "section": "§ 11 C",
+      "subsection": null,
+      "item": null,
+      "title": "EBITDA-reglen",
+      "text": "Et selskabs fradrag for nettofinansieringsudgifter kan ikke overstige 80 pct. af selskabets skattepligtige indkomst opgjort før nettofinansieringsudgifter (EBITDA-reglen). EBITDA-reglen finder ikke anvendelse, hvis selskabets nettofinansieringsudgifter ikke overstiger 22,3 mio. kr. (2010-niveau)."
+    },
+    {
+      "chapter": "Kapitel 3 – Selskabsskattesatsen",
+      "section": "§ 17",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Selskabsskattesats",
+      "text": "Indkomstskatten for de i § 1, stk. 1, nævnte selskaber og foreninger m.v. udgør 22 pct. af den skattepligtige indkomst."
+    },
+    {
+      "chapter": "Kapitel 3 – Selskabsskattesatsen",
+      "section": "§ 17",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Skat af kulbrinteindkomst",
+      "text": "Indkomstskatten for selskaber og foreninger m.v., der er skattepligtige efter kulbrinteskatteloven, udgør 22 pct. af den skattepligtige indkomst, jf. stk. 1, tillagt 28 pct. af kulbrinteindkomsten."
+    },
+    {
+      "chapter": "Kapitel 4 – Sambeskatning",
+      "section": "§ 31",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Obligatorisk national sambeskatning",
+      "text": "Koncernforbundne selskaber og foreninger m.v., der er skattepligtige efter § 1, stk. 1, eller § 2, stk. 1, litra a, skal sambeskattes (national sambeskatning). Sambeskattede selskaber opgør en sambeskatningsindkomst, der beskattes hos administrationsselskabet."
+    },
+    {
+      "chapter": "Kapitel 4 – Sambeskatning",
+      "section": "§ 31",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Koncernforbundne selskaber",
+      "text": "Ved koncernforbundne selskaber og foreninger m.v. forstås selskaber og foreninger m.v., der tilhører samme koncern, jf. selskabslovens § 6."
+    },
+    {
+      "chapter": "Kapitel 4 – Sambeskatning",
+      "section": "§ 31",
+      "subsection": "stk. 4",
+      "item": null,
+      "title": "Sambeskatningsindkomst",
+      "text": "Sambeskatningsindkomsten opgøres som summen af de sambeskattede selskabers og foreningers skattepligtige indkomst, idet underskud i et selskab kan modregnes i overskud i et andet sambeskattet selskab."
+    },
+    {
+      "chapter": "Kapitel 4 – Sambeskatning",
+      "section": "§ 31 A",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "International sambeskatning – tilvalg",
+      "text": "Det ultimative moderselskab kan vælge, at sambeskatningen skal omfatte alle koncernens selskaber og faste driftssteder, herunder udenlandske selskaber og faste driftssteder (international sambeskatning). Valget er bindende i en periode på 10 år."
+    },
+    {
+      "chapter": "Kapitel 4 – Sambeskatning",
+      "section": "§ 31 B",
+      "subsection": null,
+      "item": null,
+      "title": "Administrationsselskab",
+      "text": "Administrationsselskabet er det øverste moderselskab i koncernen, der deltager i sambeskatningen. Administrationsselskabet forestår indbetalingen af den samlede indkomstskat."
+    },
+    {
+      "chapter": "Kapitel 5 – Underskudsbegrænsning",
+      "section": "§ 12",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Underskudsfremførsel",
+      "text": "Underskud fra tidligere indkomstår kan fradrages i den skattepligtige indkomst. Fradraget kan dog højst udgøre et grundbeløb på 8.872.500 kr. (2010-niveau) tillagt 60 pct. af den del af årets skattepligtige indkomst, der overstiger grundbeløbet."
+    },
+    {
+      "chapter": "Kapitel 5 – Underskudsbegrænsning",
+      "section": "§ 12",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Underskudsbegrænsning ved ejerskifte",
+      "text": "Sker der ejerskifte af mere end 50 pct. af aktiekapitalen eller en dertil svarende del af stemmeværdien, kan selskabets underskud fra indkomstår før ejerskiftet ikke fradrages i den skattepligtige indkomst for indkomstår efter ejerskiftet."
+    },
+    {
+      "chapter": "Kapitel 5 – Underskudsbegrænsning",
+      "section": "§ 12 D",
+      "subsection": null,
+      "item": null,
+      "title": "Underskudsbegrænsning ved fusion m.v.",
+      "text": "Underskud i et selskab, der ophører ved fusion, kan ikke fradrages i det modtagende selskabs indkomst, medmindre selskaberne har været sambeskattet i hele underskudsperioden."
+    },
+    {
+      "chapter": "Kapitel 6 – Skattefri omstruktureringer",
+      "section": "§ 13",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Skattefrihed for visse udbytter og avancer",
+      "text": "Til den skattepligtige indkomst medregnes ikke: 1) Overkurs, som et selskab opnår ved udstedelse af aktier eller ved udvidelse af sin aktiekapital. 2) Udbytte af egne aktier."
+    },
+    {
+      "chapter": "Kapitel 6 – Skattefri omstruktureringer",
+      "section": "§ 13 F",
+      "subsection": null,
+      "item": null,
+      "title": "CFC-beskatning",
+      "text": "Hvis et moderselskab kontrollerer et datterselskab, og mere end en tredjedel af datterselskabets samlede skattepligtige indkomst udgøres af CFC-indkomst, skal moderselskabet medregne sin andel af datterselskabets CFC-indkomst ved opgørelsen af den skattepligtige indkomst. CFC-indkomst omfatter bl.a. renter, royalties, aktieavancer og finansielle instrumenter."
+    },
+    {
+      "chapter": "Kapitel 7 – Udbyttebeskatning",
+      "section": "§ 22",
+      "subsection": null,
+      "item": null,
+      "title": "Udbytteskat for udenlandske selskaber",
+      "text": "Af udbytte, som udbetales til selskaber og foreninger m.v. som nævnt i § 2, stk. 1, litra c, svares en kildeskat på 22 pct. af udbyttebeløbet, medmindre en dobbeltbeskatningsoverenskomst medfører en lavere sats."
+    },
+    {
+      "chapter": "Kapitel 8 – Acontoskat og restskat",
+      "section": "§ 29 A",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Acontoskat",
+      "text": "Selskaber og foreninger m.v. skal betale acontoskat. Acontoskatten opkræves i to rater: den 20. marts og den 20. november i indkomståret. Hver rate udgør halvdelen af den ordinære acontoskat, som beregnes af Skattestyrelsen."
+    },
+    {
+      "chapter": "Kapitel 8 – Acontoskat og restskat",
+      "section": "§ 29 B",
+      "subsection": null,
+      "item": null,
+      "title": "Frivillig indbetaling af acontoskat",
+      "text": "Selskaber og foreninger m.v. kan foretage frivillig indbetaling af yderligere acontoskat ud over de ordinære acontorater. Frivillig indbetaling inden den 20. november i indkomståret medfører en godtgørelse."
+    },
+    {
+      "chapter": "Kapitel 8 – Acontoskat og restskat",
+      "section": "§ 30",
+      "subsection": null,
+      "item": null,
+      "title": "Restskat og overskydende skat",
+      "text": "Overstiger den beregnede indkomstskat de indbetalte acontoskatter, opkræves restbeløbet som restskat med tillæg af et procenttillæg. Er de indbetalte acontoskatter større end den beregnede indkomstskat, tilbagebetales det overskydende beløb med tillæg af en godtgørelse."
+    },
+    {
+      "chapter": "Kapitel 9 – Oplysningspligt",
+      "section": "§ 33 A",
+      "subsection": null,
+      "item": null,
+      "title": "Oplysningspligt",
+      "text": "Selskaber og foreninger m.v. skal inden udløbet af oplysningsfristen indgive oplysninger til Skattestyrelsen om den skattepligtige indkomst. Oplysningsfristen er 6 måneder efter indkomstårets udløb, dog tidligst den 1. juli i det kalenderår, der følger efter indkomståret."
+    },
+    {
+      "chapter": "Kapitel 10 – Territorial beskatning",
+      "section": "§ 8",
+      "subsection": "stk. 4",
+      "item": null,
+      "title": "Territorial beskatning – faste driftssteder",
+      "text": "Ved opgørelsen af den skattepligtige indkomst for et selskab, der er skattepligtig efter § 1, medregnes ikke indkomst og udgifter, der kan henføres til et fast driftssted eller en fast ejendom beliggende i en fremmed stat, Færøerne eller Grønland, medmindre selskabet har valgt international sambeskatning."
+    }
+  ]
+}

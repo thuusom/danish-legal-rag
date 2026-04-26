@@ -2,6 +2,7 @@
 Qdrant client utilities for the Danish Legal RAG system.
 """
 from __future__ import annotations
+
 import logging
 import os
 from typing import Optional
@@ -9,11 +10,16 @@ from typing import Optional
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
-    VectorParams,
-    PointStruct,
-    Filter,
     FieldCondition,
+    Filter,
+    Fusion,
+    FusionQuery,
     MatchValue,
+    PointStruct,
+    Prefetch,
+    SparseVector,
+    SparseVectorParams,
+    VectorParams,
 )
 
 logger = logging.getLogger(__name__)
@@ -29,20 +35,64 @@ def get_qdrant_client() -> QdrantClient:
     return QdrantClient(host=host, port=port)
 
 
+def _want_sparse() -> bool:
+    """Check if the current config expects sparse vectors (hybrid mode)."""
+    return os.environ.get("RETRIEVAL_STRATEGY", "dense").lower() == "hybrid"
+
+
 def ensure_collection(client: QdrantClient, vector_size: int) -> None:
     """
     Create the Qdrant collection if it does not already exist.
-    Idempotent: safe to call multiple times.
+    Uses named vectors: ``"dense"`` for the embedding vector.
+    When RETRIEVAL_STRATEGY=hybrid, also configures a ``"bm25"`` sparse vector.
+
+    If the collection already exists, validates that its sparse config
+    matches expectations. A mismatch raises RuntimeError so stale data
+    is never silently mixed with a new schema.
+
+    Idempotent: safe to call multiple times with the same config.
     """
+    want_sparse = _want_sparse()
+
     collections = [c.name for c in client.get_collections().collections]
     if COLLECTION_NAME not in collections:
-        logger.info(f"Creating Qdrant collection '{COLLECTION_NAME}' with vector_size={vector_size}")
+        sparse_config = {}
+        if want_sparse:
+            sparse_config = {"bm25": SparseVectorParams()}
+            logger.info(
+                f"Creating collection '{COLLECTION_NAME}' with dense({vector_size}) + sparse(bm25)"
+            )
+        else:
+            logger.info(
+                f"Creating collection '{COLLECTION_NAME}' with dense({vector_size})"
+            )
+
         client.create_collection(
             collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(size=vector_size, distance=Distance.COSINE),
+            vectors_config={"dense": VectorParams(size=vector_size, distance=Distance.COSINE)},
+            sparse_vectors_config=sparse_config if sparse_config else None,
         )
     else:
-        logger.info(f"Qdrant collection '{COLLECTION_NAME}' already exists")
+        # Validate schema matches expectations
+        info = client.get_collection(COLLECTION_NAME)
+        has_sparse = (
+            info.config.params.sparse_vectors is not None
+            and "bm25" in (info.config.params.sparse_vectors or {})
+        )
+        if want_sparse and not has_sparse:
+            raise RuntimeError(
+                f"Collection '{COLLECTION_NAME}' exists with sparse=False but config expects "
+                f"sparse=True. Run: docker compose down -v && docker compose up --build"
+            )
+        if not want_sparse and has_sparse:
+            # Tolerate: collection has sparse but we only need dense.
+            # Dense-only queries will simply ignore the sparse index.
+            logger.info(
+                f"Collection '{COLLECTION_NAME}' has sparse vectors but running in dense mode "
+                f"(this is fine; sparse index is unused)"
+            )
+        else:
+            logger.info(f"Qdrant collection '{COLLECTION_NAME}' already exists, schema OK")
 
 
 def upsert_points(client: QdrantClient, points: list[PointStruct]) -> None:
@@ -56,17 +106,17 @@ def search_similar(
     query_vector: list[float],
     limit: int = 5,
     filter_law: Optional[str] = None,
+    sparse_vector: Optional[dict] = None,
 ) -> list[dict]:
     """
-    Perform semantic similarity search in Qdrant.
+    Perform similarity search in Qdrant.
 
-    The query_vector is the embedding of the user's question,
-    generated at query time (not during ingestion).
+    When *sparse_vector* is provided, runs hybrid retrieval:
+    two prefetch legs (dense + BM25 sparse) fused via Reciprocal Rank
+    Fusion (RRF) server-side.  Otherwise, plain dense search on the
+    ``"dense"`` named vector.
 
-    Optionally filter by law_code for more targeted retrieval.
-
-    Uses query_points() (qdrant-client >= 1.10) which supersedes the
-    deprecated search() method removed in 1.17.
+    Uses query_points() (qdrant-client >= 1.10).
     """
     search_filter = None
     if filter_law:
@@ -74,13 +124,39 @@ def search_similar(
             must=[FieldCondition(key="law_code", match=MatchValue(value=filter_law))]
         )
 
-    response = client.query_points(
-        collection_name=COLLECTION_NAME,
-        query=query_vector,
-        limit=limit,
-        query_filter=search_filter,
-        with_payload=True,
-    )
+    if sparse_vector is not None:
+        # Hybrid: prefetch dense + sparse, fuse with RRF
+        prefetch_limit = limit * 3  # over-fetch each leg for better fusion
+        sparse_qvec = SparseVector(
+            indices=sparse_vector["indices"],
+            values=sparse_vector["values"],
+        )
+        logger.info(
+            f"Hybrid search: dense prefetch={prefetch_limit}, "
+            f"sparse terms={len(sparse_vector['indices'])}, final limit={limit}"
+        )
+        response = client.query_points(
+            collection_name=COLLECTION_NAME,
+            prefetch=[
+                Prefetch(query=query_vector, using="dense", limit=prefetch_limit),
+                Prefetch(query=sparse_qvec, using="bm25", limit=prefetch_limit),
+            ],
+            query=FusionQuery(fusion=Fusion.RRF),
+            limit=limit,
+            query_filter=search_filter,
+            with_payload=True,
+        )
+    else:
+        # Dense only — query the named "dense" vector
+        response = client.query_points(
+            collection_name=COLLECTION_NAME,
+            query=query_vector,
+            using="dense",
+            limit=limit,
+            query_filter=search_filter,
+            with_payload=True,
+        )
+
     return [
         {"score": r.score, "payload": r.payload}
         for r in response.points

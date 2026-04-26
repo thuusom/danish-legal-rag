@@ -1,0 +1,282 @@
+{
+  "law_code": "MOML",
+  "law_name": "Momsloven",
+  "law_title": "Bekendtgørelse af lov om merværdiafgift",
+  "law_number": "LBK nr 1021 af 26/09/2019",
+  "source_url": "https://www.retsinformation.dk/eli/lta/2019/1021",
+  "effective_date": "2019-09-26",
+  "provisions": [
+    {
+      "chapter": "Kapitel 1 – Afgiftspligtens omfang",
+      "section": "§ 1",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afgiftspligtige transaktioner",
+      "text": "Erhvervsmæssig levering af varer og ydelser med leveringssted her i landet er afgiftspligtig efter denne lov. Afgiftspligtig er ligeledes erhvervelse af varer fra andre EU-lande og indførsel af varer fra steder uden for EU."
+    },
+    {
+      "chapter": "Kapitel 1 – Afgiftspligtens omfang",
+      "section": "§ 1",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Afgiftspligtige transaktioner – vederlag",
+      "text": "Afgift efter denne lov betales af den afgiftspligtige persons leveringer af varer og ydelser, af erhvervelser af varer fra andre EU-lande og af indførsel af varer fra steder uden for EU."
+    },
+    {
+      "chapter": "Kapitel 2 – Afgiftspligtige personer",
+      "section": "§ 3",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afgiftspligtige personer",
+      "text": "Afgiftspligtige personer er juridiske eller fysiske personer, der driver selvstændig økonomisk virksomhed."
+    },
+    {
+      "chapter": "Kapitel 2 – Afgiftspligtige personer",
+      "section": "§ 3",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Offentlige institutioner",
+      "text": "Som afgiftspligtig person anses endvidere enhver person, der lejlighedsvis leverer et nyt transportmiddel til et andet EU-land. Offentlige forsyningsvirksomheder er ligeledes afgiftspligtige."
+    },
+    {
+      "chapter": "Kapitel 2 – Afgiftspligtige personer",
+      "section": "§ 4",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Levering af varer",
+      "text": "Ved levering af en vare forstås overdragelse af retten til som ejer at råde over et materielt gode."
+    },
+    {
+      "chapter": "Kapitel 2 – Afgiftspligtige personer",
+      "section": "§ 4",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Levering mod vederlag – sidestilling",
+      "text": "Med levering mod vederlag sidestilles udtagning af varer og ydelser, når de tages i brug til formål, som ikke vedrører den afgiftspligtige virksomheds leverancer, herunder til privat brug."
+    },
+    {
+      "chapter": "Kapitel 3 – Leveringssted for varer",
+      "section": "§ 14",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Leveringssted for varer",
+      "text": "Leveringsstedet for varer, der ikke forsendes eller transporteres, er det sted, hvor varen befinder sig på leveringstidspunktet. Leveringsstedet for varer, der forsendes eller transporteres af leverandøren, erhververen eller tredjemand, er det sted, hvor varen befinder sig på det tidspunkt, hvor forsendelsen eller transporten til erhververen påbegyndes."
+    },
+    {
+      "chapter": "Kapitel 4 – Leveringssted for ydelser",
+      "section": "§ 16",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Hovedregel for leveringssted for ydelser – B2B",
+      "text": "Leveringsstedet for ydelser er her i landet, når ydelsen leveres til en afgiftspligtig person, der handler i denne egenskab, og som har etableret stedet for sin økonomiske virksomhed her i landet eller har et fast forretningssted her i landet, hvortil ydelsen leveres."
+    },
+    {
+      "chapter": "Kapitel 4 – Leveringssted for ydelser",
+      "section": "§ 16",
+      "subsection": "stk. 4",
+      "item": null,
+      "title": "Hovedregel for leveringssted for ydelser – B2C",
+      "text": "Leveringsstedet for ydelser til en ikke-afgiftspligtig person er her i landet, når leverandøren har etableret stedet for sin økonomiske virksomhed her i landet."
+    },
+    {
+      "chapter": "Kapitel 4 – Leveringssted for ydelser",
+      "section": "§ 18",
+      "subsection": null,
+      "item": null,
+      "title": "Fast ejendom – leveringssted",
+      "text": "Leveringsstedet for ydelser vedrørende fast ejendom, herunder ydelser fra ejendomsmæglere og sagkyndige, samt ydelser til forberedelse og koordinering af byggearbejder, er det sted, hvor ejendommen er beliggende."
+    },
+    {
+      "chapter": "Kapitel 5 – Afgiftspligtens indtræden",
+      "section": "§ 23",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afgiftspligtens indtræden",
+      "text": "Afgiftspligten indtræder på det tidspunkt, hvor leveringen af varen eller ydelsen finder sted (leveringstidspunktet)."
+    },
+    {
+      "chapter": "Kapitel 5 – Afgiftspligtens indtræden",
+      "section": "§ 23",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Forudbetaling",
+      "text": "Modtages betaling helt eller delvis, inden leveringen finder sted, eller inden faktura udstedes, indtræder afgiftspligten på tidspunktet for modtagelsen af betalingen for det modtagne beløb."
+    },
+    {
+      "chapter": "Kapitel 6 – Afgiftsgrundlaget",
+      "section": "§ 27",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afgiftsgrundlaget ved levering",
+      "text": "Ved levering af varer og ydelser er afgiftsgrundlaget det samlede modværdi, som leverandøren modtager eller vil modtage fra køber, bestiller eller tredjemand for leverancerne, herunder tilskud, der er direkte forbundet med varens eller ydelsens pris."
+    },
+    {
+      "chapter": "Kapitel 6 – Afgiftsgrundlaget",
+      "section": "§ 27",
+      "subsection": "stk. 3",
+      "item": null,
+      "title": "Afgiftsgrundlaget – ikke medregnes",
+      "text": "I afgiftsgrundlaget medregnes ikke: 1) Prisnedsættelser i form af kasserabat for forudbetaling. 2) Rabatter og bonus, som ydes kunden. 3) Beløb, som en afgiftspligtig person modtager fra køber til dækning af udgifter afholdt i købers navn og for købers regning."
+    },
+    {
+      "chapter": "Kapitel 7 – Afgiftssatser",
+      "section": "§ 33",
+      "subsection": null,
+      "item": null,
+      "title": "Afgiftssats",
+      "text": "Afgiften udgør 25 pct. af afgiftsgrundlaget."
+    },
+    {
+      "chapter": "Kapitel 8 – Afgiftsfritagelser",
+      "section": "§ 34",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Fritagelser ved udførsel",
+      "text": "Følgende leverancer er fritaget for afgift: 1) Levering af varer, der af virksomheden eller af en køber, som ikke er etableret her i landet, eller for disses regning udføres til steder uden for EU. 2) Levering af varer, der af virksomheden sendes eller transporteres til et andet EU-land, når erhververen er registreret for afgift i det pågældende land."
+    },
+    {
+      "chapter": "Kapitel 8 – Afgiftsfritagelser",
+      "section": "§ 13",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afgiftsfritagne leverancer",
+      "text": "Følgende varer og ydelser er fritaget for afgift: 1) Hospitalsbehandling og lægevirksomhed. 2) Social forsorg og bistand. 3) Undervisning i skoler og universiteter. 4) Foreningers og organisationers leverancer til medlemmer i disses fælles interesse. 5) Kulturelle aktiviteter. 6) Forfatter- og komponistvirksomhed samt kunstnerisk virksomhed. 7) Forsikrings- og genforsikringsvirksomhed. 8) Finansielle aktiviteter, herunder transaktioner vedrørende værdipapirer, udlån og sikkerhedsstillelse. 9) Levering af fast ejendom, dog ikke nye bygninger med tilhørende jord. 10) Udlejning og bortforpagtning af fast ejendom, herunder levering af gas, vand, elektricitet og varme som led i udlejningen."
+    },
+    {
+      "chapter": "Kapitel 9 – Fradrag",
+      "section": "§ 37",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Fuld fradragsret",
+      "text": "Virksomheder registreret efter §§ 47, 49, 51 eller 51 a kan ved opgørelsen af afgiftstilsvaret som indgående afgift, jf. § 56, stk. 3, fradrage afgiften efter denne lov for virksomhedens indkøb m.v. af varer og ydelser, der udelukkende anvendes til brug for virksomhedens leverancer, som ikke er fritaget for afgift efter § 13."
+    },
+    {
+      "chapter": "Kapitel 9 – Fradrag",
+      "section": "§ 38",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Delvis fradragsret",
+      "text": "For varer og ydelser, som en virksomhed registreret efter §§ 47, 49, 51 eller 51 a anvender både til fradragsberettigede formål efter § 37 og til andre formål i virksomheden, kan der foretages fradrag for den del af afgiften, der forholdsmæssigt svarer til omsætningen i den registreringspligtige del af virksomheden."
+    },
+    {
+      "chapter": "Kapitel 9 – Fradrag",
+      "section": "§ 39",
+      "subsection": null,
+      "item": null,
+      "title": "Fradragsbegrænsning – personbiler",
+      "text": "Afgift vedrørende anskaffelse og drift af personmotorkøretøjer kan ikke fradrages, medmindre køretøjet udelukkende anvendes erhvervsmæssigt til udlejning, køreskolevirksomhed eller lignende."
+    },
+    {
+      "chapter": "Kapitel 9 – Fradrag",
+      "section": "§ 42",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Ikke-fradragsberettigede udgifter",
+      "text": "Virksomheder kan ikke fradrage afgift af indkøb m.v., som vedrører: 1) Kost til virksomhedens indehaver og personale. 2) Anskaffelse og drift af bolig for indehaver og personale. 3) Naturalaflønning af personale. 4) Underholdning, restaurationsydelser, repræsentation og gaver. 5) Hotelophold."
+    },
+    {
+      "chapter": "Kapitel 10 – Betalingspligtige personer",
+      "section": "§ 46",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Betalingspligtige personer",
+      "text": "Betaling af afgift påhviler den afgiftspligtige person, som foretager en afgiftspligtig levering af varer og ydelser her i landet. Afgiften påhviler dog aftageren af varer og ydelser, når aftageren er en afgiftspligtig person eller en ikke-afgiftspligtig momsregistreret juridisk person, og leverandøren ikke er etableret her i landet (omvendt betalingspligt/reverse charge)."
+    },
+    {
+      "chapter": "Kapitel 11 – Registrering",
+      "section": "§ 47",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Registreringspligt",
+      "text": "Afgiftspligtige personer, der driver virksomhed med levering af varer og ydelser, som ikke er fritaget efter § 13, skal anmelde deres virksomhed til registrering hos told- og skatteforvaltningen. Registreringspligten indtræder, når den samlede afgiftspligtige omsætning inden for en 12-måneders periode overstiger 50.000 kr."
+    },
+    {
+      "chapter": "Kapitel 11 – Registrering",
+      "section": "§ 48",
+      "subsection": null,
+      "item": null,
+      "title": "Frivillig registrering",
+      "text": "Afgiftspligtige personer kan frivilligt lade sig registrere, selv om den afgiftspligtige omsætning ikke overstiger registreringsgrænsen."
+    },
+    {
+      "chapter": "Kapitel 11 – Registrering",
+      "section": "§ 50",
+      "subsection": null,
+      "item": null,
+      "title": "Frivillig registrering for udlejning af fast ejendom",
+      "text": "Virksomheder, der udlejer fast ejendom, kan frivilligt lade sig registrere for udlejning af fast ejendom, der anvendes til afgiftspligtig virksomhed. Den frivillige registrering medfører, at der skal betales afgift af lejen, men virksomheden opnår samtidig fradragsret for afgift af udgifter til opførelse, ombygning og drift af den pågældende ejendom."
+    },
+    {
+      "chapter": "Kapitel 12 – Regnskabsbestemmelser",
+      "section": "§ 52",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Fakturakrav",
+      "text": "Enhver afgiftspligtig person skal for levering af varer og ydelser udstede en faktura til modtageren. Fakturaen skal indeholde: momsregistreringsnummer, fakturanummer, fakturadato, leverandørens og modtagerens navn og adresse, varernes eller ydelsernes mængde og art, afgiftsgrundlaget og afgiftsbeløbet."
+    },
+    {
+      "chapter": "Kapitel 13 – Afregning af afgift",
+      "section": "§ 56",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afgiftsperiode",
+      "text": "Afgiftsperioden er kvartalet for virksomheder med en omsætning, der ikke overstiger 5 mio. kr. årligt. For virksomheder med en omsætning over 5 mio. kr., men ikke over 50 mio. kr., er afgiftsperioden kalendermåneden. For virksomheder med en omsætning over 50 mio. kr. er afgiftsperioden ligeledes kalendermåneden."
+    },
+    {
+      "chapter": "Kapitel 13 – Afregning af afgift",
+      "section": "§ 56",
+      "subsection": "stk. 3",
+      "item": null,
+      "title": "Afgiftstilsvar",
+      "text": "Virksomheder skal efter udløbet af hver afgiftsperiode opgøre afgiftstilsvaret som udgående afgift (salgsmoms) med fradrag af indgående afgift (købsmoms) for den pågældende periode."
+    },
+    {
+      "chapter": "Kapitel 13 – Afregning af afgift",
+      "section": "§ 57",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Angivelsesfrist",
+      "text": "Virksomheder, der er registreret efter § 47, skal angive størrelsen af virksomhedens udgående og indgående afgift i afgiftsperioden til told- og skatteforvaltningen. Angivelsen skal ske senest den 1. i den tredje måned efter afgiftsperiodens udløb for kvartalsafregnende virksomheder og senest den 25. i den måned, der følger efter afgiftsperioden for månedsafregnende virksomheder."
+    },
+    {
+      "chapter": "Kapitel 14 – Særlige ordninger",
+      "section": "§ 66",
+      "subsection": null,
+      "item": null,
+      "title": "Brugtmomsordningen",
+      "text": "Virksomheder, der med henblik på videresalg indkøber brugte varer, kunstgenstande, samlerobjekter eller antikviteter, kan ved videresalget afgiftsberigtige varerne efter den særlige ordning i dette kapitel. Afgiften beregnes af forskellen mellem salgsprisen og købsprisen (avancen)."
+    },
+    {
+      "chapter": "Kapitel 14 – Særlige ordninger",
+      "section": "§ 69",
+      "subsection": null,
+      "item": null,
+      "title": "OSS-ordningen (One Stop Shop)",
+      "text": "Afgiftspligtige personer, der leverer ydelser til ikke-afgiftspligtige personer i andre EU-lande, eller som foretager fjernsalg af varer inden for EU, kan anvende den særlige ordning (One Stop Shop), hvorefter afgiften angives og betales i ét EU-land."
+    },
+    {
+      "chapter": "Kapitel 15 – Kontrol og straffebestemmelser",
+      "section": "§ 74",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Kontrolbestemmelser",
+      "text": "Told- og skatteforvaltningen har adgang til at foretage eftersyn i lokaler, der benyttes af virksomheder registreret efter denne lov. Forvaltningen kan kræve at se virksomhedens regnskabsmateriale, herunder fakturaer, kontrakter og korrespondance."
+    },
+    {
+      "chapter": "Kapitel 15 – Kontrol og straffebestemmelser",
+      "section": "§ 81",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Straffebestemmelser",
+      "text": "Med bøde straffes den, der forsætligt eller groft uagtsomt: 1) afgiver urigtige eller vildledende oplysninger eller fortier oplysninger til brug for afgiftskontrollen, 2) overtræder § 47, stk. 1, § 52, stk. 1, eller § 56, stk. 3. Er overtrædelsen begået med forsæt til at unddrage statskassen afgift, straffes med bøde eller fængsel i indtil 1 år og 6 måneder."
+    },
+    {
+      "chapter": "Kapitel 16 – Godtgørelse af afgift",
+      "section": "§ 45",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Godtgørelse til udenlandske virksomheder",
+      "text": "Afgiftspligtige personer, der er etableret i et andet EU-land og ikke er registreret her i landet, kan få godtgjort den afgift, som er betalt her i landet for varer og ydelser til brug for virksomheden, i samme omfang som en her i landet registreret virksomhed kan fradrage afgiften."
+    }
+  ]
+}

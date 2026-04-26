@@ -1,0 +1,15 @@
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests that require heavy dependencies like sentence-transformers (deselect with '-m \"not slow\"')",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+# E: pycodestyle errors, F: pyflakes, W: pycodestyle warnings, I: isort
+ignore = [
+    "E501",  # line too long — handled by formatter, not linter
+]

@@ -7,6 +7,7 @@ Falls back to local JSON files if the API is unavailable.
 Retsinformation.dk provides a REST API for Danish law texts.
 """
 from __future__ import annotations
+
 import json
 import logging
 import os
@@ -20,15 +21,16 @@ logger = logging.getLogger(__name__)
 DATA_DIR = Path(__file__).parent / "data"
 
 # Laws to ingest: (law_code, retsinformation document ID, fallback file)
-# We ingest:
-# - Afskrivningsloven (AFL): The key law for tax depreciation of intangible assets incl. software
-# - Årsregnskabsloven (ARL): For financial reporting rules on intangible assets
-#
-# NOTE: "Skatteloven" is not a single Danish law. The relevant laws for
-# tax depreciation of software/intangible assets are:
-# - Afskrivningsloven (AFL): Primary source for tax depreciation
-# - Ligningsloven (LL): Additional deduction rules
-# - Årsregnskabsloven (ARL): Accounting (GAAP) perspective
+# The corpus covers Danish tax, accounting, and corporate audit law:
+# - Afskrivningsloven (AFL): Tax depreciation rules
+# - Årsregnskabsloven (ARL): Financial reporting / accounting
+# - Bogføringsloven (BOG): Bookkeeping requirements
+# - Selskabsskatteloven (SEL): Corporate income tax
+# - Momsloven (MOML): Value-added tax (VAT / moms)
+# - Ligningsloven (LL): Personal and corporate income tax deductions
+# - Skattekontrolloven (SKL): Tax reporting obligations and control
+# - Revisorloven (REVL): Auditor regulation
+# - Skatteforvaltningsloven (SFL): Tax administration, appeals, deadlines
 LAWS_TO_INGEST = [
     {
         "law_code": "AFL",
@@ -39,6 +41,41 @@ LAWS_TO_INGEST = [
         "law_code": "ARL",
         "retsinformation_id": "2015-1580",  # LBK nr 1580
         "fallback_file": DATA_DIR / "aarsregnskabsloven.json",
+    },
+    {
+        "law_code": "BOG",
+        "retsinformation_id": "2022-700",  # LOV nr 700
+        "fallback_file": DATA_DIR / "bogfoeringsloven.json",
+    },
+    {
+        "law_code": "SEL",
+        "retsinformation_id": "2022-1241",  # LBK nr 1241
+        "fallback_file": DATA_DIR / "selskabsskatteloven.json",
+    },
+    {
+        "law_code": "MOML",
+        "retsinformation_id": "2019-1021",  # LBK nr 1021
+        "fallback_file": DATA_DIR / "momsloven.json",
+    },
+    {
+        "law_code": "LL",
+        "retsinformation_id": "2021-1735",  # LBK nr 1735
+        "fallback_file": DATA_DIR / "ligningsloven.json",
+    },
+    {
+        "law_code": "SKL",
+        "retsinformation_id": "2017-1535",  # LOV nr 1535
+        "fallback_file": DATA_DIR / "skattekontrolloven.json",
+    },
+    {
+        "law_code": "REVL",
+        "retsinformation_id": "2024-25",  # LBK nr 25
+        "fallback_file": DATA_DIR / "revisorloven.json",
+    },
+    {
+        "law_code": "SFL",
+        "retsinformation_id": "2022-835",  # LBK nr 835
+        "fallback_file": DATA_DIR / "skatteforvaltningsloven.json",
     },
 ]
 

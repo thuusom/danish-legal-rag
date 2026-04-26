@@ -19,6 +19,7 @@ Before embedding, we check if the chunk already exists in Qdrant with
 the same content hash. If so, we skip re-embedding (no wasted API calls).
 """
 from __future__ import annotations
+
 import logging
 import os
 import sys
@@ -29,15 +30,16 @@ from qdrant_client.models import PointStruct
 # Add parent to path for shared imports
 sys.path.insert(0, "/app")
 
-from shared.qdrant_utils import (
-    get_qdrant_client,
-    ensure_collection,
-    upsert_points,
-    point_exists_with_hash,
-)
 from ingest.chunker import chunk_law
 from ingest.embedder import get_embedding_provider
 from ingest.fetcher import load_all_laws
+from shared.qdrant_utils import (
+    ensure_collection,
+    get_qdrant_client,
+    point_exists_with_hash,
+    upsert_points,
+)
+from shared.sparse import get_sparse_provider, is_hybrid_enabled
 
 logging.basicConfig(
     level=logging.INFO,
@@ -134,12 +136,27 @@ def run_ingestion() -> None:
         vectors = embedder.embed(embedding_texts)
         logger.info("Embeddings generated successfully")
 
-        # Build Qdrant points
+        # Optionally generate sparse BM25 vectors for hybrid retrieval
+        sparse_vectors = None
+        if is_hybrid_enabled():
+            sparse_provider = get_sparse_provider()
+            logger.info(f"Generating BM25 sparse vectors for {len(embedding_texts)} texts...")
+            sparse_vectors = sparse_provider.embed(embedding_texts)
+            logger.info("Sparse vectors generated")
+
+        # Build Qdrant points with named vectors
         points = []
-        for chunk, vector in zip(chunks_to_embed, vectors):
+        for i, (chunk, vector) in enumerate(zip(chunks_to_embed, vectors)):
+            vec_dict: dict = {"dense": vector}
+            if sparse_vectors is not None:
+                sv = sparse_vectors[i]
+                from qdrant_client.models import SparseVector
+                vec_dict["bm25"] = SparseVector(
+                    indices=sv["indices"], values=sv["values"]
+                )
             point = PointStruct(
                 id=chunk.id,
-                vector=vector,
+                vector=vec_dict,
                 payload=chunk.to_qdrant_payload(),
             )
             points.append(point)

@@ -7,12 +7,172 @@
   "effective_date": "2016-08-29",
   "provisions": [
     {
-      "chapter": "Kapitel 1 – Afskrivning på bygninger og installationer",
+      "chapter": "Kapitel 1 – Almindelige bestemmelser",
       "section": "§ 1",
       "subsection": null,
       "item": null,
-      "title": "Bygninger anvendt erhvervsmæssigt",
-      "text": "Erhvervsmæssigt benyttede bygninger kan afskrives efter reglerne i dette kapitel."
+      "title": "Lovens anvendelsesområde",
+      "text": "Efter reglerne i denne lov kan skattemæssig afskrivning foretages på udgifter til anskaffelse og forbedring af aktiver, der benyttes erhvervsmæssigt af den skattepligtige, samt på visse andre udgifter."
+    },
+    {
+      "chapter": "Kapitel 1 – Almindelige bestemmelser",
+      "section": "§ 2",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Driftsmidler og skibe – saldoafskrivning",
+      "text": "Maskiner, inventar og andre driftsmidler samt skibe afskrives efter reglerne i dette kapitel, såfremt de udelukkende eller delvis benyttes erhvervsmæssigt."
+    },
+    {
+      "chapter": "Kapitel 1 – Almindelige bestemmelser",
+      "section": "§ 2",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Undtagne aktiver",
+      "text": "Uanset stk. 1 kan der ikke afskrives på aktiver, der er indrettet til beboelse, jf. dog § 14, stk. 2. Der kan heller ikke afskrives på personbiler og motorcykler, der er indregistreret til privat personbefordring eller til udlejning uden fører."
+    },
+    {
+      "chapter": "Kapitel 2 – Driftsmidler og skibe",
+      "section": "§ 5",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afskrivningsgrundlag – saldoværdien",
+      "text": "Driftsmidler og skibe, som en skattepligtig udelukkende benytter erhvervsmæssigt, skal afskrives på en samlet saldo for den enkelte virksomhed opgjort efter reglerne i §§ 5-8."
+    },
+    {
+      "chapter": "Kapitel 2 – Driftsmidler og skibe",
+      "section": "§ 5",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Opgørelse af saldoværdi",
+      "text": "Den afskrivningsberettigede saldoværdi opgøres som saldoværdien ved indkomstårets begyndelse med tillæg af anskaffelsessummen for driftsmidler og skibe, der er anskaffet i indkomståret, og med fradrag af salgssummen for driftsmidler og skibe, der er solgt eller udgået af driften i indkomståret."
+    },
+    {
+      "chapter": "Kapitel 2 – Driftsmidler og skibe",
+      "section": "§ 5",
+      "subsection": "stk. 3",
+      "item": null,
+      "title": "Afskrivningssats for driftsmidler",
+      "text": "Afskrivning kan højst udgøre 25 pct. af den afskrivningsberettigede saldoværdi efter stk. 2."
+    },
+    {
+      "chapter": "Kapitel 2 – Driftsmidler og skibe",
+      "section": "§ 5 B",
+      "subsection": null,
+      "item": null,
+      "title": "Forskudsafskrivning på driftsmidler",
+      "text": "Skattepligtige, der har bestilt et driftsmiddel eller skib til levering, kan afskrive forlods med indtil 30 pct. af anskaffelsessummen i bestillingsåret og de følgende indkomstår. Det er en betingelse, at anskaffelsessummen for driftsmidlet eller skibet overstiger et grundbeløb på 1.579.100 kr. (2010-niveau)."
+    },
+    {
+      "chapter": "Kapitel 2 – Driftsmidler og skibe",
+      "section": "§ 6",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Straksafskrivning for småanskaffelser",
+      "text": "Driftsmidler og skibe med en anskaffelsessum på et grundbeløb på 12.800 kr. (2010-niveau) eller derunder kan fradrages fuldt ud i den skattepligtige indkomst i anskaffelsesåret i stedet for at blive afskrevet efter § 5."
+    },
+    {
+      "chapter": "Kapitel 2 – Driftsmidler og skibe",
+      "section": "§ 6",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Straksafskrivning for aktiver med kort levetid",
+      "text": "Udgifter til anskaffelse af driftsmidler og skibe, der har en fysisk levetid på ikke over 3 år, kan fradrages fuldt ud i det indkomstår, hvori anskaffelsen finder sted."
+    },
+    {
+      "chapter": "Kapitel 2 – Driftsmidler og skibe",
+      "section": "§ 8",
+      "subsection": null,
+      "item": null,
+      "title": "Negativ saldo",
+      "text": "Er den afskrivningsberettigede saldoværdi negativ ved indkomstårets udgang, og overstiger den et grundbeløb på 12.800 kr. (2010-niveau), skal den negative saldo medregnes ved opgørelsen af den skattepligtige indkomst for det pågældende indkomstår."
+    },
+    {
+      "chapter": "Kapitel 3 – Bygninger",
+      "section": "§ 14",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Afskrivning på bygninger",
+      "text": "Erhvervsmæssigt benyttede bygninger afskrives særskilt for hver enkelt bygning efter reglerne i dette kapitel. Afskrivningen kan fra og med anskaffelsesåret udgøre indtil 4 pct. af anskaffelsessummen årligt."
+    },
+    {
+      "chapter": "Kapitel 3 – Bygninger",
+      "section": "§ 14",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Undtagne bygninger",
+      "text": "Uanset stk. 1 kan afskrivning ikke foretages på bygninger, der anvendes til kontorformål, eller på bygninger, der anvendes til beboelse eller hertil knyttede formål, medmindre bygningen er en del af et landbrug eller gartneri."
+    },
+    {
+      "chapter": "Kapitel 3 – Bygninger",
+      "section": "§ 15",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Installationer i bygninger",
+      "text": "Installationer, der udelukkende tjener bygninger, som afskrives efter § 14, afskrives under ét med bygningen. Andre installationer i afskrivningsberettigede bygninger afskrives efter reglerne om driftsmidler i kapitel 2."
+    },
+    {
+      "chapter": "Kapitel 3 – Bygninger",
+      "section": "§ 17",
+      "subsection": null,
+      "item": null,
+      "title": "Forbedringer af bygninger",
+      "text": "Udgifter til ombygning og forbedring af afskrivningsberettigede bygninger og installationer heri afskrives efter de regler, der gælder for bygningen eller installationen."
+    },
+    {
+      "chapter": "Kapitel 3 – Bygninger",
+      "section": "§ 18",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Vedligeholdelse",
+      "text": "Udgifter til vedligeholdelse af bygninger kan fradrages i den skattepligtige indkomst i det indkomstår, hvori udgifterne er afholdt."
+    },
+    {
+      "chapter": "Kapitel 3 – Bygninger",
+      "section": "§ 19",
+      "subsection": null,
+      "item": null,
+      "title": "Blandet benyttede bygninger",
+      "text": "Benyttes en bygning til både afskrivningsberettigede formål og ikke-afskrivningsberettigede formål, kan ejeren afskrive på den del af anskaffelsessummen, der forholdsmæssigt svarer til den afskrivningsberettigede anvendelse."
+    },
+    {
+      "chapter": "Kapitel 4 – Avance og tab ved salg af bygninger",
+      "section": "§ 21",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Beskatning af genvundne afskrivninger",
+      "text": "Sælges en bygning, på hvilken der er afskrevet efter § 14, medregnes genvundne afskrivninger ved opgørelsen af den skattepligtige indkomst for salgsåret. Genvundne afskrivninger opgøres som forskellen mellem salgssummen og den nedskrevne værdi, dog højst de samlede foretagne afskrivninger."
+    },
+    {
+      "chapter": "Kapitel 4 – Avance og tab ved salg af bygninger",
+      "section": "§ 21",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Tab ved salg af bygninger",
+      "text": "Tab ved salg af bygninger, der er afskrevet efter § 14, kan fradrages i den skattepligtige indkomst for salgsåret. Tabet opgøres som forskellen mellem den nedskrevne værdi og salgssummen."
+    },
+    {
+      "chapter": "Kapitel 5 – Dræningsanlæg og markvandingsanlæg på jordbrugsbedrifter",
+      "section": "§ 27",
+      "subsection": null,
+      "item": null,
+      "title": "Dræningsanlæg",
+      "text": "Udgifter til anlæg af dræning på jordbrugsbedrifter kan fradrages med lige store årlige beløb over 10 år. Fradraget foretages fra og med det indkomstår, hvori anlægget tages i brug."
+    },
+    {
+      "chapter": "Kapitel 5 – Dræningsanlæg og markvandingsanlæg på jordbrugsbedrifter",
+      "section": "§ 28",
+      "subsection": null,
+      "item": null,
+      "title": "Markvandingsanlæg",
+      "text": "Udgifter til markvandingsanlæg på jordbrugsbedrifter kan fradrages med lige store årlige beløb over 10 år."
+    },
+    {
+      "chapter": "Kapitel 6 – Accessoriske udgifter",
+      "section": "§ 39",
+      "subsection": null,
+      "item": null,
+      "title": "Accessoriske udgifter",
+      "text": "Udgifter til mægler, advokat og lignende, der er afholdt i forbindelse med anskaffelse af aktiver, som kan afskrives efter denne lov, tillægges aktivets anskaffelsessum."
     },
     {
       "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
@@ -35,8 +195,48 @@
       "section": "§ 40",
       "subsection": "stk. 3",
       "item": null,
-      "title": "Negativ anskaffelsessum",
+      "title": "Straksafskrivning af småbeløb",
       "text": "Udgifter til erhvervelse af aktiver som nævnt i stk. 1 og 2 kan straksafskrives, hvis anskaffelsessummen ikke overstiger et grundbeløb på 12.800 kr. (2010-niveau). Grundbeløbet reguleres efter personskattelovens § 20."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40",
+      "subsection": "stk. 4",
+      "item": null,
+      "title": "Tidsbegrænset rettighed",
+      "text": "Er en rettighed som nævnt i stk. 1 erhvervet tidsbegrænset, kan den skattemæssige afskrivning foretages over den aftalte periode, når denne er kortere end den periode, der følger af stk. 1."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40",
+      "subsection": "stk. 5",
+      "item": null,
+      "title": "Tab ved udløb af tidsbegrænset rettighed",
+      "text": "Udløber en rettighed som nævnt i stk. 1, der er tidsbegrænset, uden afhændelse, kan der foretages fradrag for den del af anskaffelsessummen, der ikke allerede er afskrevet."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40",
+      "subsection": "stk. 6",
+      "item": null,
+      "title": "Fortjeneste og tab ved salg",
+      "text": "Fortjeneste eller tab ved salg af aktiver som nævnt i stk. 1-2 medregnes ved opgørelsen af den skattepligtige indkomst. Fortjeneste eller tab opgøres som forskellen mellem afståelsessummen og den nedskrevne værdi."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40 A",
+      "subsection": null,
+      "item": null,
+      "title": "Tillæg til anskaffelsessum",
+      "text": "Udgifter til forbedring af aktiver som nævnt i § 40, stk. 1 og 2, tillægges aktivets anskaffelsessum og afskrives sammen med denne."
+    },
+    {
+      "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 40 B",
+      "subsection": null,
+      "item": null,
+      "title": "Varemærker og andre rettigheder",
+      "text": "Udgifter til erhvervelse af varemærkeret og andre lignende immaterielle rettigheder, der ikke er nævnt i § 40, kan afskrives med indtil 1/7 af anskaffelsessummen for hvert indkomstår."
     },
     {
       "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
@@ -67,16 +267,56 @@
       "section": "§ 41",
       "subsection": "stk. 1",
       "item": null,
-      "title": "Afskrivning ved salg",
+      "title": "Avance og tab ved salg af immaterielle aktiver",
       "text": "Sælges et aktiv, som der er afskrevet på efter §§ 40-40 C, medregnes en eventuel fortjeneste eller tab ved opgørelsen af den skattepligtige indkomst i det indkomstår, hvori salget finder sted. Fortjeneste eller tab opgøres som forskellen mellem afståelsessum og den afskrevne værdi."
     },
     {
       "chapter": "Kapitel 7 – Immaterielle anlægsaktiver",
+      "section": "§ 41",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Salg af del af rettighed",
+      "text": "Sælges en del af en rettighed som nævnt i § 40, fordeles den nedskrevne værdi forholdsmæssigt mellem den solgte og den beholdte del."
+    },
+    {
+      "chapter": "Kapitel 8 – Forsknings- og udviklingsudgifter",
+      "section": "§ 44",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Udgifter til forsøgs- og forskningsvirksomhed",
+      "text": "Ved opgørelsen af den skattepligtige indkomst kan udgifter, som afholdes til forsøgs- og forskningsvirksomhed i tilknytning til den skattepligtiges erhverv, bortset fra udgifter til anskaffelse af maskiner, inventar og lignende driftsmidler, efter den skattepligtiges valg enten fradrages fuldt ud i det indkomstår, hvori de er afholdt, eller afskrives med lige store årlige beløb over 5 år."
+    },
+    {
+      "chapter": "Kapitel 8 – Forsknings- og udviklingsudgifter",
+      "section": "§ 44",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Grundforskning – fradrag",
+      "text": "Udgifter til grundforskning, der afholdes i tilknytning til den skattepligtiges erhverv, kan fradrages efter reglerne i stk. 1."
+    },
+    {
+      "chapter": "Kapitel 9 – Ikrafttrædelses- og overgangsbestemmelser",
       "section": "§ 45",
       "subsection": "stk. 1",
       "item": null,
       "title": "Erhvervsmæssig brug – krav",
       "text": "Afskrivning efter §§ 40-40 C forudsætter, at aktivet benyttes erhvervsmæssigt i den skattepligtiges virksomhed. Aktiver, der benyttes både erhvervsmæssigt og privat, kan kun afskrives for den del, der svarer til den erhvervsmæssige benyttelse."
+    },
+    {
+      "chapter": "Kapitel 9 – Ikrafttrædelses- og overgangsbestemmelser",
+      "section": "§ 46",
+      "subsection": null,
+      "item": null,
+      "title": "Ikrafttræden",
+      "text": "Loven har virkning fra og med indkomståret 1999. Samtidig ophæves de hidtidige afskrivningsregler i den tidligere afskrivningslov."
+    },
+    {
+      "chapter": "Kapitel 9 – Ikrafttrædelses- og overgangsbestemmelser",
+      "section": "§ 47",
+      "subsection": null,
+      "item": null,
+      "title": "Overgangsbestemmelser",
+      "text": "Afskrivning efter de hidtidige regler kan fuldføres for aktiver, der er anskaffet før lovens ikrafttræden, efter den skattepligtiges valg."
     }
   ]
 }

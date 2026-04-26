@@ -1,0 +1,378 @@
+openapi: 3.1.0
+info:
+  title: Danish Legal RAG API
+  version: 1.0.0
+  description: |
+    Retrieval-Augmented Generation API for Danish tax and accounting law.
+
+    This file is the contract between backend and frontend. Backend agent
+    owns and updates it. Frontend agent generates a typed client from it
+    via `make client`.
+
+    Regenerate from the running API with `make contract`.
+
+servers:
+  - url: http://localhost:8000
+    description: Local dev
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: health
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+                  qdrant: { type: string, example: connected }
+                  collections:
+                    type: array
+                    items: { type: string }
+
+  /ask:
+    post:
+      summary: Ask a legal question (non-streaming)
+      description: |
+        Submits a natural-language question in Danish. Retrieves relevant
+        legal provisions from Qdrant and returns an LLM-generated answer
+        with structured references. Full response returned in one payload.
+
+        For streaming, use `/ask/stream`.
+      operationId: ask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AskRequest'
+            examples:
+              software_depreciation:
+                summary: Typical question about software depreciation
+                value:
+                  question: "Hvordan afskrives immaterielle aktiver såsom software skattemæssigt?"
+                  limit: 8
+      responses:
+        '200':
+          description: Answer with references
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AskResponse'
+
+  /search:
+    post:
+      summary: Semantic search without answer generation
+      operationId: search
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Ranked list of matching legal provisions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+  /ask/stream:
+    post:
+      summary: Ask a legal question (streaming SSE)
+      description: |
+        Submits a natural-language question in Danish. Retrieves relevant
+        legal provisions from Qdrant and streams the LLM-generated answer
+        token-by-token via Server-Sent Events.
+
+        SSE event sequence:
+        1. Zero or more `StreamChunkEvent` — partial answer text
+        2. One `StreamReferencesEvent` — full reference array
+        3. One `StreamDoneEvent` — completion signal with model name
+
+        On error at any point, a single `StreamErrorEvent` is sent and the
+        stream closes.
+
+        Each SSE message is formatted as `data: {json}\n\n`.
+      operationId: askStream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamAskRequest'
+            examples:
+              software_depreciation:
+                summary: Streaming question about software depreciation
+                value:
+                  question: "Hvordan afskrives immaterielle aktiver såsom software skattemæssigt?"
+                  limit: 8
+              with_history:
+                summary: Follow-up question with conversation history
+                value:
+                  question: "Hvad med goodwill?"
+                  limit: 8
+                  history:
+                    - role: user
+                      content: "Hvordan afskrives software?"
+                    - role: assistant
+                      content: "Software kan straksafskrives jf. AFL § 41..."
+      responses:
+        '200':
+          description: SSE stream of answer chunks, references, and completion signal
+          content:
+            text/event-stream:
+              schema:
+                description: |
+                  Newline-delimited SSE events. Each `data:` line contains
+                  a JSON object matching one of the event schemas below.
+                oneOf:
+                  - $ref: '#/components/schemas/StreamChunkEvent'
+                  - $ref: '#/components/schemas/StreamReferencesEvent'
+                  - $ref: '#/components/schemas/StreamDoneEvent'
+                  - $ref: '#/components/schemas/StreamErrorEvent'
+
+  /laws:
+    get:
+      summary: List all ingested laws
+      operationId: listLaws
+      responses:
+        '200':
+          description: Laws in the corpus
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: { type: integer }
+                  laws:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LawSummary'
+
+components:
+  schemas:
+    AskRequest:
+      type: object
+      required: [question]
+      properties:
+        question:
+          type: string
+          description: Natural language question in Danish
+          example: "Hvordan afskrives software skattemæssigt?"
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 8
+        filter_law:
+          type: string
+          nullable: true
+          description: Optional law_code filter (e.g. AFL, ARL)
+        retrieval_strategy:
+          type: string
+          enum: [dense, hybrid]
+          nullable: true
+          description: |
+            Retrieval strategy to use. If omitted, the server picks the
+            default (currently "dense"). "hybrid" enables combined dense
+            + sparse BM25 retrieval with RRF fusion.
+
+    AskResponse:
+      type: object
+      required: [answer, references, retrieved_context, question, model_used]
+      properties:
+        answer:
+          type: string
+          description: LLM-generated answer in Danish, grounded in references
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalReference'
+        retrieved_context:
+          type: array
+          description: Raw retrieved Qdrant payloads (for debugging/transparency)
+          items:
+            type: object
+            additionalProperties: true
+        question:
+          type: string
+        model_used:
+          type: string
+          example: "claude-opus-4-5"
+
+    SearchRequest:
+      type: object
+      required: [query]
+      properties:
+        query: { type: string }
+        limit: { type: integer, minimum: 1, maximum: 20, default: 5 }
+        filter_law: { type: string, nullable: true }
+        retrieval_strategy:
+          type: string
+          enum: [dense, hybrid]
+          nullable: true
+          description: |
+            Retrieval strategy to use. If omitted, the server picks the
+            default (currently "dense"). "hybrid" enables combined dense
+            + sparse BM25 retrieval with RRF fusion.
+
+    SearchResponse:
+      type: object
+      required: [results, query]
+      properties:
+        query: { type: string }
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalReference'
+
+    LegalReference:
+      type: object
+      required: [law, law_code, section, quote, citation_label]
+      properties:
+        law: { type: string, description: "Human-readable law name" }
+        law_code: { type: string, example: "AFL" }
+        section: { type: string, example: "§ 40 C" }
+        subsection: { type: string, nullable: true, example: "stk. 1" }
+        item: { type: string, nullable: true }
+        title: { type: string, nullable: true }
+        quote:
+          type: string
+          description: The cited legal provision text
+        citation_label:
+          type: string
+          example: "Afskrivningsloven § 40 C, stk. 1"
+        source_url:
+          type: string
+          nullable: true
+          format: uri
+        score:
+          type: number
+          nullable: true
+          minimum: 0
+          maximum: 1
+
+    StreamAskRequest:
+      type: object
+      required: [question]
+      properties:
+        question:
+          type: string
+          description: Natural language question in Danish
+          example: "Hvordan afskrives software skattemæssigt?"
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 8
+        filter_law:
+          type: string
+          nullable: true
+          description: Optional law_code filter (e.g. AFL, ARL)
+        retrieval_strategy:
+          type: string
+          enum: [dense, hybrid]
+          nullable: true
+          description: |
+            Retrieval strategy to use. If omitted, the server picks the
+            default (currently "dense"). "hybrid" enables combined dense
+            + sparse BM25 retrieval with RRF fusion.
+        history:
+          type: array
+          nullable: true
+          description: |
+            Optional conversation history for multi-turn context.
+            Messages are prepended to the LLM context in order.
+          items:
+            type: object
+            required: [role, content]
+            properties:
+              role:
+                type: string
+                enum: [user, assistant]
+              content:
+                type: string
+
+    StreamChunkEvent:
+      type: object
+      required: [type, data]
+      description: Partial answer text chunk, streamed as the LLM generates tokens.
+      properties:
+        type:
+          type: string
+          enum: [chunk]
+        data:
+          type: string
+          description: A fragment of the answer text
+      example:
+        type: chunk
+        data: "Ifølge Afskrivningsloven"
+
+    StreamReferencesEvent:
+      type: object
+      required: [type, data]
+      description: Full array of legal references, sent once after the answer is complete.
+      properties:
+        type:
+          type: string
+          enum: [references]
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalReference'
+      example:
+        type: references
+        data:
+          - law: Afskrivningsloven
+            law_code: AFL
+            section: "§ 41"
+            quote: "Udgifter til anskaffelse af..."
+            citation_label: "Afskrivningsloven § 41"
+
+    StreamDoneEvent:
+      type: object
+      required: [type, data]
+      description: Completion signal, sent as the final event.
+      properties:
+        type:
+          type: string
+          enum: [done]
+        data:
+          type: object
+          required: [model_used]
+          properties:
+            model_used:
+              type: string
+              example: "claude-opus-4-5"
+
+    StreamErrorEvent:
+      type: object
+      required: [type, data]
+      description: Error event. Sent on failure, after which the stream closes.
+      properties:
+        type:
+          type: string
+          enum: [error]
+        data:
+          type: object
+          required: [detail]
+          properties:
+            detail:
+              type: string
+              description: Human-readable error message
+
+    LawSummary:
+      type: object
+      required: [law_code, law_name]
+      properties:
+        law_code: { type: string }
+        law_name: { type: string }
+        law_title: { type: string, nullable: true }
+        law_number: { type: string, nullable: true }
+        source_url: { type: string, nullable: true, format: uri }

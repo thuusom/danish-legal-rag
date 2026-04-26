@@ -7,15 +7,151 @@
   "effective_date": "2015-12-10",
   "provisions": [
     {
-      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
-      "section": "§ 33",
+      "chapter": "Afsnit 1 – Lovens anvendelsesområde m.v.",
+      "section": "§ 1",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Lovens anvendelsesområde",
+      "text": "Denne lov finder anvendelse på udarbejdelse og offentliggørelse af årsrapporter. Loven finder anvendelse på alle erhvervsdrivende virksomheder, uanset om disse virksomheder er organiseret som aktieselskaber, anpartsselskaber, interessentskaber, kommanditselskaber, andelsselskaber, foreninger, fonde eller lignende."
+    },
+    {
+      "chapter": "Afsnit 1 – Lovens anvendelsesområde m.v.",
+      "section": "§ 1",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Undtagne virksomheder",
+      "text": "Loven finder ikke anvendelse på finansielle virksomheder, der udarbejder årsrapport efter lov om finansiel virksomhed."
+    },
+    {
+      "chapter": "Afsnit 1 – Lovens anvendelsesområde m.v.",
+      "section": "§ 3",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Regnskabsklasser",
+      "text": "Virksomhederne opdeles i regnskabsklasse A, B, C og D. En virksomhed, der er omfattet af en højere regnskabsklasse, skal ud over kravene for den pågældende regnskabsklasse tillige opfylde kravene for de lavere regnskabsklasser."
+    },
+    {
+      "chapter": "Afsnit 1 – Lovens anvendelsesområde m.v.",
+      "section": "§ 4",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Regnskabsklasse A",
+      "text": "Virksomheder i regnskabsklasse A er personligt ejede virksomheder, der ikke overskrider to af følgende størrelsesgrænser: en balancesum på 44 mio. kr., en nettoomsætning på 89 mio. kr. og et gennemsnit af 50 heltidsbeskæftigede i løbet af regnskabsåret."
+    },
+    {
+      "chapter": "Afsnit 1 – Lovens anvendelsesområde m.v.",
+      "section": "§ 7",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Regnskabsklasse B",
+      "text": "Virksomheder i regnskabsklasse B er virksomheder, der ikke overskrider to af følgende grænser i to på hinanden følgende regnskabsår: en balancesum på 44 mio. kr., en nettoomsætning på 89 mio. kr. og et gennemsnitligt antal heltidsbeskæftigede på 50."
+    },
+    {
+      "chapter": "Afsnit 1 – Lovens anvendelsesområde m.v.",
+      "section": "§ 7",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Regnskabsklasse C",
+      "text": "Virksomheder i regnskabsklasse C er virksomheder, der overskrider to af grænserne i stk. 1, men som ikke er omfattet af regnskabsklasse D. Regnskabsklasse C opdeles i mellemstor C (overskrider ikke to af: balancesum 156 mio. kr., nettoomsætning 313 mio. kr., 250 ansatte) og stor C."
+    },
+    {
+      "chapter": "Afsnit 1 – Lovens anvendelsesområde m.v.",
+      "section": "§ 7",
+      "subsection": "stk. 3",
+      "item": null,
+      "title": "Regnskabsklasse D",
+      "text": "Regnskabsklasse D omfatter børsnoterede virksomheder samt statslige aktieselskaber."
+    },
+    {
+      "chapter": "Afsnit 2 – Generelle bestemmelser",
+      "section": "§ 11",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Det retvisende billede",
+      "text": "Årsregnskabet og et eventuelt koncernregnskab skal give et retvisende billede af virksomhedens og koncernens aktiver og passiver, finansielle stilling samt resultatet. Ledelsesberetningen skal indeholde en retvisende redegørelse for de forhold, som beretningen omhandler."
+    },
+    {
+      "chapter": "Afsnit 2 – Generelle bestemmelser",
+      "section": "§ 11",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Fravigelse for retvisende billede",
+      "text": "Hvis anvendelsen af lovens bestemmelser ikke er tilstrækkelig til at give et retvisende billede, skal der gives yderligere oplysninger i noterne."
+    },
+    {
+      "chapter": "Afsnit 2 – Generelle bestemmelser",
+      "section": "§ 12",
       "subsection": null,
+      "item": null,
+      "title": "Regnskabsperiode",
+      "text": "Regnskabsperioden er 12 måneder. Første regnskabsperiode kan dog omfatte et kortere eller længere tidsrum, dog højst 18 måneder."
+    },
+    {
+      "chapter": "Afsnit 2 – Generelle bestemmelser",
+      "section": "§ 13",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Grundlæggende krav – konsistens",
+      "text": "Indregningsmetoder og målegrundlag skal anvendes ensartet fra år til år (konsistens). Ændringer heri må kun foretages, hvis det fører til, at årsregnskabet giver et mere retvisende billede."
+    },
+    {
+      "chapter": "Afsnit 2 – Generelle bestemmelser",
+      "section": "§ 13",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Grundlæggende krav – going concern",
+      "text": "Ved udarbejdelsen af årsregnskabet antages det, at virksomheden fortsætter sin drift (going concern), medmindre virksomheden er under afvikling eller det er besluttet at afvikle virksomheden."
+    },
+    {
+      "chapter": "Afsnit 2 – Generelle bestemmelser",
+      "section": "§ 13",
+      "subsection": "stk. 3",
+      "item": null,
+      "title": "Grundlæggende krav – neutralitet",
+      "text": "Alle poster i årsregnskabet skal indregnes og måles efter princippet om neutralitet, dvs. upartiskhed, og forsigtighedsprincippet, dvs. at aktiver og indtægter ikke overvurderes, og at forpligtelser og udgifter ikke undervurderes."
+    },
+    {
+      "chapter": "Afsnit 2 – Generelle bestemmelser",
+      "section": "§ 16",
+      "subsection": null,
+      "item": null,
+      "title": "Årsrapportens bestanddele",
+      "text": "Årsrapporten skal mindst indeholde en ledelsespåtegning, en eventuel revisionspåtegning, en ledelsesberetning, en resultatopgørelse, en balance og noter. Større virksomheder skal også udarbejde en pengestrømsopgørelse og en egenkapitalopgørelse."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 22",
+      "subsection": null,
+      "item": null,
+      "title": "Resultatopgørelsen",
+      "text": "Resultatopgørelsen skal opstilles i skemaform efter enten artsopdeling eller funktionsopdeling. Virksomheden vælger den fremgangsmåde, der bedst viser virksomhedens indtjening."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 23",
+      "subsection": null,
+      "item": null,
+      "title": "Resultatopgørelse – poster",
+      "text": "Resultatopgørelsen efter artsopdeling skal indeholde poster for nettoomsætning, ændring i lagre, andre driftsindtægter, omkostninger til råvarer og hjælpematerialer, andre eksterne omkostninger, personaleomkostninger, af- og nedskrivninger, andre driftsomkostninger, finansielle indtægter og finansielle omkostninger."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 25",
+      "subsection": null,
+      "item": null,
+      "title": "Balancen – skema",
+      "text": "Balancen skal opstilles i skemaform med aktiver og passiver. Under aktiver opføres immaterielle anlægsaktiver, materielle anlægsaktiver, finansielle anlægsaktiver, omsætningsaktiver m.v. Under passiver opføres egenkapital, hensatte forpligtelser og gældsforpligtelser."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 33",
+      "subsection": "stk. 1",
       "item": null,
       "title": "Immaterielle anlægsaktiver – definition og indregning",
       "text": "Immaterielle anlægsaktiver er identificerbare ikke-monetære aktiver uden fysisk substans. Et immaterielt anlægsaktiv indregnes i balancen, når det er sandsynligt, at fremtidige økonomiske fordele, der kan henføres til aktivet, vil tilgå virksomheden, og aktivets kostpris kan måles pålideligt."
     },
     {
-      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
       "section": "§ 33",
       "subsection": "stk. 2",
       "item": null,
@@ -23,7 +159,7 @@
       "text": "Immaterielle anlægsaktiver omfatter bl.a. udviklingsomkostninger, erhvervede patenter, licenser og lignende rettigheder, goodwill samt software (EDB-programmer), der er erhvervet separat eller udviklet internt til brug i virksomheden."
     },
     {
-      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
       "section": "§ 34",
       "subsection": "stk. 1",
       "item": null,
@@ -31,7 +167,7 @@
       "text": "Immaterielle anlægsaktiver med begrænset brugstid afskrives systematisk over den forventede brugstid. Afskrivningsmetoden skal afspejle det forventede forbrug af de fremtidige økonomiske fordele, der er knyttet til aktivet."
     },
     {
-      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
       "section": "§ 34",
       "subsection": "stk. 2",
       "item": null,
@@ -39,7 +175,7 @@
       "text": "For software, der erhverves eller udvikles til brug i virksomheden, anvendes typisk en afskrivningsperiode på 3-5 år, medmindre en kortere eller længere periode kan begrundes ud fra aktivets forventede brugstid. Afskrivning påbegyndes, når aktivet er klar til brug."
     },
     {
-      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
       "section": "§ 35",
       "subsection": null,
       "item": null,
@@ -47,28 +183,204 @@
       "text": "Immaterielle anlægsaktiver, som vurderes at have ubegrænset brugstid, afskrives ikke, men testes i stedet for nedskrivningsbehov mindst én gang årligt. Brugstiden skal revurderes hvert år."
     },
     {
-      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
       "section": "§ 36",
       "subsection": "stk. 1",
       "item": null,
-      "title": "Internt oparbejdede immaterielle aktiver",
+      "title": "Internt oparbejdede immaterielle aktiver – forskningsfasen",
       "text": "Omkostninger i forskningsfasen for internt oparbejdede immaterielle aktiver indregnes altid som en omkostning i resultatopgørelsen i den periode, de afholdes. Det er ikke tilladt at aktivere udgifter i forskningsfasen."
     },
     {
-      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
       "section": "§ 36",
       "subsection": "stk. 2",
       "item": null,
-      "title": "Udviklingsfasen",
-      "text": "Et internt oparbejdet immaterielt aktiv opstået i udviklingsfasen kan indregnes, hvis virksomheden kan påvise: (a) den tekniske gennemførlighed af at færdiggøre aktivet, (b) hensigten om at færdiggøre og bruge eller sælge aktivet, (c) evnen til at bruge eller sælge aktivet, (d) sandsynlighed for fremtidige ekonomiske fordele, (e) tilgængelighed af ressourcer til at færdiggøre aktivet, og (f) evnen til pålideligt at måle de udgifter, der kan henføres til aktivet under udviklingen."
+      "title": "Internt oparbejdede immaterielle aktiver – udviklingsfasen",
+      "text": "Et internt oparbejdet immaterielt aktiv opstået i udviklingsfasen kan indregnes, hvis virksomheden kan påvise: (a) den tekniske gennemførlighed af at færdiggøre aktivet, (b) hensigten om at færdiggøre og bruge eller sælge aktivet, (c) evnen til at bruge eller sælge aktivet, (d) sandsynlighed for fremtidige økonomiske fordele, (e) tilgængelighed af ressourcer til at færdiggøre aktivet, og (f) evnen til pålideligt at måle de udgifter, der kan henføres til aktivet under udviklingen."
     },
     {
-      "chapter": "Kapitel 3 – Grundlæggende krav til indregning og måling",
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
       "section": "§ 37",
       "subsection": null,
       "item": null,
       "title": "Oplysningskrav for immaterielle aktiver",
       "text": "Virksomheden skal i noterne oplyse om de anvendte afskrivningsmetoder og afskrivningsperioder for immaterielle anlægsaktiver. Derudover skal der oplyses om kostpris, akkumulerede afskrivninger og eventuelle nedskrivninger for hver kategori af immaterielle aktiver."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 38",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Materielle anlægsaktiver – indregning",
+      "text": "Materielle anlægsaktiver skal indregnes i balancen til kostpris på anskaffelses- eller fremstillingstidspunktet. Kostprisen omfatter købsprisen samt omkostninger, der er direkte tilknyttet anskaffelsen, og omkostninger til at bringe aktivet til den ønskede driftsstand."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 38",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Materielle anlægsaktiver – afskrivning",
+      "text": "Materielle anlægsaktiver med begrænset brugstid afskrives systematisk over den forventede brugstid. Afskrivning påbegyndes, når aktivet tages i brug."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 40",
+      "subsection": null,
+      "item": null,
+      "title": "Nedskrivning af anlægsaktiver",
+      "text": "Anlægsaktiver skal nedskrives til en lavere genindvindingsværdi, hvis denne er lavere end den regnskabsmæssige værdi, og værdifaldet forventes at være vedvarende. Nedskrivningen indregnes i resultatopgørelsen."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 41",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Varebeholdninger",
+      "text": "Varebeholdninger skal indregnes til kostpris. Kostprisen omfatter anskaffelses- eller fremstillingsprisen. Varebeholdninger skal nedskrives til nettorealisationsværdien, hvis denne er lavere end kostprisen."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 43",
+      "subsection": null,
+      "item": null,
+      "title": "Tilgodehavender",
+      "text": "Tilgodehavender indregnes til den nominelle værdi med fradrag af nedskrivninger til imødegåelse af forventede tab."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 46",
+      "subsection": null,
+      "item": null,
+      "title": "Egenkapital",
+      "text": "I balancen skal egenkapitalen opdeles i virksomhedskapital, overkurs ved emission, reserve for opskrivninger, reserve for udviklingsomkostninger, overført overskud og forslag til udbytte."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 47",
+      "subsection": null,
+      "item": null,
+      "title": "Hensatte forpligtelser",
+      "text": "Hensatte forpligtelser indregnes, når virksomheden har en retlig eller faktisk forpligtelse som følge af tidligere begivenheder, det er sandsynligt at indfrielse vil medføre et forbrug af økonomiske ressourcer, og forpligtelsen kan måles pålideligt."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 48",
+      "subsection": null,
+      "item": null,
+      "title": "Gældsforpligtelser",
+      "text": "Gældsforpligtelser skal indregnes i balancen til den nominelle restgæld. Langfristede gældsforpligtelser indregnes til amortiseret kostpris."
+    },
+    {
+      "chapter": "Afsnit 3 – Bestemmelser for regnskabsklasse B",
+      "section": "§ 49",
+      "subsection": null,
+      "item": null,
+      "title": "Periodeafgrænsningsposter",
+      "text": "Periodeafgrænsningsposter under aktiver omfatter omkostninger, der er afholdt inden balancedagen, men som vedrører efterfølgende regnskabsår. Periodeafgrænsningsposter under passiver omfatter indtægter, der er modtaget inden balancedagen, men som vedrører efterfølgende regnskabsår."
+    },
+    {
+      "chapter": "Afsnit 4 – Bestemmelser for regnskabsklasse C og D",
+      "section": "§ 78",
+      "subsection": null,
+      "item": null,
+      "title": "Yderligere krav til regnskabsklasse C",
+      "text": "Virksomheder i regnskabsklasse C skal ud over kravene for regnskabsklasse B opfylde en række yderligere krav, herunder udarbejde en pengestrømsopgørelse, en egenkapitalopgørelse og en udvidet ledelsesberetning."
+    },
+    {
+      "chapter": "Afsnit 4 – Bestemmelser for regnskabsklasse C og D",
+      "section": "§ 86",
+      "subsection": null,
+      "item": null,
+      "title": "Pengestrømsopgørelse",
+      "text": "Virksomheder i regnskabsklasse C og D skal udarbejde en pengestrømsopgørelse, der viser virksomhedens pengestrømme fra driftsaktivitet, investeringsaktivitet og finansieringsaktivitet."
+    },
+    {
+      "chapter": "Afsnit 4 – Bestemmelser for regnskabsklasse C og D",
+      "section": "§ 87",
+      "subsection": null,
+      "item": null,
+      "title": "Egenkapitalopgørelse",
+      "text": "Virksomheder i regnskabsklasse C og D skal udarbejde en egenkapitalopgørelse, der viser bevægelserne i egenkapitalens bestanddele i regnskabsåret."
+    },
+    {
+      "chapter": "Afsnit 5 – Koncernregnskab",
+      "section": "§ 109",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Pligt til at udarbejde koncernregnskab",
+      "text": "En modervirksomhed, der er omfattet af regnskabsklasse C eller D, skal udarbejde koncernregnskab. Koncernregnskabet skal omfatte modervirksomheden og samtlige dattervirksomheder."
+    },
+    {
+      "chapter": "Afsnit 5 – Koncernregnskab",
+      "section": "§ 110",
+      "subsection": null,
+      "item": null,
+      "title": "Undtagelser fra koncernregnskabspligt",
+      "text": "En modervirksomhed kan undlade at udarbejde koncernregnskab, hvis koncernen i to på hinanden følgende regnskabsår ikke overskrider to af følgende grænser: en balancesum på 44 mio. kr., en nettoomsætning på 89 mio. kr. og et gennemsnitligt antal heltidsbeskæftigede i regnskabsåret på 50."
+    },
+    {
+      "chapter": "Afsnit 5 – Koncernregnskab",
+      "section": "§ 114",
+      "subsection": null,
+      "item": null,
+      "title": "Koncernregnskab – eliminering",
+      "text": "I koncernregnskabet elimineres koncerninterne transaktioner, mellemværender, urealiserede fortjenester og tab på transaktioner mellem koncernvirksomhederne."
+    },
+    {
+      "chapter": "Afsnit 5 – Koncernregnskab",
+      "section": "§ 120",
+      "subsection": null,
+      "item": null,
+      "title": "Goodwill ved virksomhedsovertagelse",
+      "text": "Goodwill, der opstår ved en virksomhedsovertagelse, indregnes som et immaterielt anlægsaktiv. Goodwill afskrives systematisk over brugstiden. Kan brugstiden ikke skønnes pålideligt, afskrives goodwill over 10 år."
+    },
+    {
+      "chapter": "Afsnit 6 – Revision",
+      "section": "§ 135",
+      "subsection": "stk. 1",
+      "item": null,
+      "title": "Revisionspligt",
+      "text": "Årsregnskaber og koncernregnskaber for virksomheder, der er omfattet af regnskabsklasse B, C eller D, skal revideres af en godkendt revisor."
+    },
+    {
+      "chapter": "Afsnit 6 – Revision",
+      "section": "§ 135",
+      "subsection": "stk. 2",
+      "item": null,
+      "title": "Fravalg af revision",
+      "text": "Virksomheder i regnskabsklasse B kan fravælge revision, hvis virksomheden i to på hinanden følgende regnskabsår på balancetidspunktet ikke overskrider to af følgende grænser: en balancesum på 4 mio. kr., en nettoomsætning på 8 mio. kr. og et gennemsnitligt antal heltidsbeskæftigede i regnskabsåret på 12."
+    },
+    {
+      "chapter": "Afsnit 7 – Offentliggørelse",
+      "section": "§ 138",
+      "subsection": null,
+      "item": null,
+      "title": "Indsendelse af årsrapport",
+      "text": "Virksomheder omfattet af regnskabsklasse B, C og D skal indsende årsrapporten til Erhvervsstyrelsen. Årsrapporten skal indsendes uden ugrundet ophold efter godkendelse og senest 5 måneder efter regnskabsårets udløb."
+    },
+    {
+      "chapter": "Afsnit 7 – Offentliggørelse",
+      "section": "§ 139",
+      "subsection": null,
+      "item": null,
+      "title": "Digital indberetning",
+      "text": "Årsrapporten skal indberettes digitalt til Erhvervsstyrelsen i det format, som styrelsen kræver (XBRL). Kravene til digital indberetning gælder for alle virksomheder, der er forpligtet til at indsende årsrapport."
+    },
+    {
+      "chapter": "Afsnit 8 – Straffebestemmelser m.v.",
+      "section": "§ 161",
+      "subsection": null,
+      "item": null,
+      "title": "Straffebestemmelser",
+      "text": "Overtrædelse af lovens bestemmelser om udarbejdelse og indsendelse af årsrapporter straffes med bøde. Forsætlig eller groft uagtsom overtrædelse kan medføre straf."
+    },
+    {
+      "chapter": "Afsnit 8 – Straffebestemmelser m.v.",
+      "section": "§ 162",
+      "subsection": null,
+      "item": null,
+      "title": "Tvangsbøder",
+      "text": "Erhvervsstyrelsen kan pålægge medlemmer af virksomhedens ledelse tvangsbøder for at fremtvinge indsendelse af årsrapporter."
     }
   ]
 }

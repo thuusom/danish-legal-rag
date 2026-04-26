@@ -14,9 +14,9 @@ Or locally if dependencies are installed:
   python -m pytest tests/test_embeddings.py -v
 """
 import sys
+
 sys.path.insert(0, "/app")
 
-import hashlib
 import pytest
 
 
@@ -206,6 +206,7 @@ class TestChunker:
             assert chunk.source_url == "https://www.retsinformation.dk/eli/lta/2016/1147"
 
 
+@pytest.mark.slow
 class TestEmbeddingProvider:
     """Test the embedding provider (requires sentence-transformers installed)."""
 
@@ -246,6 +247,7 @@ class TestEmbeddingProvider:
     def test_normalized_vectors(self):
         """Vectors should be approximately unit-normalized (for cosine similarity)."""
         import math
+
         from ingest.embedder import get_embedding_provider
         provider = get_embedding_provider()
         vector = provider.embed_single("Afskrivning af software")

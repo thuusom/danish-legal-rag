@@ -6,6 +6,7 @@ Each provision (§, stk.) becomes exactly one chunk.
 References are NEVER split across chunks.
 """
 from __future__ import annotations
+
 import logging
 import uuid
 from datetime import datetime, timezone

@@ -11,12 +11,13 @@ Run these tests after docker compose up:
   docker compose exec api python -m pytest /app/tests/ -v
 """
 import sys
+
 sys.path.insert(0, "/app")
 
 import os
-import pytest
-import httpx
 
+import httpx
+import pytest
 
 API_URL = os.environ.get("API_URL", "http://localhost:8000")
 QDRANT_HOST = os.environ.get("QDRANT_HOST", "localhost")
@@ -29,6 +30,7 @@ class TestIngestion:
     def test_qdrant_collection_exists(self):
         """Qdrant collection must exist after ingestion."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -38,6 +40,7 @@ class TestIngestion:
     def test_chunks_ingested(self):
         """Verify that chunks have been ingested."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -48,7 +51,8 @@ class TestIngestion:
     def test_afl_chunks_present(self):
         """Afskrivningsloven chunks must be present."""
         from qdrant_client import QdrantClient
-        from qdrant_client.models import Filter, FieldCondition, MatchValue
+        from qdrant_client.models import FieldCondition, Filter, MatchValue
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -65,6 +69,7 @@ class TestIngestion:
     def test_chunk_has_required_fields(self):
         """Each chunk must have all required metadata fields."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -112,6 +117,7 @@ class TestEmbeddings:
     def test_embeddings_stored_in_qdrant(self):
         """Qdrant points must have vectors stored."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -122,12 +128,20 @@ class TestEmbeddings:
             with_vectors=True,
         )
         assert records, "No records found"
-        assert records[0].vector is not None, "Vector not stored in Qdrant"
-        assert len(records[0].vector) > 0, "Vector is empty"
+        vector = records[0].vector
+        assert vector is not None, "Vector not stored in Qdrant"
+        # Named vectors: vector is a dict with at least a "dense" key
+        if isinstance(vector, dict):
+            assert "dense" in vector, "Named 'dense' vector missing"
+            assert len(vector["dense"]) > 0, "Dense vector is empty"
+        else:
+            # Legacy unnamed vector (pre-hybrid collections)
+            assert len(vector) > 0, "Vector is empty"
 
     def test_content_hash_stored(self):
         """Each chunk must have embedding_content_hash in payload."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -157,6 +171,7 @@ class TestEmbeddings:
     def test_similar_texts_produce_similar_embeddings(self):
         """Semantically similar texts should have high cosine similarity."""
         import math
+
         from ingest.embedder import get_embedding_provider
         provider = get_embedding_provider()
 
@@ -187,17 +202,19 @@ class TestRetrieval:
         embedder = get_embedding_provider()
         qdrant = get_qdrant_client()
 
-        query = "software afskrivning skattemæssigt"
+        query = "afskrivning af driftsmidler og bygninger"
         query_vector = embedder.embed_single(query)
         results = search_similar(qdrant, query_vector, limit=3)
 
-        assert len(results) > 0, "No results returned for software query"
+        assert len(results) > 0, "No results returned for depreciation query"
         assert results[0]["score"] > 0.3, "Top result has very low relevance score"
 
-        # Top result should be from Afskrivningsloven
+        # Top result should be from a tax-relevant law (AFL is most likely,
+        # but SEL/ARL also discuss depreciation in a corporate-tax context)
         top_law = results[0]["payload"].get("law_code")
         print(f"Top result: {results[0]['payload'].get('citation_label')} (score: {results[0]['score']:.3f})")
-        assert top_law in ["AFL", "ARL"], f"Unexpected law: {top_law}"
+        accepted_laws = ["AFL", "ARL", "SEL"]
+        assert top_law in accepted_laws, f"Unexpected law: {top_law}, expected one of {accepted_laws}"
 
     def test_references_preserved_in_retrieval(self):
         """Retrieved chunks must have all legal reference fields."""
@@ -284,5 +301,189 @@ class TestAPI:
         assert r.status_code == 200
         data = r.json()
         assert data["count"] > 0
-        law_codes = [l["law_code"] for l in data["laws"]]
+        law_codes = [law["law_code"] for law in data["laws"]]
         assert "AFL" in law_codes, "Afskrivningsloven not found in laws list"
+
+    def test_search_with_retrieval_strategy_dense(self):
+        """Search with explicit retrieval_strategy=dense must work."""
+        with httpx.Client(timeout=30.0) as client:
+            r = client.post(
+                f"{API_URL}/search",
+                json={"query": "software afskrivning", "limit": 3, "retrieval_strategy": "dense"},
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert len(data["results"]) > 0
+
+    def test_ask_with_retrieval_strategy_dense(self):
+        """Ask with explicit retrieval_strategy=dense must work."""
+        with httpx.Client(timeout=60.0) as client:
+            r = client.post(
+                f"{API_URL}/ask",
+                json={
+                    "question": "Hvad er reglerne for straksafskrivning?",
+                    "retrieval_strategy": "dense",
+                },
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert data["answer"], "Answer should not be empty"
+        assert len(data["references"]) > 0
+
+
+class TestAskStream:
+    """Tests for the /ask/stream SSE endpoint."""
+
+    def _parse_sse_events(self, text: str) -> list[dict]:
+        """Parse SSE text into a list of JSON event dicts."""
+        import json
+        events = []
+        for line in text.split("\n"):
+            line = line.strip()
+            if line.startswith("data: "):
+                payload = line[len("data: "):]
+                try:
+                    events.append(json.loads(payload))
+                except json.JSONDecodeError:
+                    pass
+        return events
+
+    def test_ask_stream_returns_sse(self):
+        """POST /ask/stream must return a valid SSE stream with chunk, references, and done events."""
+        with httpx.Client(timeout=120.0) as client:
+            r = client.post(
+                f"{API_URL}/ask/stream",
+                json={"question": "Hvordan afskrives software skattemæssigt?"},
+            )
+        assert r.status_code == 200
+        assert "text/event-stream" in r.headers.get("content-type", "")
+
+        events = self._parse_sse_events(r.text)
+        assert len(events) > 0, "No SSE events received"
+
+        event_types = [e["type"] for e in events]
+
+        # Must have at least one chunk
+        assert "chunk" in event_types, f"No 'chunk' events in stream. Got types: {event_types}"
+
+        # Must have exactly one references event
+        ref_events = [e for e in events if e["type"] == "references"]
+        assert len(ref_events) == 1, f"Expected 1 references event, got {len(ref_events)}"
+        refs = ref_events[0]["data"]
+        assert isinstance(refs, list), "References data must be a list"
+        if len(refs) > 0:
+            ref = refs[0]
+            assert "law" in ref, "Reference missing 'law' field"
+            assert "section" in ref, "Reference missing 'section' field"
+            assert "citation_label" in ref, "Reference missing 'citation_label' field"
+
+        # Must have exactly one done event
+        done_events = [e for e in events if e["type"] == "done"]
+        assert len(done_events) == 1, f"Expected 1 done event, got {len(done_events)}"
+        assert "model_used" in done_events[0]["data"], "Done event missing 'model_used'"
+
+        # done must be the last event
+        assert events[-1]["type"] == "done", f"Last event should be 'done', got '{events[-1]['type']}'"
+
+    def test_ask_stream_with_history(self):
+        """POST /ask/stream with history must still return valid SSE."""
+        with httpx.Client(timeout=120.0) as client:
+            r = client.post(
+                f"{API_URL}/ask/stream",
+                json={
+                    "question": "Hvad med goodwill?",
+                    "limit": 5,
+                    "history": [
+                        {"role": "user", "content": "Hvordan afskrives software?"},
+                        {"role": "assistant", "content": "Software kan straksafskrives."},
+                    ],
+                },
+            )
+        assert r.status_code == 200
+        events = self._parse_sse_events(r.text)
+        event_types = [e["type"] for e in events]
+        assert "chunk" in event_types, "No chunk events with history"
+        assert "done" in event_types, "No done event with history"
+
+    def test_ask_stream_chunks_form_answer(self):
+        """Concatenated chunk data should form a non-empty answer string."""
+        with httpx.Client(timeout=120.0) as client:
+            r = client.post(
+                f"{API_URL}/ask/stream",
+                json={"question": "Hvad er reglerne for straksafskrivning?"},
+            )
+        assert r.status_code == 200
+        events = self._parse_sse_events(r.text)
+        chunks = [e["data"] for e in events if e["type"] == "chunk"]
+        full_answer = "".join(chunks)
+        assert len(full_answer) > 10, f"Answer too short: '{full_answer}'"
+
+    def test_nonstreaming_ask_still_works(self):
+        """Regression: non-streaming /ask must still work after adding /ask/stream."""
+        with httpx.Client(timeout=60.0) as client:
+            r = client.post(
+                f"{API_URL}/ask",
+                json={"question": "Hvordan afskrives bygninger?"},
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert "answer" in data and data["answer"]
+        assert "references" in data
+
+
+class TestHybridSearch:
+    """Tests for hybrid search. These require RETRIEVAL_STRATEGY=hybrid and re-ingested data."""
+
+    @pytest.fixture(autouse=True)
+    def _check_hybrid(self):
+        """Skip hybrid tests if the collection doesn't have sparse vectors."""
+        from qdrant_client import QdrantClient
+
+        from shared.qdrant_utils import COLLECTION_NAME
+
+        client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+        try:
+            info = client.get_collection(COLLECTION_NAME)
+            has_sparse = (
+                info.config.params.sparse_vectors is not None
+                and "bm25" in (info.config.params.sparse_vectors or {})
+            )
+        except Exception:
+            has_sparse = False
+
+        if not has_sparse:
+            pytest.skip("Collection has no sparse vectors (hybrid not enabled)")
+
+    def test_hybrid_search_returns_results(self):
+        """Hybrid search via /search must return results."""
+        with httpx.Client(timeout=30.0) as client:
+            r = client.post(
+                f"{API_URL}/search",
+                json={
+                    "query": "straksafskrivning af EDB-programmer",
+                    "limit": 5,
+                    "retrieval_strategy": "hybrid",
+                },
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert len(data["results"]) > 0, "Hybrid search returned no results"
+        # Verify result structure
+        ref = data["results"][0]
+        assert ref.get("citation_label"), "citation_label missing"
+        assert ref.get("law_code"), "law_code missing"
+
+    def test_dense_search_unaffected(self):
+        """Dense search must still work even when collection has sparse vectors."""
+        with httpx.Client(timeout=30.0) as client:
+            r = client.post(
+                f"{API_URL}/search",
+                json={
+                    "query": "goodwill afskrivning",
+                    "limit": 3,
+                    "retrieval_strategy": "dense",
+                },
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert len(data["results"]) > 0, "Dense search returned no results on hybrid collection"

@@ -4,12 +4,14 @@ Danish Legal RAG - REST API
 FastAPI application exposing the RAG system via HTTP.
 
 Endpoints:
-  POST /ask    - Ask a natural language question, get answer + references
-  POST /search - Semantic search without answer generation
-  GET  /laws   - List all ingested laws
-  GET  /health - Health check
+  POST /ask        - Ask a natural language question, get answer + references
+  POST /ask/stream - Ask with streaming SSE response (token-by-token)
+  POST /search     - Semantic search without answer generation
+  GET  /laws       - List all ingested laws
+  GET  /health     - Health check
 """
 from __future__ import annotations
+
 import logging
 import os
 import sys
@@ -18,13 +20,34 @@ import time
 # Add app root to path
 sys.path.insert(0, "/app")
 
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 
-from shared.models import AskRequest, AskResponse, SearchRequest, SearchResponse
-from shared.qdrant_utils import get_qdrant_client, get_all_laws
-from api.rag import ask, search
 from api.embeddings import get_query_embedder
+from api.rag import (
+    NO_SOURCES_MESSAGE,
+    ask,
+    build_context_text,
+    call_llm_stream,
+    get_effective_strategy,
+    get_model_name,
+    results_to_references,
+    search,
+)
+from shared.models import (
+    AskRequest,
+    AskResponse,
+    SearchRequest,
+    SearchResponse,
+    StreamAskRequest,
+    StreamChunkEvent,
+    StreamDoneEvent,
+    StreamErrorEvent,
+    StreamReferencesEvent,
+)
+from shared.qdrant_utils import get_all_laws, get_qdrant_client
 
 logging.basicConfig(
     level=logging.INFO,
@@ -110,6 +133,88 @@ async def ask_endpoint(request: AskRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/ask/stream")
+async def ask_stream_endpoint(request: StreamAskRequest):
+    """
+    Streaming version of /ask. Returns Server-Sent Events.
+
+    SSE event sequence:
+    1. Zero or more StreamChunkEvent (partial answer text)
+    2. One StreamReferencesEvent (full reference array)
+    3. One StreamDoneEvent (completion signal)
+    On error: one StreamErrorEvent, then stream closes.
+    """
+    from shared.sparse import get_sparse_provider
+
+    async def event_generator():
+        try:
+            # 1. Embed the question
+            embedder = get_query_embedder()
+            query_vector = embedder.embed_query(request.question)
+
+            # 1b. Sparse vector if hybrid
+            strategy = get_effective_strategy(request.retrieval_strategy)
+            sparse_vec = None
+            if strategy == "hybrid":
+                sparse_vec = get_sparse_provider().embed_single(request.question)
+
+            # 2. Retrieve
+            qdrant = get_qdrant_client()
+            from shared.qdrant_utils import search_similar
+            results = search_similar(
+                qdrant,
+                query_vector=query_vector,
+                limit=request.limit,
+                filter_law=request.filter_law,
+                sparse_vector=sparse_vec,
+            )
+
+            if not results:
+                # No sources: send the no-sources message as a single chunk, then done
+                event = StreamChunkEvent(data=NO_SOURCES_MESSAGE)
+                yield f"data: {event.model_dump_json()}\n\n"
+                refs_event = StreamReferencesEvent(data=[])
+                yield f"data: {refs_event.model_dump_json()}\n\n"
+                done_event = StreamDoneEvent(data={"model_used": "none"})
+                yield f"data: {done_event.model_dump_json()}\n\n"
+                return
+
+            # 3. Build context and stream LLM answer
+            context_text = build_context_text(results)
+            references = results_to_references(results)
+
+            for chunk_text in call_llm_stream(
+                request.question,
+                context_text,
+                history=request.history,
+            ):
+                event = StreamChunkEvent(data=chunk_text)
+                yield f"data: {event.model_dump_json()}\n\n"
+
+            # 4. Send references
+            refs_event = StreamReferencesEvent(data=references)
+            yield f"data: {refs_event.model_dump_json()}\n\n"
+
+            # 5. Send done
+            model_used = get_model_name()
+            done_event = StreamDoneEvent(data={"model_used": model_used})
+            yield f"data: {done_event.model_dump_json()}\n\n"
+
+        except Exception as e:
+            logger.error(f"Streaming error: {e}", exc_info=True)
+            error_event = StreamErrorEvent(data={"detail": str(e)})
+            yield f"data: {error_event.model_dump_json()}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
 @app.post("/search", response_model=SearchResponse)
 async def search_endpoint(request: SearchRequest):
     """
@@ -140,5 +245,5 @@ async def root():
         "service": "Danish Legal RAG API",
         "version": "1.0.0",
         "docs": "/docs",
-        "endpoints": ["/ask", "/search", "/laws", "/health"],
+        "endpoints": ["/ask", "/ask/stream", "/search", "/laws", "/health"],
     }
