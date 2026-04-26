@@ -1,10 +1,10 @@
 <script lang="ts">
 	interface Props {
 		disabled?: boolean;
-		onsubmit: (question: string) => void;
+		onsend: (question: string) => void;
 	}
 
-	let { disabled = false, onsubmit }: Props = $props();
+	let { disabled = false, onsend }: Props = $props();
 
 	let value = $state('');
 
@@ -19,14 +19,14 @@
 	function submit() {
 		const trimmed = value.trim();
 		if (!trimmed || disabled) return;
-		onsubmit(trimmed);
+		onsend(trimmed);
 		value = '';
 	}
 </script>
 
 <form
 	onsubmit={(e) => { e.preventDefault(); submit(); }}
-	class="flex gap-2 border-t border-gray-200 bg-white px-4 py-3"
+	class="flex shrink-0 gap-2 border-t border-gray-200 bg-white px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
 >
 	<textarea
 		bind:value

@@ -2,6 +2,7 @@ import { writable, derived } from 'svelte/store';
 import { client } from '$lib/api/client';
 import type { components } from '$lib/api/schema';
 import { consumeSSEStream } from '$lib/api/sse';
+import { generateId } from '$lib/utils/id';
 
 type LegalReference = components['schemas']['LegalReference'];
 
@@ -114,7 +115,7 @@ function createChatStore() {
 		}
 
 		// Create a placeholder assistant message in streaming state
-		const assistantId = crypto.randomUUID();
+		const assistantId = generateId();
 		const assistantMsg: ChatMessage = {
 			id: assistantId,
 			role: 'assistant',
@@ -235,7 +236,7 @@ function createChatStore() {
 			);
 
 			const assistantMsg: ChatMessage = {
-				id: crypto.randomUUID(),
+				id: generateId(),
 				role: 'assistant',
 				content: data.answer,
 				references: data.references,
@@ -265,7 +266,7 @@ function createChatStore() {
 
 		// Add user message
 		const userMsg: ChatMessage = {
-			id: crypto.randomUUID(),
+			id: generateId(),
 			role: 'user',
 			content: trimmed,
 			timestamp: Date.now()

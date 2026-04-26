@@ -1,5 +1,6 @@
 import { writable, get } from 'svelte/store';
 import type { ChatMessage } from './chat';
+import { generateId } from '$lib/utils/id';
 
 export interface Session {
 	id: string;
@@ -92,7 +93,7 @@ function createSessionStore() {
 	 * Returns the new session ID.
 	 */
 	function createSession(): string {
-		const id = crypto.randomUUID();
+		const id = generateId();
 		const session: Session = {
 			id,
 			title: 'Ny samtale',

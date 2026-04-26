@@ -46,7 +46,7 @@
 	<title>Dansk Juridisk Assistent</title>
 </svelte:head>
 
-<div class="flex h-screen">
+<div class="flex h-dvh">
 	<!-- Session sidebar -->
 	<SessionSidebar
 		visible={sidebarOpen}
@@ -54,7 +54,7 @@
 	/>
 
 	<!-- Main chat area -->
-	<main class="flex min-w-0 flex-1 flex-col">
+	<main class="flex min-w-0 flex-1 flex-col overflow-hidden">
 		<!-- Toolbar with mobile menu button and law filter -->
 		<div class="flex items-center gap-3 border-b border-gray-200 bg-white px-4 py-2">
 			<button
@@ -76,6 +76,6 @@
 			status={$chatStore.status}
 			error={$chatStore.error}
 		/>
-		<ChatInput disabled={$isInputDisabled} onsubmit={handleSubmit} />
+		<ChatInput disabled={$isInputDisabled} onsend={handleSubmit} />
 	</main>
 </div>
