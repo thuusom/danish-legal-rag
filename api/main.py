@@ -11,6 +11,7 @@ Endpoints:
   GET  /health     - Health check
 """
 from __future__ import annotations
+
 import logging
 import os
 import sys
@@ -19,24 +20,34 @@ import time
 # Add app root to path
 sys.path.insert(0, "/app")
 
-import json
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
-from shared.models import (
-    AskRequest, AskResponse, SearchRequest, SearchResponse,
-    StreamAskRequest, StreamChunkEvent, StreamReferencesEvent,
-    StreamDoneEvent, StreamErrorEvent,
-)
-from shared.qdrant_utils import get_qdrant_client, get_all_laws
-from api.rag import (
-    ask, search, call_llm_stream, get_model_name,
-    build_context_text, results_to_references, get_effective_strategy,
-    NO_SOURCES_MESSAGE,
-)
 from api.embeddings import get_query_embedder
+from api.rag import (
+    NO_SOURCES_MESSAGE,
+    ask,
+    build_context_text,
+    call_llm_stream,
+    get_effective_strategy,
+    get_model_name,
+    results_to_references,
+    search,
+)
+from shared.models import (
+    AskRequest,
+    AskResponse,
+    SearchRequest,
+    SearchResponse,
+    StreamAskRequest,
+    StreamChunkEvent,
+    StreamDoneEvent,
+    StreamErrorEvent,
+    StreamReferencesEvent,
+)
+from shared.qdrant_utils import get_all_laws, get_qdrant_client
 
 logging.basicConfig(
     level=logging.INFO,
@@ -133,7 +144,7 @@ async def ask_stream_endpoint(request: StreamAskRequest):
     3. One StreamDoneEvent (completion signal)
     On error: one StreamErrorEvent, then stream closes.
     """
-    from shared.sparse import is_hybrid_enabled, get_sparse_provider
+    from shared.sparse import get_sparse_provider
 
     async def event_generator():
         try:

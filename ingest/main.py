@@ -19,6 +19,7 @@ Before embedding, we check if the chunk already exists in Qdrant with
 the same content hash. If so, we skip re-embedding (no wasted API calls).
 """
 from __future__ import annotations
+
 import logging
 import os
 import sys
@@ -29,16 +30,16 @@ from qdrant_client.models import PointStruct
 # Add parent to path for shared imports
 sys.path.insert(0, "/app")
 
-from shared.qdrant_utils import (
-    get_qdrant_client,
-    ensure_collection,
-    upsert_points,
-    point_exists_with_hash,
-)
-from shared.sparse import is_hybrid_enabled, get_sparse_provider
 from ingest.chunker import chunk_law
 from ingest.embedder import get_embedding_provider
 from ingest.fetcher import load_all_laws
+from shared.qdrant_utils import (
+    ensure_collection,
+    get_qdrant_client,
+    point_exists_with_hash,
+    upsert_points,
+)
+from shared.sparse import get_sparse_provider, is_hybrid_enabled
 
 logging.basicConfig(
     level=logging.INFO,

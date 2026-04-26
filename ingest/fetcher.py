@@ -7,6 +7,7 @@ Falls back to local JSON files if the API is unavailable.
 Retsinformation.dk provides a REST API for Danish law texts.
 """
 from __future__ import annotations
+
 import json
 import logging
 import os

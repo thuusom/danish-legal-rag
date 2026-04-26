@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { parseSSEEvent, consumeSSEStream, type StreamEvent, type StreamCallbacks } from './sse';
+import { parseSSEEvent, consumeSSEStream, type StreamCallbacks } from './sse';
 
 describe('parseSSEEvent', () => {
 	it('parses a chunk event', () => {

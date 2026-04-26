@@ -25,6 +25,7 @@
 		<p class="mb-1 text-xs font-medium text-gray-400">Juridisk Assistent</p>
 
 		<div class="prose prose-gray max-w-none overflow-x-auto prose-headings:mt-4 prose-headings:mb-2 prose-p:my-1.5 prose-table:text-sm prose-th:bg-gray-100 prose-th:px-3 prose-th:py-1.5 prose-td:px-3 prose-td:py-1.5">
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -- sanitized via DOMPurify in renderMarkdown() -->
 			{@html htmlContent}{#if message.streaming}<span class="inline-block h-4 w-0.5 animate-pulse bg-gray-600" aria-label="Skriver..." role="status"></span>{/if}
 		</div>
 

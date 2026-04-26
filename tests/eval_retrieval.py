@@ -163,7 +163,7 @@ def print_report(result: dict) -> None:
         print(f"    MRR:      {stats['mrr']:.3f}")
         print(f"    Recall@1: {stats['recall_at_1']:.3f}")
 
-    print(f"\n  Per-question detail:")
+    print("\n  Per-question detail:")
     for pq in result["per_question"]:
         rank_str = str(pq["rank"]) if pq["rank"] is not None else "MISS"
         print(
@@ -205,6 +205,7 @@ def main() -> None:
 
         # Check if hybrid is possible
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
         host = os.environ.get("QDRANT_HOST", "localhost")
         port = int(os.environ.get("QDRANT_PORT", "6333"))

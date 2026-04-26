@@ -10,6 +10,7 @@ The embedding model is configured via EMBEDDING_PROVIDER env var,
 same as in ingest/embedder.py, to ensure consistency.
 """
 from __future__ import annotations
+
 import logging
 import os
 from functools import lru_cache

@@ -11,12 +11,13 @@ Run these tests after docker compose up:
   docker compose exec api python -m pytest /app/tests/ -v
 """
 import sys
+
 sys.path.insert(0, "/app")
 
 import os
-import pytest
-import httpx
 
+import httpx
+import pytest
 
 API_URL = os.environ.get("API_URL", "http://localhost:8000")
 QDRANT_HOST = os.environ.get("QDRANT_HOST", "localhost")
@@ -29,6 +30,7 @@ class TestIngestion:
     def test_qdrant_collection_exists(self):
         """Qdrant collection must exist after ingestion."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -38,6 +40,7 @@ class TestIngestion:
     def test_chunks_ingested(self):
         """Verify that chunks have been ingested."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -48,7 +51,8 @@ class TestIngestion:
     def test_afl_chunks_present(self):
         """Afskrivningsloven chunks must be present."""
         from qdrant_client import QdrantClient
-        from qdrant_client.models import Filter, FieldCondition, MatchValue
+        from qdrant_client.models import FieldCondition, Filter, MatchValue
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -65,6 +69,7 @@ class TestIngestion:
     def test_chunk_has_required_fields(self):
         """Each chunk must have all required metadata fields."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -112,6 +117,7 @@ class TestEmbeddings:
     def test_embeddings_stored_in_qdrant(self):
         """Qdrant points must have vectors stored."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -135,6 +141,7 @@ class TestEmbeddings:
     def test_content_hash_stored(self):
         """Each chunk must have embedding_content_hash in payload."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -164,6 +171,7 @@ class TestEmbeddings:
     def test_similar_texts_produce_similar_embeddings(self):
         """Semantically similar texts should have high cosine similarity."""
         import math
+
         from ingest.embedder import get_embedding_provider
         provider = get_embedding_provider()
 
@@ -293,7 +301,7 @@ class TestAPI:
         assert r.status_code == 200
         data = r.json()
         assert data["count"] > 0
-        law_codes = [l["law_code"] for l in data["laws"]]
+        law_codes = [law["law_code"] for law in data["laws"]]
         assert "AFL" in law_codes, "Afskrivningsloven not found in laws list"
 
     def test_search_with_retrieval_strategy_dense(self):
@@ -430,6 +438,7 @@ class TestHybridSearch:
     def _check_hybrid(self):
         """Skip hybrid tests if the collection doesn't have sparse vectors."""
         from qdrant_client import QdrantClient
+
         from shared.qdrant_utils import COLLECTION_NAME
 
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)

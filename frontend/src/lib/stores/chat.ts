@@ -147,10 +147,6 @@ function createChatStore() {
 			},
 			onDone(data) {
 				updateLastAssistant((msg) => {
-					const isNoSources = NO_SOURCES_MARKERS.some((marker) =>
-						msg.content.includes(marker)
-					);
-
 					// Finalize the message
 					return {
 						...msg,

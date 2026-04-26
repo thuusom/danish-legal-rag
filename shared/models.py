@@ -2,11 +2,12 @@
 Shared domain models for the Danish Legal RAG system.
 """
 from __future__ import annotations
-from datetime import datetime
+
+import hashlib
 import os
 from typing import Literal, Optional
+
 from pydantic import BaseModel, Field
-import hashlib
 
 
 def get_effective_strategy(override: Optional[str] = None) -> str:

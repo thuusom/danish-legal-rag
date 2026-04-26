@@ -28,16 +28,17 @@ Or for direct connection via HTTP SSE (when using mcp[sse]):
 }
 """
 from __future__ import annotations
+
 import asyncio
-import json
 import logging
 import os
 import sys
 
 import httpx
+
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent
+from mcp.types import TextContent, Tool
 
 sys.path.insert(0, "/app")
 

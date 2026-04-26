@@ -28,21 +28,22 @@ Ollama example (.env):
   OLLAMA_MODEL=llama3.3:70b
 """
 from __future__ import annotations
+
 import logging
 import os
-from functools import lru_cache
-from pathlib import Path
-from typing import Optional
-
 from collections.abc import Generator
+from pathlib import Path
+
+from api.embeddings import get_query_embedder
 from shared.models import (
-    AskRequest, AskResponse, LegalReference, SearchResponse,
-    StreamAskRequest, StreamChunkEvent, StreamReferencesEvent,
-    StreamDoneEvent, StreamErrorEvent, get_effective_strategy,
+    AskRequest,
+    AskResponse,
+    LegalReference,
+    SearchResponse,
+    get_effective_strategy,
 )
 from shared.qdrant_utils import get_qdrant_client, search_similar
-from shared.sparse import is_hybrid_enabled, get_sparse_provider
-from api.embeddings import get_query_embedder
+from shared.sparse import get_sparse_provider
 
 logger = logging.getLogger(__name__)
 
@@ -537,7 +538,6 @@ async def ask(request: AskRequest) -> AskResponse:
 
 async def search(request) -> SearchResponse:
     """Semantic search without answer generation (POST /search)."""
-    from shared.models import SearchRequest
     embedder = get_query_embedder()
     query_vector = embedder.embed_query(request.query)
 

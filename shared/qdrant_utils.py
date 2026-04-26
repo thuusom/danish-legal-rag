@@ -2,6 +2,7 @@
 Qdrant client utilities for the Danish Legal RAG system.
 """
 from __future__ import annotations
+
 import logging
 import os
 from typing import Optional
@@ -9,16 +10,16 @@ from typing import Optional
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
+    FieldCondition,
+    Filter,
     Fusion,
     FusionQuery,
+    MatchValue,
+    PointStruct,
     Prefetch,
     SparseVector,
     SparseVectorParams,
     VectorParams,
-    PointStruct,
-    Filter,
-    FieldCondition,
-    MatchValue,
 )
 
 logger = logging.getLogger(__name__)
