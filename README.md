@@ -11,7 +11,7 @@ A fully working Retrieval-Augmented Generation (RAG) system for Danish tax, acco
   ┌──────────────┐       │  ┌──────────┐      ┌─────────────────┐      │
   │  Frontend    │─HTTP──│─►│   API    │      │     Qdrant      │      │
   │  SvelteKit   │       │  │ :8000    │◄────►│  vector store   │      │
-  │  :5173       │       │  │          │      │  :6333          │      │
+  │  :3000       │       │  │          │      │  :6333          │      │
   └──────────────┘       │  │ FastAPI  │      └─────────────────┘      │
                          │  │ + RAG    │               ▲               │
   ┌──────────┐           │  └──────────┘               │               │
@@ -92,17 +92,15 @@ What happens:
 1. **Qdrant** starts (vector database, persists in `qdrant_data` volume)
 2. **Ingest job** starts -- downloads embedding model to `hf_model_cache` on first run (~440 MB) -- embeds all provisions -- writes to Qdrant -- **exits**
 3. **API** starts -- loads embedding model from `hf_model_cache` (no re-download) -- ready on :8000
-4. **MCP server** starts -- ready for Claude Desktop
+4. **Frontend** starts -- SvelteKit chat UI on :3000, proxies API calls to the backend
+5. **MCP server** starts -- ready for Claude Desktop
 
-### 3. Start the frontend
+Open http://localhost:3000 in your browser.
 
-```bash
-cd frontend && npm install && VITE_API_BASE_URL=http://localhost:8000 npm run dev
-```
+> **Frontend dev mode:** For hot-reload during frontend development, run
+> `cd frontend && npm install && npm run dev` instead (serves on :5173).
 
-Open http://localhost:5173 in your browser.
-
-### 4. Wait for ingestion
+### 3. Wait for ingestion
 
 ```bash
 docker compose logs -f ingest
@@ -110,7 +108,7 @@ docker compose logs -f ingest
 
 When you see `=== Ingestion Complete ===` and the container shows `exited (0)`, the system is ready. This is correct behaviour.
 
-### 5. Test
+### 4. Test
 
 ```bash
 curl -s http://localhost:8000/health
@@ -120,7 +118,6 @@ curl -s http://localhost:8000/health
 
 ```bash
 docker compose down -v && docker compose up --build -d
-cd frontend && npm install && VITE_API_BASE_URL=http://localhost:8000 npm run dev
 ```
 
 ---
@@ -184,6 +181,7 @@ docker compose ps
 NAME                    STATUS
 danish-legal-qdrant     running
 danish-legal-api        running
+danish-legal-frontend   running
 danish-legal-mcp        running
 danish-legal-ingest     exited (0)   <- korrekt og forventet
 ```
