@@ -18,6 +18,17 @@ logs:
 ingest:
 	docker compose run --rm ingest
 
+.PHONY: fetch-laws fetch-laws-dry fetch-laws-force
+
+fetch-laws:
+	docker compose run --rm ingest python -m ingest.law_fetcher
+
+fetch-laws-dry:
+	docker compose run --rm ingest python -m ingest.law_fetcher --dry-run
+
+fetch-laws-force:
+	docker compose run --rm ingest python -m ingest.law_fetcher --force
+
 test-integration:
 	docker compose exec api python -m pytest /app/tests/test_integration.py -v
 

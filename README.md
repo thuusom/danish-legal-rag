@@ -50,6 +50,8 @@ cache, so the daily live-fetch job (Issue #20) can update individual files
 without touching the repo. The cache location is overridable via the
 `LAW_CACHE_DIR` env var.
 
+The live fetcher (`python -m ingest.law_fetcher`, run via `make fetch-laws`) keeps `law_cache/` fresh. It reads `ingest/sources.yaml`, calls `retsinformation-api.dk` for each entry, compares versions, and only writes when a newer version is available. It writes `law_cache/currency-report.json` summarising every run, and is rate-limited under the published 20/h and 50/d budget (default 15/h, 40/d, configurable via `FETCHER_RATE_LIMIT_HOUR` / `FETCHER_RATE_LIMIT_DAY`). The fetcher never touches Qdrant — the existing idempotent ingestion job re-processes the cache on the next run.
+
 ---
 
 ## Laws ingested
@@ -268,6 +270,9 @@ make down            # Stop all services
 make build           # Build containers
 make logs            # Follow all logs
 make ingest          # Re-run ingestion (e.g. after adding new laws)
+make fetch-laws      # Run live fetcher: refresh law_cache/ from retsinformation-api.dk
+make fetch-laws-dry  # Dry run of the live fetcher (no writes)
+make fetch-laws-force  # Force re-fetch all laws regardless of version
 make test-integration  # Run integration tests inside API container
 make test-embeddings   # Run embedding unit tests inside API container
 make curl-test       # Quick curl test of primary question
