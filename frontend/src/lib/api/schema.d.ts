@@ -111,6 +111,80 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Operator-facing corpus state aggregate
+         * @description Aggregates the current state of the corpus from three sources:
+         *
+         *     * `ingest/sources.yaml` — the declarative manifest of every law we
+         *       intend to ingest.
+         *     * `law_cache/currency-report.json` — written by the live fetcher
+         *       (Issue #20) on every run; reports which laws were checked, the
+         *       latest version observed upstream, and any fetch failures.
+         *     * Qdrant — aggregate per-`law_code` payload metadata (most recent
+         *       `ingested_at`, `law_version_*`, `eli`, provisions count).
+         *
+         *     Per-law `status` is computed:
+         *       * `ok` — our ingested version equals the latest upstream version.
+         *       * `outdated` — upstream is newer than what's in Qdrant.
+         *       * `fetch-failed` — last fetcher run errored on this law.
+         *       * `unknown` — no entry in the currency report yet (fetcher hasn't
+         *         run, or has been wiped).
+         *
+         *     No authentication. The endpoint is intended for the admin UI
+         *     (Issue #26) and ops tooling; deployment isolation (private network /
+         *     ingress filter) is the gating mechanism for now. Adding auth is a
+         *     follow-up ticket.
+         */
+        get: operations["adminStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/check-currency": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Trigger an ad-hoc fetcher run
+         * @description Spawns the live retsinformation-api.dk fetcher (`ingest.law_fetcher`)
+         *     as a background subprocess. Returns immediately with `202 Accepted`;
+         *     the run takes up to a few minutes depending on rate-limit budget and
+         *     how many laws need updating.
+         *
+         *     Idempotent: while a fetcher run is already in progress, returns
+         *     `409 Conflict`. Progress and outcome are observable via
+         *     `GET /admin/status` (the per-law `status` and `last_currency_check`
+         *     update once the run completes and `currency-report.json` is written).
+         *
+         *     Body is empty — no per-call configuration. Configuration lives in
+         *     env vars (`FETCHER_RATE_LIMIT_HOUR`, `FETCHER_RATE_LIMIT_DAY`,
+         *     `RETSINFORMATION_API_URL`). To restrict to one law, use the CLI.
+         *
+         *     No authentication; same private-network rationale as `/admin/status`.
+         */
+        post: operations["adminCheckCurrency"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -137,10 +211,11 @@ export interface components {
             /** @description LLM-generated answer in Danish, grounded in references */
             answer: string;
             references: components["schemas"]["LegalReference"][];
-            /** @description Raw retrieved Qdrant payloads (for debugging/transparency) */
-            retrieved_context: {
-                [key: string]: unknown;
-            }[];
+            /**
+             * @description Raw retrieved Qdrant payloads (for debugging/transparency). Each
+             *     entry is a `LegalChunk` payload as stored in the vector index.
+             */
+            retrieved_context: components["schemas"]["LegalChunk"][];
             question: string;
             /** @example claude-opus-4-5 */
             model_used: string;
@@ -180,6 +255,21 @@ export interface components {
             /** Format: uri */
             source_url?: string | null;
             score?: number | null;
+            /**
+             * @description European Legislation Identifier path for the law this reference
+             *     comes from, e.g. `eli/lta/2016/1147`. Lets clients deep-link to
+             *     the official source on retsinformation.dk.
+             * @example eli/lta/2016/1147
+             */
+            eli?: string | null;
+            /**
+             * Format: date
+             * @description Effective date of the law version this reference was retrieved
+             *     from. Allows the UI to surface "the cited text is from version
+             *     of YYYY-MM-DD" so users can judge currency.
+             * @example 2016-09-06
+             */
+            law_version_date?: string | null;
         };
         StreamAskRequest: {
             /**
@@ -266,6 +356,233 @@ export interface components {
             law_number?: string | null;
             /** Format: uri */
             source_url?: string | null;
+            /**
+             * @description European Legislation Identifier path, e.g. `eli/lta/2016/1147`.
+             *     Aggregated across the law's chunks (first non-null wins).
+             * @example eli/lta/2016/1147
+             */
+            eli?: string | null;
+            /**
+             * Format: date
+             * @description Effective date of the law version currently ingested.
+             *     Aggregated across the law's chunks (first non-null wins).
+             * @example 2016-09-06
+             */
+            law_version_date?: string | null;
+            /**
+             * Format: date-time
+             * @description UTC timestamp of the most recent ingestion across this law's chunks.
+             *     Lets the UI display "last updated YYYY-MM-DD HH:MM".
+             * @example 2026-04-27T08:30:00Z
+             */
+            latest_ingested_at?: string | null;
+        };
+        /**
+         * @description Full Qdrant payload for a single legal provision chunk. Returned
+         *     verbatim in the `retrieved_context` array of `/ask` responses.
+         *     All metadata fields beyond the core legal reference are optional —
+         *     chunks ingested before live-fetcher support left them null.
+         */
+        LegalChunk: {
+            id: string;
+            /** @example AFL */
+            law_code: string;
+            /** @example Afskrivningsloven */
+            law_name: string;
+            law_title: string;
+            chapter?: string | null;
+            /** @example § 40 C */
+            section: string;
+            subsection?: string | null;
+            item?: string | null;
+            title?: string | null;
+            text: string;
+            citation_label: string;
+            /** Format: uri */
+            source_url?: string | null;
+            effective_date?: string | null;
+            law_number?: string | null;
+            embedding_model: string;
+            /** @description SHA256 of embedding input text */
+            embedding_content_hash: string;
+            /**
+             * Format: date-time
+             * @description UTC timestamp at which this chunk was ingested. Set automatically
+             *     by the ingestion pipeline. Optional because chunks ingested
+             *     before this field existed will not have it on first read.
+             */
+            ingested_at?: string | null;
+            /**
+             * Format: date
+             * @description Effective date of the law version this chunk was extracted from
+             *     (sourced from the retsinformation API `effective_date` top-level
+             *     field). Lets us distinguish chunks belonging to different
+             *     versions of the same law in the index.
+             */
+            law_version_date?: string | null;
+            /**
+             * @description Version number of the law as reported by the retsinformation API
+             *     (`version_number`). Useful diagnostic when a re-ingestion brings
+             *     in a newer version.
+             */
+            law_version_number?: number | null;
+            /**
+             * @description European Legislation Identifier path, e.g. `eli/lta/2016/1147`.
+             *     Stable canonical reference, useful for citations and dedup.
+             */
+            eli?: string | null;
+            /**
+             * @description UUID identifying the law (stable across versions) in the
+             *     retsinformation-api.dk store. Lets us query for updates without
+             *     hardcoding (year, number).
+             * @example 7f6afaff-1234-5678-9abc-def012345678
+             */
+            retsinformation_law_id?: string | null;
+            /**
+             * @description Stable paragraph anchor id used by retsinformation.dk's HTML
+             *     viewer (e.g. `id39cb96dc-...`). Lets us deep-link to the §-level.
+             */
+            retsinformation_paragraph_id?: string | null;
+        };
+        /**
+         * @description Per-law row for the admin status response. Combines manifest data
+         *     (`law_code`, `law_name`, `law_title`), Qdrant aggregates (`our_version`,
+         *     `our_version_number`, `our_version_date`, `eli`, `ingested_at`,
+         *     `provisions_count`), and the latest currency-report entry
+         *     (`latest_version_number`, `latest_version_date`, `status`,
+         *     `fetch_error`).
+         */
+        AdminLawStatus: {
+            /** @example AFL */
+            law_code: string;
+            /** @example Afskrivningsloven */
+            law_name: string;
+            /** @example Bekendtgørelse af lov om skattemæssige afskrivninger (afskrivningsloven) */
+            law_title?: string | null;
+            /**
+             * @description Human-readable identifier of the ingested version (typically the
+             *     `law_number` field, e.g. `LBK nr 1147 af 29/08/2016`).
+             * @example LBK nr 1147 af 29/08/2016
+             */
+            our_version?: string | null;
+            /**
+             * @description Numeric version reported by the retsinformation API for the
+             *     currently ingested cache file. Null until the live fetcher has
+             *     run for this law.
+             * @example 1
+             */
+            our_version_number?: number | null;
+            /**
+             * Format: date
+             * @description Effective date of the ingested law version.
+             * @example 2016-08-29
+             */
+            our_version_date?: string | null;
+            /**
+             * @description Numeric version of the latest law version observed upstream.
+             *     Null until the fetcher has run.
+             * @example 24
+             */
+            latest_version_number?: number | null;
+            /**
+             * Format: date
+             * @description Effective date of the latest version upstream.
+             * @example 2021-01-01
+             */
+            latest_version_date?: string | null;
+            /**
+             * @description Aggregate health for this law. See endpoint description.
+             * @enum {string}
+             */
+            status: "ok" | "outdated" | "fetch-failed" | "unknown";
+            /**
+             * Format: date-time
+             * @description UTC timestamp of the most recent ingestion for this law.
+             * @example 2026-04-27T10:00:00Z
+             */
+            ingested_at?: string | null;
+            /**
+             * @description Number of chunks currently in Qdrant for this law.
+             * @example 41
+             */
+            provisions_count?: number;
+            /** @example eli/lta/2016/1147 */
+            eli?: string | null;
+            /** @description Last fetch error message, if `status == "fetch-failed"`. */
+            fetch_error?: string | null;
+        };
+        /** @description Rate-limit snapshot from the fetcher's persistent state. */
+        AdminFetcherState: {
+            /**
+             * @description Calls consumed today (UTC). Resets at midnight UTC. Reflects the
+             *     persisted counter in `law_cache/.fetcher_state.json`.
+             * @example 12
+             */
+            calls_today: number;
+            /**
+             * @description Daily call budget enforced by the fetcher.
+             * @example 40
+             */
+            rate_limit_day: number;
+            /**
+             * @description Calls consumed in the last hour. Best-effort — only the daily
+             *     counter is persisted, so this is reset on container restart.
+             * @example 3
+             */
+            calls_this_hour: number;
+            /**
+             * @description Hourly call budget enforced by the fetcher.
+             * @example 15
+             */
+            rate_limit_hour: number;
+        };
+        AdminStatusResponse: {
+            laws: components["schemas"]["AdminLawStatus"][];
+            /**
+             * Format: date-time
+             * @description UTC timestamp of the last fetcher run. Null when the fetcher has
+             *     never run (no `currency-report.json` yet).
+             * @example 2026-04-27T06:00:00Z
+             */
+            last_currency_check?: string | null;
+            /**
+             * @description Current state of the ingestion job. `running` is set while the
+             *     ingest job is executing; `idle` after a successful run; `failed`
+             *     after a crash; `unknown` if no state file exists yet.
+             * @enum {string}
+             */
+            ingestion_status: "idle" | "running" | "failed" | "unknown";
+            /**
+             * Format: date-time
+             * @description UTC timestamp of the last successful ingestion (when
+             *     `ingestion_status` transitioned from `running` to `idle`).
+             * @example 2026-04-27T10:05:00Z
+             */
+            last_ingestion_completed?: string | null;
+            /**
+             * @description Error message from the last failed ingestion run, if
+             *     `ingestion_status == "failed"`.
+             */
+            last_ingestion_error?: string | null;
+            fetcher_state: components["schemas"]["AdminFetcherState"];
+        };
+        AdminCheckCurrencyAccepted: {
+            /** @enum {string} */
+            status: "started";
+            /**
+             * Format: date-time
+             * @example 2026-04-27T10:00:00Z
+             */
+            started_at: string;
+        };
+        AdminCheckCurrencyConflict: {
+            /** @enum {string} */
+            status: "already-running";
+            /**
+             * Format: date-time
+             * @description When the in-progress run started, if known.
+             */
+            started_at?: string | null;
         };
     };
     responses: never;
@@ -393,6 +710,55 @@ export interface operations {
                         count?: number;
                         laws?: components["schemas"]["LawSummary"][];
                     };
+                };
+            };
+        };
+    };
+    adminStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Aggregate corpus state */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminStatusResponse"];
+                };
+            };
+        };
+    };
+    adminCheckCurrency: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Fetcher started */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCheckCurrencyAccepted"];
+                };
+            };
+            /** @description Another fetcher run is already in progress */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCheckCurrencyConflict"];
                 };
             };
         };
