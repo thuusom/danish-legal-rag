@@ -20,6 +20,7 @@ the same content hash. If so, we skip re-embedding (no wasted API calls).
 """
 from __future__ import annotations
 
+import json
 import logging
 import os
 import sys
@@ -30,9 +31,9 @@ from qdrant_client.models import PointStruct
 # Add parent to path for shared imports
 sys.path.insert(0, "/app")
 
+from ingest.cache import list_cached_laws, seed_cache_from_repo
 from ingest.chunker import chunk_law
 from ingest.embedder import get_embedding_provider
-from ingest.fetcher import load_all_laws
 from shared.qdrant_utils import (
     ensure_collection,
     get_qdrant_client,
@@ -67,6 +68,23 @@ def wait_for_qdrant(max_retries: int = 30, delay: float = 2.0) -> None:
     raise RuntimeError("Qdrant did not become ready in time")
 
 
+def _load_laws_from_cache() -> list[dict]:
+    """
+    Load every law JSON currently sitting in the cache directory.
+
+    The cache is the single source of truth for ingestion (Issue #21).
+    Files arrive there either via :func:`seed_cache_from_repo` (first boot,
+    seeded from ``ingest/data/*.json``) or via the live retsinformation
+    fetcher (Issue #20, future).
+    """
+    laws: list[dict] = []
+    for path in list_cached_laws():
+        with path.open(encoding="utf-8") as fh:
+            laws.append(json.load(fh))
+        logger.info(f"Loaded cached law: {path.name}")
+    return laws
+
+
 def run_ingestion() -> None:
     """
     Main ingestion pipeline.
@@ -74,12 +92,13 @@ def run_ingestion() -> None:
     Flow:
     1. Wait for Qdrant
     2. Load embedding provider
-    3. Load all laws
-    4. Chunk each law
-    5. For each chunk:
+    3. Seed the cache from in-repo JSON if it is empty
+    4. Load all laws from the cache
+    5. Chunk each law
+    6. For each chunk:
        a. Check if already ingested with same content hash
        b. If changed/new: generate embedding, upsert to Qdrant
-    6. Log statistics
+    7. Log statistics
     """
     logger.info("=== Starting Danish Legal RAG Ingestion ===")
 
@@ -95,8 +114,18 @@ def run_ingestion() -> None:
     # Ensure collection exists with correct vector dimensions
     ensure_collection(qdrant, embedder.vector_size)
 
-    # Step 3: Load law texts
-    laws = load_all_laws()
+    # Step 3: Make sure the cache is populated (idempotent — first boot only).
+    seeded = seed_cache_from_repo()
+    if seeded:
+        logger.info(f"Cache seeded on first boot for: {seeded}")
+
+    # Step 4: Load law texts from the cache
+    laws = _load_laws_from_cache()
+    if not laws:
+        raise RuntimeError(
+            "Law cache is empty after seeding — check ingest/sources.yaml "
+            "and the seed_file paths."
+        )
 
     # Step 4 & 5: Chunk, embed, and upsert
     total_new = 0

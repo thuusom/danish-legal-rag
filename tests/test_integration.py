@@ -89,6 +89,41 @@ class TestIngestion:
             assert field in payload, f"Missing field: {field}"
 
 
+class TestCacheLayer:
+    """
+    Verify that ingestion went through the law_cache indirection layer
+    (Issue #21). After a successful ingestion the cache must be populated
+    with one JSON file per law_code declared in sources.yaml.
+    """
+
+    def test_sources_manifest_loads(self):
+        """sources.yaml must parse and list every law expected in Qdrant."""
+        from ingest.cache import load_sources_manifest
+
+        sources = load_sources_manifest()
+        assert sources, "sources.yaml is empty"
+        # Sanity: the canonical 12-law corpus.
+        codes = {s.law_code for s in sources}
+        assert "AFL" in codes
+        assert "ARL" in codes
+
+    def test_cache_directory_populated(self):
+        """After ingestion, the cache directory must hold one JSON per source."""
+        from ingest.cache import (
+            get_cache_dir,
+            list_cached_laws,
+            load_sources_manifest,
+        )
+
+        sources = load_sources_manifest()
+        cached = {p.stem for p in list_cached_laws()}
+        cache_dir = get_cache_dir()
+        for source in sources:
+            assert source.law_code in cached, (
+                f"missing {source.law_code}.json in cache at {cache_dir}; got {sorted(cached)}"
+            )
+
+
 class TestEmbeddings:
     """Verify that embeddings are generated correctly."""
 

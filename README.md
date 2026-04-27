@@ -34,7 +34,21 @@ FastAPI backend as curl, httpyac, and the MCP server for Claude Desktop.
 ```
 hf_model_cache   <- HuggingFace embedding model (~440 MB, downloaded once)
 qdrant_data      <- Qdrant vector store (all chunks + embeddings)
+law_cache        <- Per-law JSON payloads (one file per law_code) — see below
 ```
+
+### Source manifest and law cache
+
+The set of laws to ingest is declared in [`ingest/sources.yaml`](ingest/sources.yaml).
+Adding or removing a law is a one-line change in that file.
+
+At ingestion time, the pipeline reads from a cache directory (`law_cache/` on
+the host, mounted at `/cache/laws` in Docker) — not directly from
+`ingest/data/*.json`. On first boot the cache is empty and gets seeded from
+the in-repo JSON files declared in the manifest. Subsequent boots reuse the
+cache, so the daily live-fetch job (Issue #20) can update individual files
+without touching the repo. The cache location is overridable via the
+`LAW_CACHE_DIR` env var.
 
 ---
 
