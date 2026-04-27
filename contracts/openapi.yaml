@@ -155,6 +155,76 @@ paths:
                     items:
                       $ref: '#/components/schemas/LawSummary'
 
+  /admin/status:
+    get:
+      tags: [admin]
+      summary: Operator-facing corpus state aggregate
+      description: |
+        Aggregates the current state of the corpus from three sources:
+
+        * `ingest/sources.yaml` — the declarative manifest of every law we
+          intend to ingest.
+        * `law_cache/currency-report.json` — written by the live fetcher
+          (Issue #20) on every run; reports which laws were checked, the
+          latest version observed upstream, and any fetch failures.
+        * Qdrant — aggregate per-`law_code` payload metadata (most recent
+          `ingested_at`, `law_version_*`, `eli`, provisions count).
+
+        Per-law `status` is computed:
+          * `ok` — our ingested version equals the latest upstream version.
+          * `outdated` — upstream is newer than what's in Qdrant.
+          * `fetch-failed` — last fetcher run errored on this law.
+          * `unknown` — no entry in the currency report yet (fetcher hasn't
+            run, or has been wiped).
+
+        No authentication. The endpoint is intended for the admin UI
+        (Issue #26) and ops tooling; deployment isolation (private network /
+        ingress filter) is the gating mechanism for now. Adding auth is a
+        follow-up ticket.
+      operationId: adminStatus
+      responses:
+        '200':
+          description: Aggregate corpus state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminStatusResponse'
+
+  /admin/check-currency:
+    post:
+      tags: [admin]
+      summary: Trigger an ad-hoc fetcher run
+      description: |
+        Spawns the live retsinformation-api.dk fetcher (`ingest.law_fetcher`)
+        as a background subprocess. Returns immediately with `202 Accepted`;
+        the run takes up to a few minutes depending on rate-limit budget and
+        how many laws need updating.
+
+        Idempotent: while a fetcher run is already in progress, returns
+        `409 Conflict`. Progress and outcome are observable via
+        `GET /admin/status` (the per-law `status` and `last_currency_check`
+        update once the run completes and `currency-report.json` is written).
+
+        Body is empty — no per-call configuration. Configuration lives in
+        env vars (`FETCHER_RATE_LIMIT_HOUR`, `FETCHER_RATE_LIMIT_DAY`,
+        `RETSINFORMATION_API_URL`). To restrict to one law, use the CLI.
+
+        No authentication; same private-network rationale as `/admin/status`.
+      operationId: adminCheckCurrency
+      responses:
+        '202':
+          description: Fetcher started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCheckCurrencyAccepted'
+        '409':
+          description: Another fetcher run is already in progress
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCheckCurrencyConflict'
+
 components:
   schemas:
     AskRequest:
@@ -487,3 +557,169 @@ components:
           description: |
             Stable paragraph anchor id used by retsinformation.dk's HTML
             viewer (e.g. `id39cb96dc-...`). Lets us deep-link to the §-level.
+
+    AdminLawStatus:
+      type: object
+      description: |
+        Per-law row for the admin status response. Combines manifest data
+        (`law_code`, `law_name`, `law_title`), Qdrant aggregates (`our_version`,
+        `our_version_number`, `our_version_date`, `eli`, `ingested_at`,
+        `provisions_count`), and the latest currency-report entry
+        (`latest_version_number`, `latest_version_date`, `status`,
+        `fetch_error`).
+      required: [law_code, law_name, status]
+      properties:
+        law_code: { type: string, example: "AFL" }
+        law_name: { type: string, example: "Afskrivningsloven" }
+        law_title:
+          type: string
+          nullable: true
+          example: "Bekendtgørelse af lov om skattemæssige afskrivninger (afskrivningsloven)"
+        our_version:
+          type: string
+          nullable: true
+          description: |
+            Human-readable identifier of the ingested version (typically the
+            `law_number` field, e.g. `LBK nr 1147 af 29/08/2016`).
+          example: "LBK nr 1147 af 29/08/2016"
+        our_version_number:
+          type: integer
+          nullable: true
+          description: |
+            Numeric version reported by the retsinformation API for the
+            currently ingested cache file. Null until the live fetcher has
+            run for this law.
+          example: 1
+        our_version_date:
+          type: string
+          format: date
+          nullable: true
+          description: Effective date of the ingested law version.
+          example: "2016-08-29"
+        latest_version_number:
+          type: integer
+          nullable: true
+          description: |
+            Numeric version of the latest law version observed upstream.
+            Null until the fetcher has run.
+          example: 24
+        latest_version_date:
+          type: string
+          format: date
+          nullable: true
+          description: Effective date of the latest version upstream.
+          example: "2021-01-01"
+        status:
+          type: string
+          enum: [ok, outdated, fetch-failed, unknown]
+          description: |
+            Aggregate health for this law. See endpoint description.
+        ingested_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: UTC timestamp of the most recent ingestion for this law.
+          example: "2026-04-27T10:00:00Z"
+        provisions_count:
+          type: integer
+          description: Number of chunks currently in Qdrant for this law.
+          example: 41
+        eli:
+          type: string
+          nullable: true
+          example: "eli/lta/2016/1147"
+        fetch_error:
+          type: string
+          nullable: true
+          description: Last fetch error message, if `status == "fetch-failed"`.
+
+    AdminFetcherState:
+      type: object
+      description: Rate-limit snapshot from the fetcher's persistent state.
+      required: [calls_today, rate_limit_day, calls_this_hour, rate_limit_hour]
+      properties:
+        calls_today:
+          type: integer
+          description: |
+            Calls consumed today (UTC). Resets at midnight UTC. Reflects the
+            persisted counter in `law_cache/.fetcher_state.json`.
+          example: 12
+        rate_limit_day:
+          type: integer
+          description: Daily call budget enforced by the fetcher.
+          example: 40
+        calls_this_hour:
+          type: integer
+          description: |
+            Calls consumed in the last hour. Best-effort — only the daily
+            counter is persisted, so this is reset on container restart.
+          example: 3
+        rate_limit_hour:
+          type: integer
+          description: Hourly call budget enforced by the fetcher.
+          example: 15
+
+    AdminStatusResponse:
+      type: object
+      required: [laws, ingestion_status, fetcher_state]
+      properties:
+        laws:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminLawStatus'
+        last_currency_check:
+          type: string
+          format: date-time
+          nullable: true
+          description: |
+            UTC timestamp of the last fetcher run. Null when the fetcher has
+            never run (no `currency-report.json` yet).
+          example: "2026-04-27T06:00:00Z"
+        ingestion_status:
+          type: string
+          enum: [idle, running, failed, unknown]
+          description: |
+            Current state of the ingestion job. `running` is set while the
+            ingest job is executing; `idle` after a successful run; `failed`
+            after a crash; `unknown` if no state file exists yet.
+        last_ingestion_completed:
+          type: string
+          format: date-time
+          nullable: true
+          description: |
+            UTC timestamp of the last successful ingestion (when
+            `ingestion_status` transitioned from `running` to `idle`).
+          example: "2026-04-27T10:05:00Z"
+        last_ingestion_error:
+          type: string
+          nullable: true
+          description: |
+            Error message from the last failed ingestion run, if
+            `ingestion_status == "failed"`.
+        fetcher_state:
+          $ref: '#/components/schemas/AdminFetcherState'
+
+    AdminCheckCurrencyAccepted:
+      type: object
+      required: [status, started_at]
+      properties:
+        status:
+          type: string
+          enum: [started]
+        started_at:
+          type: string
+          format: date-time
+          example: "2026-04-27T10:00:00Z"
+
+    AdminCheckCurrencyConflict:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [already-running]
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the in-progress run started, if known.

@@ -44,6 +44,11 @@ sys.path.insert(0, "/app")
 from ingest.cache import list_cached_laws, seed_cache_from_repo
 from ingest.chunker import chunk_law
 from ingest.embedder import get_embedding_provider
+from shared.admin_state import (
+    write_ingestion_failed,
+    write_ingestion_started,
+    write_ingestion_succeeded,
+)
 from shared.qdrant_utils import (
     count_chunks_by_law_code,
     delete_chunks_by_law_code,
@@ -117,8 +122,35 @@ def run_ingestion() -> None:
     Re-ingestion is therefore fully idempotent at the law-code level:
     repealed paragraffer disappear from Qdrant on the next run without
     operator intervention (Issue #23).
+
+    Side effect: writes ``law_cache/.ingestion_state.json`` at start, on
+    success, and on failure so the admin endpoint can surface the current
+    state to operators (Issue #24).
     """
     logger.info("=== Starting Danish Legal RAG Ingestion ===")
+    try:
+        write_ingestion_started()
+    except Exception as exc:
+        # Ingestion must not fail just because we couldn't write the marker.
+        logger.warning(f"Could not write ingestion start marker: {exc}")
+    try:
+        _run_ingestion_body()
+    except Exception as exc:
+        try:
+            write_ingestion_failed(str(exc))
+        except Exception:
+            logger.exception("Could not write ingestion failure marker")
+        raise
+    else:
+        try:
+            write_ingestion_succeeded()
+        except Exception:
+            logger.exception("Could not write ingestion success marker")
+
+
+def _run_ingestion_body() -> None:
+    """The original ingestion body, separated so :func:`run_ingestion` owns
+    the state-marker bookkeeping without indenting the entire pipeline."""
 
     # Step 1: Wait for Qdrant and load providers
     wait_for_qdrant()

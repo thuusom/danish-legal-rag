@@ -25,6 +25,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
+from api.admin import router as admin_router
 from api.embeddings import get_query_embedder
 from api.rag import (
     NO_SOURCES_MESSAGE,
@@ -88,6 +89,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(admin_router)
 
 
 @app.on_event("startup")
@@ -252,5 +255,13 @@ async def root():
         "service": "Danish Legal RAG API",
         "version": "1.0.0",
         "docs": "/docs",
-        "endpoints": ["/ask", "/ask/stream", "/search", "/laws", "/health"],
+        "endpoints": [
+            "/ask",
+            "/ask/stream",
+            "/search",
+            "/laws",
+            "/health",
+            "/admin/status",
+            "/admin/check-currency",
+        ],
     }

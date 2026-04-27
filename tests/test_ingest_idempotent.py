@@ -290,6 +290,11 @@ def patched_run(monkeypatch, fake_qdrant, tmp_path):
     monkeypatch.setattr(ingest_main, "is_hybrid_enabled", lambda: False)
     # Seed cache is exercised in test_cache.py — no-op here.
     monkeypatch.setattr(ingest_main, "seed_cache_from_repo", lambda: [])
+    # Redirect the ingestion-state marker writes (Issue #24) to a tmp dir so
+    # they don't leak into the repo / container filesystem during tests.
+    state_dir = tmp_path / "law_cache"
+    state_dir.mkdir(parents=True, exist_ok=True)
+    monkeypatch.setenv("LAW_CACHE_DIR", str(state_dir))
     return ingest_main
 
 

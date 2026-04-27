@@ -275,3 +275,59 @@ class LawsResponse(BaseModel):
     """Response body for GET /laws."""
     laws: list[LawSummary]
     count: int
+
+
+# ---------------------------------------------------------------------------
+# Admin endpoints (Issue #24)
+# ---------------------------------------------------------------------------
+
+
+AdminLawStatusValue = Literal["ok", "outdated", "fetch-failed", "unknown"]
+IngestionStatusValue = Literal["idle", "running", "failed", "unknown"]
+
+
+class AdminLawStatus(BaseModel):
+    """Per-law row for the admin status response."""
+    law_code: str
+    law_name: str
+    law_title: Optional[str] = None
+    our_version: Optional[str] = None
+    our_version_number: Optional[int] = None
+    our_version_date: Optional[date] = None
+    latest_version_number: Optional[int] = None
+    latest_version_date: Optional[date] = None
+    status: AdminLawStatusValue
+    ingested_at: Optional[datetime] = None
+    provisions_count: int = 0
+    eli: Optional[str] = None
+    fetch_error: Optional[str] = None
+
+
+class AdminFetcherState(BaseModel):
+    """Rate-limit snapshot from the fetcher's persisted state."""
+    calls_today: int = 0
+    rate_limit_day: int
+    calls_this_hour: int = 0
+    rate_limit_hour: int
+
+
+class AdminStatusResponse(BaseModel):
+    """Response body for GET /admin/status."""
+    laws: list[AdminLawStatus]
+    last_currency_check: Optional[datetime] = None
+    ingestion_status: IngestionStatusValue = "unknown"
+    last_ingestion_completed: Optional[datetime] = None
+    last_ingestion_error: Optional[str] = None
+    fetcher_state: AdminFetcherState
+
+
+class AdminCheckCurrencyAccepted(BaseModel):
+    """202 response body for POST /admin/check-currency."""
+    status: Literal["started"] = "started"
+    started_at: datetime
+
+
+class AdminCheckCurrencyConflict(BaseModel):
+    """409 response body for POST /admin/check-currency."""
+    status: Literal["already-running"] = "already-running"
+    started_at: Optional[datetime] = None

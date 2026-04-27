@@ -10,4 +10,5 @@ torch>=2.0.0
 transformers>=4.40.0
 numpy>=1.26.0
 fastembed>=0.3.0
+pyyaml>=6.0
 pytest>=7.0

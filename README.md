@@ -166,6 +166,13 @@ Types are generated from `contracts/openapi.yaml` -- the frontend never hand-wri
 | POST | `/ask/stream` | Ask a question, receive answer via Server-Sent Events (SSE) |
 | POST | `/search` | Semantic search only (no LLM), returns ranked provisions |
 | GET | `/laws` | List all ingested laws with metadata |
+| GET | `/admin/status` | Operator-facing corpus state (per-law version, ingestion freshness, fetcher quota) |
+| POST | `/admin/check-currency` | Trigger an ad-hoc fetcher run (returns 202; 409 if already running) |
+
+The `/admin/*` endpoints power the admin UI (Issue #26) and ops tooling.
+They are unauthenticated by design; treat them as private and gate access
+at the network/ingress layer. Both rely on `law_cache/` being readable from
+the api container — see PR notes if you're upgrading an existing deployment.
 
 ### `/ask/stream` SSE events
 
