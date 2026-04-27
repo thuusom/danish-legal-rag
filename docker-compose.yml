@@ -63,12 +63,18 @@ services:
       # Point HuggingFace to the shared cache volume.
       - HF_HOME=/cache/huggingface
       - TRANSFORMERS_CACHE=/cache/huggingface/hub
+      # Per-law JSON payload cache. The api service reads this for
+      # /admin/sources/status (#24) — it never writes. The fetcher and
+      # ingest services own writes to this volume.
+      - LAW_CACHE_DIR=/cache/laws
     volumes:
       # Same shared model cache as ingest – model downloaded only once total.
       - hf_model_cache:/cache/huggingface
       # Mount answer-style.md so tone/style edits take effect without rebuilding.
       # Edit the file freely; changes are picked up on the next API call.
       - ./answer-style.md:/app/answer-style.md:ro
+      # Read-only law cache – api consumes it for admin status, never mutates.
+      - law_cache:/cache/laws:ro
     depends_on:
       - qdrant
     restart: unless-stopped
@@ -106,6 +112,6 @@ volumes:
     # HuggingFace model cache – the ~440 MB embedding model is downloaded here
     # on first run and reused across restarts and rebuilds by both ingest and api.
   law_cache:
-    # Per-law JSON payload cache (see ingest/cache.py). Mounted into the
-    # ingest service at /cache/laws. Only the ingest service reads/writes
-    # it – the api service queries Qdrant and does not touch the cache.
+    # Per-law JSON payload cache (see ingest/cache.py). Mounted at /cache/laws
+    # in ingest (rw, populated by the live fetcher), and in api (ro, read by
+    # /admin/sources/status from #24).
