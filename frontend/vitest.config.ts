@@ -3,12 +3,18 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	resolve: {
+		// Resolve to Svelte's browser/client build so component tests can
+		// `mount(...)` against jsdom — the default `node` condition picks
+		// the server build which throws `lifecycle_function_unavailable`.
+		conditions: ['browser']
+	},
 	test: {
 		include: ['src/**/*.test.ts'],
 		environment: 'jsdom',
 		// Provide stubs for SvelteKit modules in unit tests
 		alias: {
-			'$lib': '/src/lib'
+			$lib: '/src/lib'
 		}
 	}
 });
