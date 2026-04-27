@@ -28,9 +28,15 @@ services:
       # is only downloaded once (shared with the api service).
       - HF_HOME=/cache/huggingface
       - TRANSFORMERS_CACHE=/cache/huggingface/hub
+      # Per-law JSON payload cache (see ingest/cache.py). Persisted in the
+      # law_cache named volume so it survives container rebuilds.
+      - LAW_CACHE_DIR=/cache/laws
     volumes:
       # Shared model cache – avoids re-downloading ~440 MB on every restart.
       - hf_model_cache:/cache/huggingface
+      # Per-law JSON cache – populated by the live fetcher (#20), consumed by
+      # ingestion. Survives rebuilds; clear with `docker volume rm`.
+      - law_cache:/cache/laws
     depends_on:
       - qdrant
     # restart: "no" – ingest is a one-shot job.
@@ -99,3 +105,7 @@ volumes:
   hf_model_cache:
     # HuggingFace model cache – the ~440 MB embedding model is downloaded here
     # on first run and reused across restarts and rebuilds by both ingest and api.
+  law_cache:
+    # Per-law JSON payload cache (see ingest/cache.py). Mounted into the
+    # ingest service at /cache/laws. Only the ingest service reads/writes
+    # it – the api service queries Qdrant and does not touch the cache.
