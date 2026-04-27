@@ -12,6 +12,7 @@ from qdrant_client.models import (
     Distance,
     FieldCondition,
     Filter,
+    FilterSelector,
     Fusion,
     FusionQuery,
     MatchValue,
@@ -231,3 +232,72 @@ def point_exists_with_hash(client: QdrantClient, point_id: str, content_hash: st
     except Exception:
         pass
     return False
+
+
+def count_chunks_by_law_code(client: QdrantClient, law_code: str) -> int:
+    """
+    Count points in the collection whose ``payload.law_code == law_code``.
+
+    Uses the dedicated Qdrant ``count`` API with an exact filter — never
+    a global count.
+
+    Returns 0 if the collection does not yet exist.
+    """
+    try:
+        flt = Filter(
+            must=[FieldCondition(key="law_code", match=MatchValue(value=law_code))]
+        )
+        result = client.count(
+            collection_name=COLLECTION_NAME,
+            count_filter=flt,
+            exact=True,
+        )
+        return int(result.count)
+    except Exception as exc:
+        logger.warning(
+            f"count_chunks_by_law_code({law_code!r}) failed; assuming 0: {exc}"
+        )
+        return 0
+
+
+def delete_chunks_by_law_code(client: QdrantClient, law_code: str) -> int:
+    """
+    Delete every point whose ``payload.law_code == law_code``.
+
+    Scoped strictly by ``law_code`` filter — never global. Used for
+    idempotent re-ingestion of a single law (Issue #23): remove the prior
+    chunk set before upserting the new one so deletions in the upstream
+    source are reflected in Qdrant.
+
+    The deletion is filter-based (rather than ID-based) so it also reaps
+    any orphan chunks whose stable IDs are no longer produced by the
+    current chunker — for example a paragraph that was repealed upstream.
+
+    Returns:
+        The number of points present for ``law_code`` *before* the delete,
+        as observed via :func:`count_chunks_by_law_code`. Useful for the
+        structured ``deleted=N`` log line on each run. Returns 0 when the
+        collection does not exist yet (first-ever ingestion).
+    """
+    if not law_code:
+        raise ValueError("law_code must be a non-empty string")
+
+    before = count_chunks_by_law_code(client, law_code)
+    if before == 0:
+        logger.info(
+            f"No existing chunks for law_code={law_code!r}; nothing to delete"
+        )
+        return 0
+
+    flt = Filter(
+        must=[FieldCondition(key="law_code", match=MatchValue(value=law_code))]
+    )
+    client.delete(
+        collection_name=COLLECTION_NAME,
+        points_selector=FilterSelector(filter=flt),
+        wait=True,
+    )
+    logger.info(
+        f"Deleted {before} chunks for law_code={law_code!r} from '{COLLECTION_NAME}'"
+    )
+    return before
