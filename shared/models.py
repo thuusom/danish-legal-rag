@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+from datetime import date, datetime
 from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
@@ -57,7 +58,34 @@ class LegalChunk(BaseModel):
     # Embedding tracking (for idempotent ingestion)
     embedding_model: str = Field(description="Name of the embedding model used")
     embedding_content_hash: str = Field(description="SHA256 of the text used as embedding input")
-    ingested_at: str = Field(description="ISO 8601 timestamp of ingestion")
+
+    # Provenance metadata (Issue #22 — populated by the live retsinformation fetcher)
+    # All optional: pre-fetcher chunks lack these and will backfill on next ingestion.
+    ingested_at: Optional[datetime] = Field(
+        default=None,
+        description="UTC timestamp at which this chunk was ingested",
+    )
+    law_version_date: Optional[date] = Field(
+        default=None,
+        description="Effective date of the law version this chunk was extracted from "
+                    "(retsinformation API `effective_date` top-level field)",
+    )
+    law_version_number: Optional[int] = Field(
+        default=None,
+        description="Version number of the law as reported by the retsinformation API",
+    )
+    eli: Optional[str] = Field(
+        default=None,
+        description="European Legislation Identifier path, e.g. 'eli/lta/2016/1147'",
+    )
+    retsinformation_law_id: Optional[str] = Field(
+        default=None,
+        description="UUID identifying the law (stable across versions) in retsinformation-api.dk",
+    )
+    retsinformation_paragraph_id: Optional[str] = Field(
+        default=None,
+        description="Stable paragraph anchor id used by retsinformation.dk's HTML viewer",
+    )
 
     def compute_embedding_text(self) -> str:
         """
@@ -84,8 +112,17 @@ class LegalChunk(BaseModel):
         return hashlib.sha256(self.compute_embedding_text().encode("utf-8")).hexdigest()
 
     def to_qdrant_payload(self) -> dict:
-        """Serialize to Qdrant point payload (all fields except the vector itself)."""
-        return {
+        """
+        Serialize to Qdrant point payload (all fields except the vector itself).
+
+        New optional provenance fields (Issue #22) are only included when
+        non-null so we don't bloat payloads for chunks ingested before the
+        live fetcher landed. ``ingested_at`` and ``law_version_date`` are
+        serialised to ISO 8601 strings — Qdrant payloads are JSON, not
+        Python objects, and downstream consumers (frontend, MCP) expect
+        strings per the OpenAPI contract.
+        """
+        payload: dict = {
             "id": self.id,
             "law_code": self.law_code,
             "law_name": self.law_name,
@@ -102,8 +139,20 @@ class LegalChunk(BaseModel):
             "law_number": self.law_number,
             "embedding_model": self.embedding_model,
             "embedding_content_hash": self.embedding_content_hash,
-            "ingested_at": self.ingested_at,
         }
+        if self.ingested_at is not None:
+            payload["ingested_at"] = self.ingested_at.isoformat()
+        if self.law_version_date is not None:
+            payload["law_version_date"] = self.law_version_date.isoformat()
+        if self.law_version_number is not None:
+            payload["law_version_number"] = self.law_version_number
+        if self.eli is not None:
+            payload["eli"] = self.eli
+        if self.retsinformation_law_id is not None:
+            payload["retsinformation_law_id"] = self.retsinformation_law_id
+        if self.retsinformation_paragraph_id is not None:
+            payload["retsinformation_paragraph_id"] = self.retsinformation_paragraph_id
+        return payload
 
 
 class AskRequest(BaseModel):
@@ -127,6 +176,15 @@ class LegalReference(BaseModel):
     citation_label: str
     source_url: Optional[str] = None
     score: Optional[float] = None
+    # Provenance fields surfaced for the frontend (Issue #22)
+    eli: Optional[str] = Field(
+        default=None,
+        description="ELI path, e.g. 'eli/lta/2016/1147', for deep-linking to retsinformation.dk",
+    )
+    law_version_date: Optional[date] = Field(
+        default=None,
+        description="Effective date of the law version this reference was retrieved from",
+    )
 
 
 class AskResponse(BaseModel):
@@ -189,3 +247,31 @@ class SearchRequest(BaseModel):
 class SearchResponse(BaseModel):
     results: list[LegalReference]
     query: str
+
+
+class LawSummary(BaseModel):
+    """Summary entry for the GET /laws endpoint."""
+    law_code: str
+    law_name: str
+    law_title: Optional[str] = None
+    law_number: Optional[str] = None
+    source_url: Optional[str] = None
+    # Aggregate provenance (Issue #22) — first non-null wins across the law's chunks
+    eli: Optional[str] = Field(
+        default=None,
+        description="ELI path aggregated across the law's chunks",
+    )
+    law_version_date: Optional[date] = Field(
+        default=None,
+        description="Effective date of the law version currently ingested",
+    )
+    latest_ingested_at: Optional[datetime] = Field(
+        default=None,
+        description="Most recent ingestion timestamp across this law's chunks",
+    )
+
+
+class LawsResponse(BaseModel):
+    """Response body for GET /laws."""
+    laws: list[LawSummary]
+    count: int

@@ -196,10 +196,11 @@ components:
             $ref: '#/components/schemas/LegalReference'
         retrieved_context:
           type: array
-          description: Raw retrieved Qdrant payloads (for debugging/transparency)
+          description: |
+            Raw retrieved Qdrant payloads (for debugging/transparency). Each
+            entry is a `LegalChunk` payload as stored in the vector index.
           items:
-            type: object
-            additionalProperties: true
+            $ref: '#/components/schemas/LegalChunk'
         question:
           type: string
         model_used:
@@ -257,6 +258,23 @@ components:
           nullable: true
           minimum: 0
           maximum: 1
+        eli:
+          type: string
+          nullable: true
+          description: |
+            European Legislation Identifier path for the law this reference
+            comes from, e.g. `eli/lta/2016/1147`. Lets clients deep-link to
+            the official source on retsinformation.dk.
+          example: "eli/lta/2016/1147"
+        law_version_date:
+          type: string
+          format: date
+          nullable: true
+          description: |
+            Effective date of the law version this reference was retrieved
+            from. Allows the UI to surface "the cited text is from version
+            of YYYY-MM-DD" so users can judge currency.
+          example: "2016-09-06"
 
     StreamAskRequest:
       type: object
@@ -376,3 +394,96 @@ components:
         law_title: { type: string, nullable: true }
         law_number: { type: string, nullable: true }
         source_url: { type: string, nullable: true, format: uri }
+        eli:
+          type: string
+          nullable: true
+          description: |
+            European Legislation Identifier path, e.g. `eli/lta/2016/1147`.
+            Aggregated across the law's chunks (first non-null wins).
+          example: "eli/lta/2016/1147"
+        law_version_date:
+          type: string
+          format: date
+          nullable: true
+          description: |
+            Effective date of the law version currently ingested.
+            Aggregated across the law's chunks (first non-null wins).
+          example: "2016-09-06"
+        latest_ingested_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: |
+            UTC timestamp of the most recent ingestion across this law's chunks.
+            Lets the UI display "last updated YYYY-MM-DD HH:MM".
+          example: "2026-04-27T08:30:00Z"
+
+    LegalChunk:
+      type: object
+      description: |
+        Full Qdrant payload for a single legal provision chunk. Returned
+        verbatim in the `retrieved_context` array of `/ask` responses.
+        All metadata fields beyond the core legal reference are optional —
+        chunks ingested before live-fetcher support left them null.
+      required: [id, law_code, law_name, law_title, section, text, citation_label, embedding_model, embedding_content_hash]
+      properties:
+        id: { type: string }
+        law_code: { type: string, example: "AFL" }
+        law_name: { type: string, example: "Afskrivningsloven" }
+        law_title: { type: string }
+        chapter: { type: string, nullable: true }
+        section: { type: string, example: "§ 40 C" }
+        subsection: { type: string, nullable: true }
+        item: { type: string, nullable: true }
+        title: { type: string, nullable: true }
+        text: { type: string }
+        citation_label: { type: string }
+        source_url: { type: string, nullable: true, format: uri }
+        effective_date: { type: string, nullable: true }
+        law_number: { type: string, nullable: true }
+        embedding_model: { type: string }
+        embedding_content_hash: { type: string, description: "SHA256 of embedding input text" }
+        ingested_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: |
+            UTC timestamp at which this chunk was ingested. Set automatically
+            by the ingestion pipeline. Optional because chunks ingested
+            before this field existed will not have it on first read.
+        law_version_date:
+          type: string
+          format: date
+          nullable: true
+          description: |
+            Effective date of the law version this chunk was extracted from
+            (sourced from the retsinformation API `effective_date` top-level
+            field). Lets us distinguish chunks belonging to different
+            versions of the same law in the index.
+        law_version_number:
+          type: integer
+          nullable: true
+          description: |
+            Version number of the law as reported by the retsinformation API
+            (`version_number`). Useful diagnostic when a re-ingestion brings
+            in a newer version.
+        eli:
+          type: string
+          nullable: true
+          description: |
+            European Legislation Identifier path, e.g. `eli/lta/2016/1147`.
+            Stable canonical reference, useful for citations and dedup.
+        retsinformation_law_id:
+          type: string
+          nullable: true
+          description: |
+            UUID identifying the law (stable across versions) in the
+            retsinformation-api.dk store. Lets us query for updates without
+            hardcoding (year, number).
+          example: "7f6afaff-1234-5678-9abc-def012345678"
+        retsinformation_paragraph_id:
+          type: string
+          nullable: true
+          description: |
+            Stable paragraph anchor id used by retsinformation.dk's HTML
+            viewer (e.g. `id39cb96dc-...`). Lets us deep-link to the §-level.

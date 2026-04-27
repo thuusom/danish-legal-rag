@@ -164,10 +164,16 @@ def search_similar(
 
 
 def get_all_laws(client: QdrantClient) -> list[dict]:
-    """Retrieve distinct ingested laws for the /laws endpoint."""
-    # Scroll through all points and collect unique laws
-    seen = set()
-    laws = []
+    """
+    Retrieve distinct ingested laws for the /laws endpoint.
+
+    For each law, also aggregate the Issue #22 provenance fields across its
+    chunks: ``eli`` and ``law_version_date`` use first-non-null wins
+    (chunks of the same law share these), and ``latest_ingested_at`` is the
+    maximum ``ingested_at`` value seen.
+    """
+    # Scroll through all points and aggregate by law_code
+    by_code: dict[str, dict] = {}
     offset = None
     while True:
         records, offset = client.scroll(
@@ -179,18 +185,33 @@ def get_all_laws(client: QdrantClient) -> list[dict]:
         )
         for record in records:
             code = record.payload.get("law_code")
-            if code and code not in seen:
-                seen.add(code)
-                laws.append({
+            if not code:
+                continue
+            if code not in by_code:
+                by_code[code] = {
                     "law_code": code,
                     "law_name": record.payload.get("law_name"),
                     "law_title": record.payload.get("law_title"),
                     "law_number": record.payload.get("law_number"),
                     "source_url": record.payload.get("source_url"),
-                })
+                    "eli": record.payload.get("eli"),
+                    "law_version_date": record.payload.get("law_version_date"),
+                    "latest_ingested_at": record.payload.get("ingested_at"),
+                }
+            else:
+                entry = by_code[code]
+                # First-non-null wins for static fields
+                if entry.get("eli") is None and record.payload.get("eli"):
+                    entry["eli"] = record.payload.get("eli")
+                if entry.get("law_version_date") is None and record.payload.get("law_version_date"):
+                    entry["law_version_date"] = record.payload.get("law_version_date")
+                # Max wins for ingested_at (ISO-8601 strings sort lexicographically when same TZ)
+                ts = record.payload.get("ingested_at")
+                if ts and (entry.get("latest_ingested_at") is None or ts > entry["latest_ingested_at"]):
+                    entry["latest_ingested_at"] = ts
         if offset is None:
             break
-    return laws
+    return list(by_code.values())
 
 
 def point_exists_with_hash(client: QdrantClient, point_id: str, content_hash: str) -> bool:
