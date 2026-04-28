@@ -140,22 +140,65 @@ else
   echo "WARNING: $COMPOSE_FILE not found — skipped."
 fi
 
-# 3. CHANGELOG.md — promote [Unreleased] section to [NEW] - DATE.
+# 3. CHANGELOG.md — promote [Unreleased] content into a new [NEW] - DATE section,
+#    leaving [Unreleased] with empty Keep-a-Changelog scaffolding for the next release.
 if [ -f "$CHANGELOG_FILE" ]; then
-  # Build replacement: replace `## [Unreleased]` with a new empty Unreleased
-  # section followed by the released section header.
   TMP="$(mktemp)"
   awk -v new="$NEW_VERSION" -v today="$TODAY" '
-    BEGIN { replaced = 0 }
-    {
-      if (!replaced && $0 ~ /^##[[:space:]]+\[Unreleased\]/) {
+    BEGIN { mode = 0; n = 0 }
+
+    # mode 0: before [Unreleased] — pass through
+    # mode 1: collecting under old [Unreleased]
+    # mode 2: after promotion — pass through
+
+    mode == 0 {
+      if ($0 ~ /^##[[:space:]]+\[Unreleased\]/) {
+        # Emit fresh empty [Unreleased] block
         print "## [Unreleased]"
         print ""
-        print "## [" new "] - " today
-        replaced = 1
+        print "### Added"
+        print ""
+        print "### Changed"
+        print ""
+        print "### Deprecated"
+        print ""
+        print "### Removed"
+        print ""
+        print "### Fixed"
+        print ""
+        print "### Security"
+        print ""
+        mode = 1
         next
       }
       print
+      next
+    }
+
+    mode == 1 {
+      # Hitting the next "## [" header means we have captured everything
+      # that used to live under [Unreleased].
+      if ($0 ~ /^##[[:space:]]+\[/) {
+        print "## [" new "] - " today
+        print ""
+        for (i = 1; i <= n; i++) print buf[i]
+        print $0
+        mode = 2
+        next
+      }
+      buf[++n] = $0
+      next
+    }
+
+    mode == 2 { print; next }
+
+    END {
+      # [Unreleased] was the last section in the file — flush captured content.
+      if (mode == 1) {
+        print "## [" new "] - " today
+        print ""
+        for (i = 1; i <= n; i++) print buf[i]
+      }
     }
   ' "$CHANGELOG_FILE" > "$TMP"
 
