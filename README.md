@@ -2,6 +2,17 @@
 
 A fully working Retrieval-Augmented Generation (RAG) system for Danish tax, accounting, and corporate law. Ask natural language questions in Danish and receive answers grounded in actual legal provisions with precise citations (law, section, stk. — Danish for subsection).
 
+## How this project is built
+
+This is an AI-assisted project. Most code, docs, and infrastructure are
+produced through dialogue with Claude (an AI assistant), which distributes
+work across specialized agents — backend, frontend, pm, release — defined
+in [CLAUDE.md](CLAUDE.md). Humans set direction, review plans, approve
+work, and perform irreversible actions (merging, tagging, releasing).
+
+For how humans engage with the workflow, see [human.md](human.md).
+For agent rules and ownership, see [CLAUDE.md](CLAUDE.md).
+
 ## Architecture
 
 ```
@@ -310,6 +321,27 @@ No API keys required -- CI uses the mock LLM provider throughout.
 For the full reference covering CI, the daily law currency check,
 GHCR publishing, issue templates, and branch rules, see
 [`docs/github-workflows.md`](docs/github-workflows.md).
+
+### What runs automatically
+
+Only one component in this project runs on its own. Everything else is
+reactive — triggered by a human action or a code event.
+
+| Component | Trigger | Schedule | Autonomous? |
+|---|---|---|---|
+| `check-law-currency.yml` | cron + manual | Daily 06:00 UTC | **Yes — only one** |
+| `ci.yml` | push to feat/*, PR to main | Per push | No (reactive) |
+| `release.yml` | tag push (human action) | On tag | No (reactive) |
+| Claude Code agents | chat invocation | Interactive | **No — never autonomous** |
+
+When the daily currency check finds a law that has been updated upstream,
+it opens a `Stale law: ...` GitHub Issue automatically (and auto-closes it
+when the local cache catches up). The check itself does not modify the
+production index — that requires a human triggering `make fetch-laws` and
+then re-ingesting.
+
+See [`docs/github-workflows.md`](docs/github-workflows.md) for full
+workflow details.
 
 ---
 
