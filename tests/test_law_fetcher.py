@@ -34,10 +34,9 @@ from ingest.law_fetcher import (
     write_currency_report,
 )
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-SPIKE_DIR = REPO_ROOT / "docs" / "spikes"
-SAMPLE_BASE = SPIKE_DIR / "retsinformation-api-sample.json"
-SAMPLE_LATEST = SPIKE_DIR / "retsinformation-api-versions-latest.json"
+FIXTURE_DIR = Path(__file__).resolve().parent / "fixtures"
+SAMPLE_BASE = FIXTURE_DIR / "retsinformation-api-sample.json"
+SAMPLE_LATEST = FIXTURE_DIR / "retsinformation-api-versions-latest.json"
 
 
 # ---------------------------------------------------------------------------
