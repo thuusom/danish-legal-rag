@@ -89,6 +89,41 @@ class TestIngestion:
             assert field in payload, f"Missing field: {field}"
 
 
+class TestCacheLayer:
+    """
+    Verify that ingestion went through the law_cache indirection layer
+    (Issue #21). After a successful ingestion the cache must be populated
+    with one JSON file per law_code declared in sources.yaml.
+    """
+
+    def test_sources_manifest_loads(self):
+        """sources.yaml must parse and list every law expected in Qdrant."""
+        from ingest.cache import load_sources_manifest
+
+        sources = load_sources_manifest()
+        assert sources, "sources.yaml is empty"
+        # Sanity: the canonical 12-law corpus.
+        codes = {s.law_code for s in sources}
+        assert "AFL" in codes
+        assert "ARL" in codes
+
+    def test_cache_directory_populated(self):
+        """After ingestion, the cache directory must hold one JSON per source."""
+        from ingest.cache import (
+            get_cache_dir,
+            list_cached_laws,
+            load_sources_manifest,
+        )
+
+        sources = load_sources_manifest()
+        cached = {p.stem for p in list_cached_laws()}
+        cache_dir = get_cache_dir()
+        for source in sources:
+            assert source.law_code in cached, (
+                f"missing {source.law_code}.json in cache at {cache_dir}; got {sorted(cached)}"
+            )
+
+
 class TestEmbeddings:
     """Verify that embeddings are generated correctly."""
 
@@ -303,6 +338,47 @@ class TestAPI:
         assert data["count"] > 0
         law_codes = [law["law_code"] for law in data["laws"]]
         assert "AFL" in law_codes, "Afskrivningsloven not found in laws list"
+
+    def test_laws_endpoint_exposes_aggregate_provenance_fields(self):
+        """
+        /laws response items must carry the Issue #22 aggregate fields:
+        eli, law_version_date, latest_ingested_at. Values may be null
+        when the live fetcher hasn't yet populated them (existing
+        hand-curated JSON), but the keys must be present.
+        """
+        with httpx.Client() as client:
+            r = client.get(f"{API_URL}/laws")
+        assert r.status_code == 200
+        data = r.json()
+        assert data["laws"], "no laws returned"
+        for law in data["laws"]:
+            assert "eli" in law, f"eli missing from law summary: {law}"
+            assert "law_version_date" in law, f"law_version_date missing: {law}"
+            assert "latest_ingested_at" in law, f"latest_ingested_at missing: {law}"
+        # At least one law must have ingested_at populated (set by chunker)
+        timestamps = [law["latest_ingested_at"] for law in data["laws"]]
+        assert any(t is not None for t in timestamps), (
+            "No law has latest_ingested_at — chunker is not setting ingested_at"
+        )
+
+    def test_search_references_expose_provenance_fields(self):
+        """
+        /search responses must include eli and law_version_date on each
+        reference (nullable). These are the public-facing provenance fields
+        the frontend uses for deep-linking and currency display.
+        """
+        with httpx.Client(timeout=30.0) as client:
+            r = client.post(
+                f"{API_URL}/search",
+                json={"query": "software afskrivning", "limit": 3},
+            )
+        assert r.status_code == 200
+        data = r.json()
+        assert data["results"], "no results returned"
+        for ref in data["results"]:
+            # Keys must be present; values may be null until live fetcher runs
+            assert "eli" in ref, f"eli missing from reference: {ref}"
+            assert "law_version_date" in ref, f"law_version_date missing: {ref}"
 
     def test_search_with_retrieval_strategy_dense(self):
         """Search with explicit retrieval_strategy=dense must work."""

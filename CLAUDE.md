@@ -43,6 +43,39 @@ The current phase adds a SvelteKit chat frontend and extends retrieval quality.
                 └───────────────┘      └──────────────────┘     └────────────────┘
 ```
 
+## Architecture decisions
+
+Significant decisions are recorded as ADRs in `docs/decisions/`. Read them
+before proposing changes to: third-party data sources, ingestion strategy,
+re-ingestion semantics, the retrieval pipeline, or session storage.
+
+Index: [`docs/decisions/README.md`](docs/decisions/README.md).
+
+If you are about to argue against an existing ADR, write a new ADR that
+supersedes it rather than silently changing behaviour.
+
+## Where decisions live
+
+Architectural decisions made in chat are ephemeral. To survive past one
+conversation, they must land in one of three places:
+
+| Tier | Lives in | What goes there |
+|------|----------|-----------------|
+| **Project conventions** | This file (`CLAUDE.md`) | One-line rules every agent must know on every task: ownership, contract-first, issue-first, file boundaries |
+| **Decisions** | `docs/decisions/ADR-NNN.md` | Substantive choices with reasoning and trade-offs: tech selection, strategic patterns, accepted invariants |
+| **Task instructions** | The agent prompt or the GitHub Issue | Task-specific detail: which files to edit, which test to write, which commits to reference |
+
+Rule of thumb when a decision is made in chat:
+
+- Applies to every task → add a line to `CLAUDE.md`
+- Substantive choice with trade-offs → file an ADR before any agent acts on it
+- Just task-specific detail → it's fine in the prompt or Issue body
+
+The PM agent's standing job: when a decision is made in chat that doesn't yet
+live anywhere durable, file it (ADR or `CLAUDE.md` update) before any
+implementation agent picks up the work. Same pattern as the "issues before
+work" rule below.
+
 ## Directory ownership (STRICT)
 
 | Path              | Owned by         | Others may                   |
@@ -160,6 +193,10 @@ is invisible and uncoordinated.
 
 ## When in doubt
 
-Ask Thomas in the chat. Don't guess on architecture questions. Specifically,
-don't guess about: database choices beyond Qdrant, authentication strategy,
-deployment targets, or whether to add a new law to the ingestion set.
+Check `docs/decisions/` first — many recurring questions (why Qdrant,
+why retsinformation-api.dk, why update-only fetcher, why per-law
+delete-then-insert) are already answered there. If the ADRs don't cover
+it, ask Thomas in the chat. Don't guess on architecture questions.
+Specifically, don't guess about: database choices beyond Qdrant,
+authentication strategy, deployment targets, or whether to add a new law
+to the ingestion set.

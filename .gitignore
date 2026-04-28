@@ -14,3 +14,6 @@ __pycache__/
 .idea/
 .vscode/
 *.swp
+
+# Law cache (host-side dev default; Docker mounts a named volume here)
+law_cache/

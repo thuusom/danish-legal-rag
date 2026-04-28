@@ -26,8 +26,10 @@ services:
       - QDRANT_PORT=6333
       - HF_HOME=/cache/huggingface
       - TRANSFORMERS_CACHE=/cache/huggingface/hub
+      - LAW_CACHE_DIR=/cache/laws
     volumes:
       - hf_model_cache:/cache/huggingface
+      - law_cache:/cache/laws
     networks:
       - backend
     depends_on:
@@ -44,9 +46,13 @@ services:
       - QDRANT_PORT=6333
       - HF_HOME=/cache/huggingface
       - TRANSFORMERS_CACHE=/cache/huggingface/hub
+      # Read-only access to the law cache so /admin/sources/status (#24) can
+      # report last-cached version dates. The fetcher/ingest own writes.
+      - LAW_CACHE_DIR=/cache/laws
     volumes:
       - hf_model_cache:/cache/huggingface
       - ./answer-style.md:/app/answer-style.md:ro
+      - law_cache:/cache/laws:ro
     networks:
       - backend
     depends_on:
@@ -74,3 +80,4 @@ networks:
 volumes:
   qdrant_data:
   hf_model_cache:
+  law_cache:

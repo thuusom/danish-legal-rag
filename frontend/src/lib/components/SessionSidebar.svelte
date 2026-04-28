@@ -128,7 +128,7 @@
 		{/if}
 	</div>
 
-	<div class="border-t border-gray-200 p-3">
+	<div class="flex flex-col gap-2 border-t border-gray-200 p-3">
 		<button
 			onclick={handleNewSession}
 			class="flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-100"
@@ -140,5 +140,13 @@
 			</svg>
 			Ny samtale
 		</button>
+		<a
+			href="/admin"
+			class="text-center text-xs text-gray-400 transition-colors hover:text-gray-600 hover:underline"
+			data-testid="admin-link"
+			aria-label="Gå til admin-side"
+		>
+			Admin
+		</a>
 	</div>
 </aside>

@@ -12,6 +12,7 @@ from qdrant_client.models import (
     Distance,
     FieldCondition,
     Filter,
+    FilterSelector,
     Fusion,
     FusionQuery,
     MatchValue,
@@ -164,10 +165,16 @@ def search_similar(
 
 
 def get_all_laws(client: QdrantClient) -> list[dict]:
-    """Retrieve distinct ingested laws for the /laws endpoint."""
-    # Scroll through all points and collect unique laws
-    seen = set()
-    laws = []
+    """
+    Retrieve distinct ingested laws for the /laws endpoint.
+
+    For each law, also aggregate the Issue #22 provenance fields across its
+    chunks: ``eli`` and ``law_version_date`` use first-non-null wins
+    (chunks of the same law share these), and ``latest_ingested_at`` is the
+    maximum ``ingested_at`` value seen.
+    """
+    # Scroll through all points and aggregate by law_code
+    by_code: dict[str, dict] = {}
     offset = None
     while True:
         records, offset = client.scroll(
@@ -179,18 +186,33 @@ def get_all_laws(client: QdrantClient) -> list[dict]:
         )
         for record in records:
             code = record.payload.get("law_code")
-            if code and code not in seen:
-                seen.add(code)
-                laws.append({
+            if not code:
+                continue
+            if code not in by_code:
+                by_code[code] = {
                     "law_code": code,
                     "law_name": record.payload.get("law_name"),
                     "law_title": record.payload.get("law_title"),
                     "law_number": record.payload.get("law_number"),
                     "source_url": record.payload.get("source_url"),
-                })
+                    "eli": record.payload.get("eli"),
+                    "law_version_date": record.payload.get("law_version_date"),
+                    "latest_ingested_at": record.payload.get("ingested_at"),
+                }
+            else:
+                entry = by_code[code]
+                # First-non-null wins for static fields
+                if entry.get("eli") is None and record.payload.get("eli"):
+                    entry["eli"] = record.payload.get("eli")
+                if entry.get("law_version_date") is None and record.payload.get("law_version_date"):
+                    entry["law_version_date"] = record.payload.get("law_version_date")
+                # Max wins for ingested_at (ISO-8601 strings sort lexicographically when same TZ)
+                ts = record.payload.get("ingested_at")
+                if ts and (entry.get("latest_ingested_at") is None or ts > entry["latest_ingested_at"]):
+                    entry["latest_ingested_at"] = ts
         if offset is None:
             break
-    return laws
+    return list(by_code.values())
 
 
 def point_exists_with_hash(client: QdrantClient, point_id: str, content_hash: str) -> bool:
@@ -210,3 +232,72 @@ def point_exists_with_hash(client: QdrantClient, point_id: str, content_hash: st
     except Exception:
         pass
     return False
+
+
+def count_chunks_by_law_code(client: QdrantClient, law_code: str) -> int:
+    """
+    Count points in the collection whose ``payload.law_code == law_code``.
+
+    Uses the dedicated Qdrant ``count`` API with an exact filter — never
+    a global count.
+
+    Returns 0 if the collection does not yet exist.
+    """
+    try:
+        flt = Filter(
+            must=[FieldCondition(key="law_code", match=MatchValue(value=law_code))]
+        )
+        result = client.count(
+            collection_name=COLLECTION_NAME,
+            count_filter=flt,
+            exact=True,
+        )
+        return int(result.count)
+    except Exception as exc:
+        logger.warning(
+            f"count_chunks_by_law_code({law_code!r}) failed; assuming 0: {exc}"
+        )
+        return 0
+
+
+def delete_chunks_by_law_code(client: QdrantClient, law_code: str) -> int:
+    """
+    Delete every point whose ``payload.law_code == law_code``.
+
+    Scoped strictly by ``law_code`` filter — never global. Used for
+    idempotent re-ingestion of a single law (Issue #23): remove the prior
+    chunk set before upserting the new one so deletions in the upstream
+    source are reflected in Qdrant.
+
+    The deletion is filter-based (rather than ID-based) so it also reaps
+    any orphan chunks whose stable IDs are no longer produced by the
+    current chunker — for example a paragraph that was repealed upstream.
+
+    Returns:
+        The number of points present for ``law_code`` *before* the delete,
+        as observed via :func:`count_chunks_by_law_code`. Useful for the
+        structured ``deleted=N`` log line on each run. Returns 0 when the
+        collection does not exist yet (first-ever ingestion).
+    """
+    if not law_code:
+        raise ValueError("law_code must be a non-empty string")
+
+    before = count_chunks_by_law_code(client, law_code)
+    if before == 0:
+        logger.info(
+            f"No existing chunks for law_code={law_code!r}; nothing to delete"
+        )
+        return 0
+
+    flt = Filter(
+        must=[FieldCondition(key="law_code", match=MatchValue(value=law_code))]
+    )
+    client.delete(
+        collection_name=COLLECTION_NAME,
+        points_selector=FilterSelector(filter=flt),
+        wait=True,
+    )
+    logger.info(
+        f"Deleted {before} chunks for law_code={law_code!r} from '{COLLECTION_NAME}'"
+    )
+    return before

@@ -108,6 +108,60 @@ class TestLegalChunkModel:
         for field in required:
             assert field in payload, f"Missing field in Qdrant payload: {field}"
 
+    def test_to_qdrant_payload_skips_none_provenance_fields(self):
+        """
+        New optional provenance fields (Issue #22) must NOT bloat the payload
+        when they're None. Only ingested_at is set in the default fixture.
+        """
+        chunk = self._make_chunk()  # has ingested_at set, others None
+        payload = chunk.to_qdrant_payload()
+        assert "ingested_at" in payload
+        assert "law_version_date" not in payload
+        assert "law_version_number" not in payload
+        assert "eli" not in payload
+        assert "retsinformation_law_id" not in payload
+        assert "retsinformation_paragraph_id" not in payload
+
+    def test_to_qdrant_payload_round_trips_all_provenance_fields(self):
+        """
+        Round-trip test for Issue #22 metadata: construct a chunk with all
+        five new fields populated, serialise to Qdrant payload, deserialise
+        back, and assert every field round-trips correctly.
+        """
+        from datetime import date, datetime, timezone
+
+        from shared.models import LegalChunk
+
+        ingested = datetime(2026, 4, 27, 8, 30, 0, tzinfo=timezone.utc)
+        version_date = date(2021, 1, 1)
+        chunk = self._make_chunk(
+            ingested_at=ingested,
+            law_version_date=version_date,
+            law_version_number=24,
+            eli="eli/lta/2016/1147",
+            retsinformation_law_id="7f6afaff-1234-5678-9abc-def012345678",
+            retsinformation_paragraph_id="id39cb96dc-aaaa-bbbb-cccc-dddddddddddd",
+        )
+        payload = chunk.to_qdrant_payload()
+
+        # Strings in payload (Qdrant only stores JSON-friendly values)
+        assert payload["ingested_at"] == ingested.isoformat()
+        assert payload["law_version_date"] == "2021-01-01"
+        assert payload["law_version_number"] == 24
+        assert payload["eli"] == "eli/lta/2016/1147"
+        assert payload["retsinformation_law_id"] == "7f6afaff-1234-5678-9abc-def012345678"
+        assert payload["retsinformation_paragraph_id"] == "id39cb96dc-aaaa-bbbb-cccc-dddddddddddd"
+
+        # Round-trip: rebuild a LegalChunk from the payload (pydantic coerces
+        # ISO strings back to datetime/date automatically)
+        rebuilt = LegalChunk(**payload)
+        assert rebuilt.ingested_at == ingested
+        assert rebuilt.law_version_date == version_date
+        assert rebuilt.law_version_number == 24
+        assert rebuilt.eli == "eli/lta/2016/1147"
+        assert rebuilt.retsinformation_law_id == "7f6afaff-1234-5678-9abc-def012345678"
+        assert rebuilt.retsinformation_paragraph_id == "id39cb96dc-aaaa-bbbb-cccc-dddddddddddd"
+
     def test_embedding_text_without_subsection(self):
         """Embedding text works when subsection is None."""
         chunk = self._make_chunk(subsection=None)

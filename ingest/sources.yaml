@@ -1,0 +1,118 @@
+# Danish Legal RAG — source manifest.
+#
+# Single declarative manifest of every law/bekendtgørelse the system ingests.
+# Adding or removing a source is a one-line change here; ingestion picks it up.
+#
+# Each entry contains:
+#   law_code:                short code stamped on every chunk (must match LegalChunk.law_code)
+#   title:                   official title of the consolidation act
+#   short_name:              popular Danish name used in citations
+#   retsinformation.year:    year component used by the retsinformation-api.dk fetcher (#20)
+#   retsinformation.number:  document number (LBK/LOV/BEK) for that year
+#   seed_file:               in-repo JSON used to seed the cache on first boot
+#                            (relative to the repo root)
+#
+# The (year, number) pair is derived from the existing `law_number` field
+# in each seed file, e.g. "LBK nr 1147 af 29/08/2016" -> 2016 / 1147.
+#
+# This manifest is consumed by ingest/cache.py (seed_cache_from_repo) and,
+# eventually, the live retsinformation fetcher (#20).
+
+sources:
+  # ─── Love (Acts) ───────────────────────────────────────────────────────
+  - law_code: AFL
+    title: Bekendtgørelse af lov om skattemæssige afskrivninger
+    short_name: Afskrivningsloven
+    retsinformation:
+      year: 2016
+      number: 1147
+    seed_file: ingest/data/afskrivningsloven.json
+
+  - law_code: ARL
+    title: Bekendtgørelse af årsregnskabsloven
+    short_name: Årsregnskabsloven
+    retsinformation:
+      year: 2015
+      number: 1580
+    seed_file: ingest/data/aarsregnskabsloven.json
+
+  - law_code: BOG
+    title: Lov om bogføring
+    short_name: Bogføringsloven
+    retsinformation:
+      year: 2022
+      number: 700
+    seed_file: ingest/data/bogfoeringsloven.json
+
+  - law_code: SEL
+    title: Bekendtgørelse af lov om indkomstbeskatning af aktieselskaber m.v.
+    short_name: Selskabsskatteloven
+    retsinformation:
+      year: 2022
+      number: 1241
+    seed_file: ingest/data/selskabsskatteloven.json
+
+  - law_code: MOML
+    title: Bekendtgørelse af lov om merværdiafgift
+    short_name: Momsloven
+    retsinformation:
+      year: 2019
+      number: 1021
+    seed_file: ingest/data/momsloven.json
+
+  - law_code: LL
+    title: Bekendtgørelse af lov om påligningen af indkomstskat til staten
+    short_name: Ligningsloven
+    retsinformation:
+      year: 2021
+      number: 1735
+    seed_file: ingest/data/ligningsloven.json
+
+  - law_code: SKL
+    title: Lov om skattekontrol
+    short_name: Skattekontrolloven
+    retsinformation:
+      year: 2017
+      number: 1535
+    seed_file: ingest/data/skattekontrolloven.json
+
+  - law_code: REVL
+    title: Bekendtgørelse af lov om godkendte revisorer og revisionsvirksomheder
+    short_name: Revisorloven
+    retsinformation:
+      year: 2024
+      number: 25
+    seed_file: ingest/data/revisorloven.json
+
+  - law_code: SFL
+    title: Bekendtgørelse af skatteforvaltningsloven
+    short_name: Skatteforvaltningsloven
+    retsinformation:
+      year: 2022
+      number: 835
+    seed_file: ingest/data/skatteforvaltningsloven.json
+
+  # ─── Bekendtgørelser (Executive orders) ───────────────────────────────
+  - law_code: BOG-BEK
+    title: Bekendtgørelse om bogføring
+    short_name: Bogføringsbekendtgørelsen
+    retsinformation:
+      year: 2023
+      number: 2006
+    seed_file: ingest/data/bogfoeringsbekendtgoerelsen.json
+
+  - law_code: BOG-MBK
+    title: Bekendtgørelse om krav til bogføringsbilag
+    short_name: Mindstekravsbekendtgørelsen for bilag
+    retsinformation:
+      year: 2024
+      number: 98
+    seed_file: ingest/data/mindstekravsbekendtgoerelsen.json
+
+  - law_code: MOML-BEK
+    title: Bekendtgørelse om merværdiafgift (momsbekendtgørelsen)
+    short_name: Momsbekendtgørelsen
+    retsinformation:
+      year: 2023
+      number: 1435
+    seed_file: ingest/data/momsbekendtgoerelsen.json

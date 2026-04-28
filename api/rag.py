@@ -448,7 +448,15 @@ def get_model_name() -> str:
 # ---------------------------------------------------------------------------
 
 def results_to_references(results: list[dict]) -> list[LegalReference]:
-    """Convert Qdrant search results to structured LegalReference objects."""
+    """
+    Convert Qdrant search results to structured LegalReference objects.
+
+    Surfaces the public-facing provenance fields (``eli``, ``law_version_date``)
+    so the frontend can deep-link to retsinformation.dk and show how old the
+    cited text is. Internal fields (``ingested_at``, ``law_version_number``,
+    ``retsinformation_*``) stay in ``retrieved_context`` and are not promoted
+    to references.
+    """
     references = []
     for r in results:
         p = r["payload"]
@@ -463,6 +471,8 @@ def results_to_references(results: list[dict]) -> list[LegalReference]:
             citation_label=p.get("citation_label", ""),
             source_url=p.get("source_url"),
             score=r.get("score"),
+            eli=p.get("eli"),
+            law_version_date=p.get("law_version_date"),
         )
         references.append(ref)
     return references

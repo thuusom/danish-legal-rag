@@ -1,6 +1,6 @@
 # Danish Legal RAG
 
-A fully working Retrieval-Augmented Generation (RAG) system for Danish tax, accounting, and corporate law. Ask natural language questions in Danish and receive answers grounded in actual legal provisions with precise citations (lov, section, stk.).
+A fully working Retrieval-Augmented Generation (RAG) system for Danish tax, accounting, and corporate law. Ask natural language questions in Danish and receive answers grounded in actual legal provisions with precise citations (law, section, stk. — Danish for subsection).
 
 ## Architecture
 
@@ -34,7 +34,23 @@ FastAPI backend as curl, httpyac, and the MCP server for Claude Desktop.
 ```
 hf_model_cache   <- HuggingFace embedding model (~440 MB, downloaded once)
 qdrant_data      <- Qdrant vector store (all chunks + embeddings)
+law_cache        <- Per-law JSON payloads (one file per law_code) — see below
 ```
+
+### Source manifest and law cache
+
+The set of laws to ingest is declared in [`ingest/sources.yaml`](ingest/sources.yaml).
+Adding or removing a law is a one-line change in that file.
+
+At ingestion time, the pipeline reads from a cache directory (`law_cache/` on
+the host, mounted at `/cache/laws` in Docker) — not directly from
+`ingest/data/*.json`. On first boot the cache is empty and gets seeded from
+the in-repo JSON files declared in the manifest. Subsequent boots reuse the
+cache, so the daily live-fetch job (Issue #20) can update individual files
+without touching the repo. The cache location is overridable via the
+`LAW_CACHE_DIR` env var.
+
+The live fetcher (`python -m ingest.law_fetcher`, run via `make fetch-laws`) keeps `law_cache/` fresh. It reads `ingest/sources.yaml`, calls `retsinformation-api.dk` for each entry, compares versions, and only writes when a newer version is available. It writes `law_cache/currency-report.json` summarising every run, and is rate-limited under the published 20/h and 50/d budget (default 15/h, 40/d, configurable via `FETCHER_RATE_LIMIT_HOUR` / `FETCHER_RATE_LIMIT_DAY`). The fetcher never touches Qdrant — the existing idempotent ingestion job re-processes the cache on the next run.
 
 ---
 
@@ -42,7 +58,7 @@ qdrant_data      <- Qdrant vector store (all chunks + embeddings)
 
 The corpus covers 9 Danish laws and 3 executive orders (bekendtgorelser):
 
-### Love (Acts)
+### Acts (Love)
 
 | Code | Name | Subject |
 |------|------|---------|
@@ -56,7 +72,7 @@ The corpus covers 9 Danish laws and 3 executive orders (bekendtgorelser):
 | REVL | Revisorloven | Auditor regulation (LBK nr 25 af 2024) |
 | SFL | Skatteforvaltningsloven | Tax administration, appeals, deadlines (LBK nr 835 af 2022) |
 
-### Bekendtgorelser (Executive orders)
+### Executive orders (Bekendtgorelser)
 
 | Code | Name | Subject |
 |------|------|---------|
@@ -150,6 +166,13 @@ Types are generated from `contracts/openapi.yaml` -- the frontend never hand-wri
 | POST | `/ask/stream` | Ask a question, receive answer via Server-Sent Events (SSE) |
 | POST | `/search` | Semantic search only (no LLM), returns ranked provisions |
 | GET | `/laws` | List all ingested laws with metadata |
+| GET | `/admin/status` | Operator-facing corpus state (per-law version, ingestion freshness, fetcher quota) |
+| POST | `/admin/check-currency` | Trigger an ad-hoc fetcher run (returns 202; 409 if already running) |
+
+The `/admin/*` endpoints power the admin UI (Issue #26) and ops tooling.
+They are unauthenticated by design; treat them as private and gate access
+at the network/ingress layer. Both rely on `law_cache/` being readable from
+the api container — see PR notes if you're upgrading an existing deployment.
 
 ### `/ask/stream` SSE events
 
@@ -166,13 +189,13 @@ The streaming endpoint returns `text/event-stream` with four event types:
 
 ---
 
-## Ingest-jobbet: korer en gang og stopper
+## The ingest job: runs once and stops
 
-`ingest`-containeren er et **one-shot job** med `restart: "no"`. Det er tilsigtet:
+The `ingest` container is a **one-shot job** with `restart: "no"`. This is intentional:
 
-1. Jobbet starter, henter lovteksterne, genererer embeddings og skriver alt til Qdrant
-2. Naar det er faerdigt logger det `=== Ingestion Complete ===` og **afslutter med exit code 0**
-3. Alle data lever herefter i `qdrant_data`-volumet -- der er intet behov for at holde ingest korende
+1. The job starts, fetches the law texts, generates embeddings, and writes everything to Qdrant
+2. When it is done it logs `=== Ingestion Complete ===` and **exits with exit code 0**
+3. All data then lives in the `qdrant_data` volume -- there is no need to keep ingest running
 
 ```
 docker compose ps
@@ -183,16 +206,16 @@ danish-legal-qdrant     running
 danish-legal-api        running
 danish-legal-frontend   running
 danish-legal-mcp        running
-danish-legal-ingest     exited (0)   <- korrekt og forventet
+danish-legal-ingest     exited (0)   <- correct and expected
 ```
 
-**Genkor ingestion** (f.eks. efter du har tilfojet nye lovtekster):
+**Re-run ingestion** (e.g. after adding new law texts):
 ```bash
 docker compose run --rm ingest
-# eller:
+# or:
 make ingest
 ```
-Jobbet er idempotent -- uaendrede paragraffer springer embedding-trinnet over (se "Idempotent ingestion" nedenfor).
+The job is idempotent -- unchanged paragraphs skip the embedding step (see "Idempotent ingestion" below).
 
 ---
 
@@ -254,6 +277,9 @@ make down            # Stop all services
 make build           # Build containers
 make logs            # Follow all logs
 make ingest          # Re-run ingestion (e.g. after adding new laws)
+make fetch-laws      # Run live fetcher: refresh law_cache/ from retsinformation-api.dk
+make fetch-laws-dry  # Dry run of the live fetcher (no writes)
+make fetch-laws-force  # Force re-fetch all laws regardless of version
 make test-integration  # Run integration tests inside API container
 make test-embeddings   # Run embedding unit tests inside API container
 make curl-test       # Quick curl test of primary question
@@ -281,78 +307,82 @@ Two jobs:
 
 No API keys required -- CI uses the mock LLM provider throughout.
 
+For the full reference covering CI, the daily law currency check,
+GHCR publishing, issue templates, and branch rules, see
+[`docs/github-workflows.md`](docs/github-workflows.md).
+
 ---
 
-## HuggingFace-requests: hvad og hvorfor
+## HuggingFace requests: what and why
 
-Systemet bruger en **lokal embedding-model** fra HuggingFace til at konvertere lovtekster og sporgsmal til vektorer. Der kraeves **ingen HuggingFace API-nogle**.
+The system uses a **local embedding model** from HuggingFace to convert law texts and questions into vectors. **No HuggingFace API key is required.**
 
-### Modellen der downloades
+### The model that gets downloaded
 
-| Egenskab | Vaerdi |
-|----------|--------|
-| Navn | `paraphrase-multilingual-mpnet-base-v2` |
-| Udgiver | `sentence-transformers` (UKP Lab) |
-| Storrelse | ~440 MB |
-| Sprog | Understotter dansk og 50+ andre sprog |
-| Dimensioner | 768 |
-| Kraever API-nogle | Nej -- frit tilgaengelig |
-| Formal | Konverterer tekst til 768-dim vektor til semantisk sogning |
+| Property | Value |
+|----------|-------|
+| Name | `paraphrase-multilingual-mpnet-base-v2` |
+| Publisher | `sentence-transformers` (UKP Lab) |
+| Size | ~440 MB |
+| Language | Supports Danish and 50+ other languages |
+| Dimensions | 768 |
+| Requires API key | No -- freely available |
+| Purpose | Converts text to a 768-dim vector for semantic search |
 
-### Hvornaar sker download?
+### When does the download happen?
 
 ```
-Forste docker compose up
+First docker compose up
   |
-  +-- ingest container starter
-  |     +-- sentence-transformers forsoger at loade modellen
-  |           +-- ikke i cache -> download fra huggingface.co (~440 MB)
-  |                 +-- gemmes i Docker-volumen: hf_model_cache
+  +-- ingest container starts
+  |     +-- sentence-transformers tries to load the model
+  |           +-- not in cache -> download from huggingface.co (~440 MB)
+  |                 +-- stored in Docker volume: hf_model_cache
   |
-  +-- api container starter (parallelt)
-        +-- sentence-transformers forsoger at loade modellen
-              +-- HF_HOME peger pa hf_model_cache -> allerede der -> ingen download
+  +-- api container starts (in parallel)
+        +-- sentence-transformers tries to load the model
+              +-- HF_HOME points at hf_model_cache -> already there -> no download
 ```
 
-Fra **anden opstart og fremefter**: Modellen er i `hf_model_cache`-volumen. Der sendes kun korte metadata-requests til HuggingFace (HEAD-requests for at tjekke om modellen er opdateret) -- ingen re-download.
+From the **second startup onwards**: The model lives in the `hf_model_cache` volume. Only short metadata requests are sent to HuggingFace (HEAD requests to check whether the model has been updated) -- no re-download.
 
-### Kor helt offline
+### Run fully offline
 
-Saet `TRANSFORMERS_OFFLINE=1` i `.env` efter forste download for at forhindre alle HF-requests:
+Set `TRANSFORMERS_OFFLINE=1` in `.env` after the first download to prevent all HF requests:
 
 ```env
 TRANSFORMERS_OFFLINE=1
 HF_DATASETS_OFFLINE=1
 ```
 
-### Skift embeddingmodel
+### Switch embedding model
 
 ```env
 # .env
 EMBEDDING_PROVIDER=sentence-transformers
-ST_MODEL_NAME=intfloat/multilingual-e5-large   # alternativ model
+ST_MODEL_NAME=intfloat/multilingual-e5-large   # alternative model
 ```
 
-> NB: Hvis du skifter model skal du genskabe Qdrant-kollektionen:
+> Note: If you change the model you must recreate the Qdrant collection:
 > `docker compose down -v && docker compose up --build`
-> (vektordimensionerne aendrer sig, og eksisterende vektorer er ugyldige)
+> (the vector dimensions change, and existing vectors become invalid)
 
 ---
 
 ## Embedding strategy
 
-Embeddings genereres **ved ingestion** for hver lovparagraf og **ved query-tid** for brugerens sporgsmal. Samme model bruges begge steder.
+Embeddings are generated **at ingestion time** for each law paragraph and **at query time** for the user's question. The same model is used in both places.
 
-**Beriget embedding-input:** I stedet for kun at embedde den ra paragraftekst beriger chunkeren teksten med lovnavn og paragrafhenvisning:
+**Enriched embedding input:** Instead of embedding only the raw paragraph text, the chunker enriches the text with the law name and paragraph reference:
 
 ```
 Afskrivningsloven par. 40 C, stk. 1 [EDB-programmer (software)]:
 Udgifter til erhvervelse af EDB-programmer (software) kan enten fradrages fuldt ud...
 ```
 
-Dette forbedrer semantisk matching for bade:
-- Emnebaserede forespørgsler: "software afskrivning"
-- Referencebaserede forespørgsler: "hvad siger par. 40 C"
+This improves semantic matching for both:
+- Topic-based queries: "software afskrivning"
+- Reference-based queries: "hvad siger par. 40 C"
 
 ---
 

@@ -25,6 +25,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
+from api.admin import router as admin_router
 from api.embeddings import get_query_embedder
 from api.rag import (
     NO_SOURCES_MESSAGE,
@@ -39,6 +40,7 @@ from api.rag import (
 from shared.models import (
     AskRequest,
     AskResponse,
+    LawsResponse,
     SearchRequest,
     SearchResponse,
     StreamAskRequest,
@@ -87,6 +89,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(admin_router)
 
 
 @app.on_event("startup")
@@ -228,13 +232,19 @@ async def search_endpoint(request: SearchRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/laws")
-async def list_laws():
-    """List all laws currently ingested in the system."""
+@app.get("/laws", response_model=LawsResponse)
+async def list_laws() -> LawsResponse:
+    """
+    List all laws currently ingested in the system.
+
+    Each entry carries aggregate provenance fields (`eli`,
+    `law_version_date`, `latest_ingested_at`) computed across the law's
+    chunks — useful for the UI's "law catalogue" page.
+    """
     try:
         qdrant = get_qdrant_client()
         laws = get_all_laws(qdrant)
-        return {"laws": laws, "count": len(laws)}
+        return LawsResponse(laws=laws, count=len(laws))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -245,5 +255,13 @@ async def root():
         "service": "Danish Legal RAG API",
         "version": "1.0.0",
         "docs": "/docs",
-        "endpoints": ["/ask", "/ask/stream", "/search", "/laws", "/health"],
+        "endpoints": [
+            "/ask",
+            "/ask/stream",
+            "/search",
+            "/laws",
+            "/health",
+            "/admin/status",
+            "/admin/check-currency",
+        ],
     }
