@@ -130,6 +130,24 @@ finished.
 3. **One PR per ticket.** Each agent opens a PR against the feature branch.
    The PR description references the Issue number. Tests must pass before
    merge.
+
+   **Auto-close syntax (important):** GitHub's auto-close parser requires the
+   `Closes` (or `Fixes` / `Resolves`) keyword **repeated for each issue** in the
+   PR description. A comma-separated list after a single keyword only closes
+   the first one.
+
+   - Wrong: `Closes #18, #19, #20`  (only #18 closes)
+   - Right: `Closes #18, closes #19, closes #20`
+   - Also right (one per line):
+
+     ```
+     Closes #18
+     Closes #19
+     Closes #20
+     ```
+
+   When a PR delivers many sub-issues plus a parent, list every one with its
+   own keyword. Otherwise the unclosed issues need manual cleanup after merge.
 4. **Integration check.** For cross-cutting features, the PM agent opens a
    tracking Issue and only closes it when an end-to-end test passes — not
    when backend and frontend individually merge.
