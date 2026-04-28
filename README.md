@@ -579,6 +579,37 @@ danish-legal-rag/
 
 ---
 
+## Roadmap
+
+Ideas for the next phase, in rough priority order. None of these are filed as
+issues yet — per `CLAUDE.md`, file an issue (and a plan) before starting work.
+
+1. **Login and authentication.** Add user accounts. Pulls in a relational
+   database (Postgres) for structured user data — auth, sessions, per-user
+   quotas, billing later — alongside Qdrant, which keeps doing what it is
+   good at (vectors). Switches the chat from "anyone with the URL" to
+   identified users.
+2. **Per-user rate limiting.** 20 requests per user per day as a starting
+   point. Both request-count and token-count caps, configurable per tier.
+   Depends on #1.
+3. **Cost and token reporting.** Return cost (USD or DKK) and token count
+   in `/ask` and `/ask/stream` responses. Surface in the chat UI so users
+   see what each question consumed and can budget themselves.
+4. **Admin UI for background jobs.** Extend the existing `/admin` page so
+   the operator can manually trigger background jobs (re-ingestion,
+   currency check, embedding model swap), view job history, and cancel
+   running jobs.
+5. **Celery + Redis for scheduling.** Move scheduled work off GitHub
+   Actions (currently only the daily currency check) into an in-stack
+   Celery + Redis setup. Enables finer-grained cron, per-user workers,
+   and async pipelines without leaving the app.
+6. **Monitoring stack.** Add Grafana + Loki for logs, Prometheus for
+   metrics, plus exporters: `node-exporter` (CPU/memory/disk),
+   `qdrant-exporter`, `postgres-exporter` (after #1), and FastAPI
+   instrumentation (`prometheus-fastapi-instrumentator`).
+
+---
+
 ## Disclaimer
 
 This is a technical demonstration system. The legal content is based on real Danish laws but may be incomplete or outdated. Always consult a qualified legal or tax advisor for specific legal questions.
