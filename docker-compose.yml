@@ -74,7 +74,7 @@ services:
       # Edit the file freely; changes are picked up on the next API call.
       - ./answer-style.md:/app/answer-style.md:ro
       # Read-only law cache – api consumes it for admin status, never mutates.
-      - law_cache:/cache/laws:ro
+      - law_cache:/cache/laws
     depends_on:
       - qdrant
     restart: unless-stopped
