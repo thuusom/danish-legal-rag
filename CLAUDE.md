@@ -43,6 +43,17 @@ The current phase adds a SvelteKit chat frontend and extends retrieval quality.
                 └───────────────┘      └──────────────────┘     └────────────────┘
 ```
 
+## Architecture decisions
+
+Significant decisions are recorded as ADRs in `docs/decisions/`. Read them
+before proposing changes to: third-party data sources, ingestion strategy,
+re-ingestion semantics, the retrieval pipeline, or session storage.
+
+Index: [`docs/decisions/README.md`](docs/decisions/README.md).
+
+If you are about to argue against an existing ADR, write a new ADR that
+supersedes it rather than silently changing behaviour.
+
 ## Directory ownership (STRICT)
 
 | Path              | Owned by         | Others may                   |
@@ -160,6 +171,10 @@ is invisible and uncoordinated.
 
 ## When in doubt
 
-Ask Thomas in the chat. Don't guess on architecture questions. Specifically,
-don't guess about: database choices beyond Qdrant, authentication strategy,
-deployment targets, or whether to add a new law to the ingestion set.
+Check `docs/decisions/` first — many recurring questions (why Qdrant,
+why retsinformation-api.dk, why update-only fetcher, why per-law
+delete-then-insert) are already answered there. If the ADRs don't cover
+it, ask Thomas in the chat. Don't guess on architecture questions.
+Specifically, don't guess about: database choices beyond Qdrant,
+authentication strategy, deployment targets, or whether to add a new law
+to the ingestion set.
