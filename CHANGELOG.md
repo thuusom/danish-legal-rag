@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [1.1.0] - 2026-04-28
+
+
+### Added
+
 - Live law fetcher service (`ingest/law_fetcher.py`) that pulls structured
   law content from retsinformation-api.dk and detects upstream version
   changes. Update-only model: in-repo JSON files remain the first-boot
@@ -100,5 +115,6 @@ for Danish tax and accounting law backed by retrieval-augmented generation.
   `ghcr.io/thuusom/danish-legal-rag-ingest:1.0.0`,
   `ghcr.io/thuusom/danish-legal-rag-frontend:1.0.0`.
 
-[Unreleased]: https://github.com/thuusom/danish-legal-rag/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/thuusom/danish-legal-rag/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/thuusom/danish-legal-rag/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/thuusom/danish-legal-rag/releases/tag/v1.0.0
