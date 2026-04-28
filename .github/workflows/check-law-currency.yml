@@ -1,3 +1,5 @@
+# Documentation: docs/github-workflows.md
+#
 # Daily law currency check (Issue #25).
 #
 # Runs ingest.law_fetcher against retsinformation-api.dk on a schedule and

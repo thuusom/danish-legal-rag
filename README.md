@@ -307,6 +307,10 @@ Two jobs:
 
 No API keys required -- CI uses the mock LLM provider throughout.
 
+For the full reference covering CI, the daily law currency check,
+GHCR publishing, issue templates, and branch rules, see
+[`docs/github-workflows.md`](docs/github-workflows.md).
+
 ---
 
 ## HuggingFace requests: what and why
