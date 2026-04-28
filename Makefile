@@ -96,3 +96,27 @@ prod-up:
 
 prod-down:
 	docker compose -f docker-compose.prod.yml down
+
+# =============================================================================
+# Release targets — bump VERSION, update compose + CHANGELOG, commit.
+# Never tag, never push. The human runs `git push origin vX.Y.Z` after merge.
+# =============================================================================
+
+.PHONY: release-major release-minor release-patch release-dry release-notes
+
+release-major:
+	@./scripts/release.sh major
+
+release-minor:
+	@./scripts/release.sh minor
+
+release-patch:
+	@./scripts/release.sh patch
+
+release-dry:
+	@./scripts/release.sh dry
+
+# Markdown bullet list of commits since the last tag — used to fill CHANGELOG
+# `[Unreleased]` before running release-{major,minor,patch}.
+release-notes:
+	@git log $$(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD --pretty=format:"- %s" --no-merges

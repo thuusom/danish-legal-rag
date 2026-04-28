@@ -11,7 +11,7 @@ new workflow.
 |------|---------|-------|-----------------------|
 | `.github/workflows/ci.yml` | push to `feat/*`, PRs to `main` | backend / frontend | Read failed step logs, fix, push again |
 | `.github/workflows/check-law-currency.yml` | daily 06:00 UTC + manual | pm / operator | Investigate `fetch-failed` rows; act on `stale-law,auto` issues |
-| (no release workflow yet) | manual `make prod-push` | pm | See "GHCR image publishing" below |
+| `.github/workflows/release.yml` | push of `v*.*.*` tag | release agent / operator | See "Release publish" below; usually re-tag after fixing root cause |
 
 ---
 
@@ -105,30 +105,51 @@ for the update-only model.
 
 ---
 
-## GHCR image publishing (manual today)
+## Release publish (`release.yml`)
 
-There is no CI workflow for image publishing. Releases are cut manually:
+**Trigger:** push of a tag matching `v*.*.*` to the repo. Branch pushes
+and PRs do not trigger it. The human is the only entity that pushes the
+tag — see `docs/release-process.md` and ADR-006 for the rationale.
 
-```bash
-make prod-build   # tags ghcr.io/thuusom/danish-legal-rag-{api,ingest,frontend}:$(VERSION)
-make prod-push    # pushes the three images to GHCR
-```
+**What it does:**
 
-`VERSION` is read from the `VERSION` file at the repo root.
+1. Checkout with full history (so the CHANGELOG section can be extracted).
+2. **Verify VERSION matches the tag.** Strips the leading `v` from
+   `github.ref_name` and compares to the contents of `VERSION`. If they
+   disagree, the workflow fails hard before any image is built or pushed.
+   This is the safety net that catches a mis-tagged release.
+3. Set up Docker Buildx and log in to GHCR using `secrets.GHCR_TOKEN`.
+4. `make prod-build` — builds api, ingest, frontend at `:$(VERSION)`.
+5. `make prod-push` — pushes the three versioned tags to
+   `ghcr.io/thuusom/danish-legal-rag-{api,ingest,frontend}`.
+6. Re-tag and push `:latest` for each of the three images.
+7. Extract the matching `## [X.Y.Z]` section from `CHANGELOG.md` (awk
+   block from the version header to the next `## [` line).
+8. Create a GitHub Release named after the tag with the extracted
+   CHANGELOG section as the body.
 
-**Required setup (one time, on the operator's machine):**
+**Required secret:** `GHCR_TOKEN` — Personal Access Token with
+`write:packages` scope. One-time setup at github.com/settings/tokens; the
+token is added to the repo at Settings → Secrets and variables → Actions.
 
-```bash
-docker login ghcr.io -u thuusom
-# Paste a Personal Access Token with scope: write:packages, read:packages
-```
+**Operator runbook:** `docs/release-process.md` is the canonical
+end-to-end guide (decide bump level → invoke release agent → review →
+PR → merge → push tag → verify). Always read it before cutting a release.
 
-The PAT also needs `repo` scope if the package visibility is private.
+**Failure response (most common cases):**
 
-**Future:** add `.github/workflows/release.yml` triggered by version tags
-(`v*`) that builds and pushes via `docker/build-push-action`. Would need
-GHCR credentials in repo secrets (`GHCR_USERNAME`, `GHCR_TOKEN`). Tracked
-informally — file an issue when the release cadence justifies it.
+- *Tag does not match VERSION file* — the `Verify VERSION matches tag`
+  step failed. Delete the bad tag (`git tag -d` and `git push origin
+  --delete`), fix VERSION (or push the correct tag), re-push.
+- *Image build failed* — reproduce locally with `make prod-build`. The
+  release agent should never be the discovery moment for a broken build.
+- *GHCR push failed (auth)* — `GHCR_TOKEN` is missing or expired. Rotate
+  at github.com/settings/tokens and update the repo secret. Re-tag.
+- *CHANGELOG section is empty* — the GitHub Release body will be blank.
+  Fix CHANGELOG.md on main, delete the bad release with `gh release
+  delete`, re-tag.
+
+See the troubleshooting section of `docs/release-process.md` for more.
 
 ---
 

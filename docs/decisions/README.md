@@ -11,6 +11,7 @@ Decision, Consequences.
 | [ADR-003](ADR-003-retsinformation-api-as-primary-source.md) | Use retsinformation-api.dk as primary law source | Accepted | 2026-04-27 |
 | [ADR-004](ADR-004-update-only-fetcher-with-seed.md) | Update-only fetcher with in-repo seed | Accepted | 2026-04-27 |
 | [ADR-005](ADR-005-idempotent-reingestion.md) | Idempotent re-ingestion via per-law delete-then-insert | Accepted | 2026-04-27 |
+| [ADR-006](ADR-006-tag-driven-release.md) | Tag-driven release with human-in-the-loop | Accepted | 2026-04-28 |
 
 ## Writing a new ADR
 

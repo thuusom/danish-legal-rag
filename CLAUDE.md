@@ -90,10 +90,16 @@ work" rule below.
 | `tickets/**`      | pm agent         | all read                     |
 | `reports/**`      | pm agent         | all read                     |
 | `docs/**`         | pm agent         | all read; backend may draft  |
-| `scripts/**`      | backend or pm    | —                            |
-| `Makefile`        | pm agent         | backend/frontend propose via ticket |
+| `scripts/**`      | backend or pm    | release agent owns `scripts/release.sh` |
+| `Makefile`        | pm agent         | release agent owns `release-*` targets; backend/frontend propose via ticket |
 | `docker-compose.yml` | pm agent      | backend/frontend propose via ticket |
-| `.github/**`      | pm agent         | —                            |
+| `docker-compose.prod.yml` | pm agent | release agent owns `IMAGE_TAG:-X.Y.Z` defaults; PM owns the rest |
+| `.github/**`      | pm agent         | release agent owns `.github/workflows/release.yml` |
+| `VERSION`                     | release agent  | —                            |
+| `CHANGELOG.md`                | release agent  | —                            |
+| `.github/workflows/release.yml` | release agent | —                          |
+| `docs/release-process.md`     | release agent  | —                            |
+| `scripts/release.sh`          | release agent  | —                            |
 
 An agent must NEVER write outside its owned paths. If a change crosses
 boundaries (e.g. a backend change requires a Makefile target), the agent
@@ -153,6 +159,29 @@ finished.
    when backend and frontend individually merge.
 5. **Reporting.** The PM agent writes daily reports to `reports/YYYY-MM-DD.md`
    summarising git activity, open PRs, ticket status, and blockers.
+6. **Tag push is human-only.** No agent runs `git tag` or `git push --tags`.
+   The release agent prepares the release commit; the human reviews the PR,
+   merges, and runs `git push origin v{X.Y.Z}` to trigger the publish
+   workflow. See `docs/release-process.md`.
+
+## Agent roles
+
+Full persona definitions live in `.claude/agents/`. Short-form summaries
+so every agent knows who does what:
+
+- **backend agent** — Owns the FastAPI service, ingestion pipeline, MCP
+  server, embedding/LLM providers, tests, and the OpenAPI contract.
+- **frontend agent** — Owns the SvelteKit chat app. Consumes the OpenAPI
+  contract via the generated TypeScript client.
+- **pm agent** — Owns tickets, reports, docs, issue templates, and
+  cross-cutting infra files (Makefile, dev compose, `.github/`). Does not
+  write production code.
+- **release agent** — Drives version bumps, image builds, GHCR pushes,
+  GitHub Releases, and CHANGELOG maintenance. Prepares releases by
+  editing VERSION, CHANGELOG, and `docker-compose.prod.yml` `IMAGE_TAG`
+  defaults; commits on a release branch. NEVER pushes git tags — that
+  is always a human action. After the human pushes the tag,
+  `.github/workflows/release.yml` takes over.
 
 ## Standards
 
