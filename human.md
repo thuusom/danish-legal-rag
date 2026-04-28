@@ -39,6 +39,30 @@ or carry external consequences:
 The complete tag-push rule is documented in `CLAUDE.md` under coordination
 model and in `docs/decisions/ADR-006-tag-driven-release.md`.
 
+## What agents must require from humans
+
+Agents must stop and request explicit human approval at these gates. They
+do NOT proceed past any of these on their own initiative:
+
+| Gate | When | Why |
+|---|---|---|
+| **Plan approval** | Before filing issues or writing code for any non-trivial work | Stops the agent from over-engineering or building the wrong thing |
+| **Branch creation for a major effort** | Before starting a multi-issue feature branch | Branch naming and scope deserve a human eye; small fixes on existing branches don't need this |
+| **Scope expansion mid-work** | When the agent finds the work is bigger than the original plan | Prevents silent scope creep |
+| **Cross-boundary edits** | When a change requires touching files outside the agent's owned paths | Per `CLAUDE.md` ownership; the agent writes a note, the right agent or human edits |
+| **Pushing the release tag** | When a release commit is merged | The only step that triggers `release.yml` and publishes images |
+| **Merging PRs to main** | After review | The agent never merges its own PR |
+| **Closing issues that were not auto-closed** | When manual cleanup is needed | Human decides whether the work actually satisfied the acceptance criteria |
+| **Force-push, branch deletion, history rewrites** | Always | Destructive git operations |
+| **Rotating or installing secrets** | Adding `GHCR_TOKEN`, `ANTHROPIC_API_KEY`, etc. | Touches credentials |
+| **Spending money** | Switching to a paid LLM model, pulling large datasets | Direct cost impact |
+| **Touching production data** | Anything that mutates the live Qdrant index, the cache volume in prod, etc. | Real-world consequences |
+| **Overriding an ADR** | When an existing ADR is in the way | Write a new ADR that supersedes it; do not silently change behaviour |
+
+If an agent is unsure whether something needs approval, the default is
+**ask**. Cost of asking once: a single chat message. Cost of acting
+without approval on the wrong thing: cleanup, rollback, or worse.
+
 ## What agents do
 
 Agents handle the mechanical and structured work:
