@@ -91,12 +91,24 @@
 	class="overflow-x-auto rounded-lg border border-gray-200 bg-white"
 	data-testid="admin-law-table-wrapper"
 >
-	<table class="min-w-full divide-y divide-gray-200 text-sm" data-testid="admin-law-table">
+	<table
+		class="w-full min-w-[960px] table-fixed divide-y divide-gray-200 text-sm"
+		data-testid="admin-law-table"
+	>
+		<colgroup>
+			<col class="w-[88px]" />
+			<col />
+			<col class="w-[110px]" />
+			<col class="w-[120px]" />
+			<col class="w-[160px]" />
+			<col class="w-[120px]" />
+			<col class="w-[140px]" />
+		</colgroup>
 		<thead class="bg-gray-50">
 			<tr>
 				<th
 					scope="col"
-					class="px-3 py-2 text-left text-xs font-semibold tracking-wide text-gray-600 uppercase"
+					class="px-3 py-2 text-left text-xs font-semibold tracking-wide whitespace-nowrap text-gray-600 uppercase"
 					aria-sort={ariaSort('law_code')}
 				>
 					<button
@@ -112,7 +124,7 @@
 				</th>
 				<th
 					scope="col"
-					class="px-3 py-2 text-left text-xs font-semibold tracking-wide text-gray-600 uppercase"
+					class="px-3 py-2 text-left text-xs font-semibold tracking-wide whitespace-nowrap text-gray-600 uppercase"
 					aria-sort={ariaSort('law_name')}
 				>
 					<button
@@ -128,13 +140,13 @@
 				</th>
 				<th
 					scope="col"
-					class="px-3 py-2 text-left text-xs font-semibold tracking-wide text-gray-600 uppercase"
+					class="px-3 py-2 text-right text-xs font-semibold tracking-wide whitespace-nowrap text-gray-600 uppercase"
 					aria-sort={ariaSort('our_version')}
 				>
 					<button
 						type="button"
 						onclick={() => toggleSort('our_version')}
-						class="flex items-center gap-1 hover:text-gray-900"
+						class="ml-auto flex items-center gap-1 hover:text-gray-900"
 					>
 						Version
 						<span aria-hidden="true">
@@ -144,7 +156,7 @@
 				</th>
 				<th
 					scope="col"
-					class="px-3 py-2 text-left text-xs font-semibold tracking-wide text-gray-600 uppercase"
+					class="px-3 py-2 text-left text-xs font-semibold tracking-wide whitespace-nowrap text-gray-600 uppercase"
 					aria-sort={ariaSort('our_version_date')}
 				>
 					<button
@@ -160,19 +172,19 @@
 				</th>
 				<th
 					scope="col"
-					class="hidden px-3 py-2 text-left text-xs font-semibold tracking-wide text-gray-600 uppercase md:table-cell"
+					class="hidden px-3 py-2 text-left text-xs font-semibold tracking-wide whitespace-nowrap text-gray-600 uppercase md:table-cell"
 				>
 					Seneste version
 				</th>
 				<th
 					scope="col"
-					class="hidden px-3 py-2 text-right text-xs font-semibold tracking-wide text-gray-600 uppercase md:table-cell"
+					class="hidden px-3 py-2 text-right text-xs font-semibold tracking-wide whitespace-nowrap text-gray-600 uppercase md:table-cell"
 				>
 					Bestemmelser
 				</th>
 				<th
 					scope="col"
-					class="px-3 py-2 text-left text-xs font-semibold tracking-wide text-gray-600 uppercase"
+					class="px-3 py-2 text-left text-xs font-semibold tracking-wide whitespace-nowrap text-gray-600 uppercase"
 					aria-sort={ariaSort('status')}
 				>
 					<button
@@ -203,32 +215,42 @@
 				</tr>
 			{:else}
 				{#each sortedLaws as law (law.law_code)}
-					<tr data-testid="law-row" data-law-code={law.law_code}>
-						<td class="px-3 py-2 font-mono text-xs text-gray-700">{law.law_code}</td>
+					<tr data-testid="law-row" data-law-code={law.law_code} class="align-top">
+						<td class="px-3 py-2 font-mono text-xs whitespace-nowrap text-gray-700">
+							{law.law_code}
+						</td>
 						<td class="px-3 py-2 text-gray-800">
-							<div class="font-medium">{law.law_name}</div>
+							<div class="truncate font-medium" title={law.law_name}>{law.law_name}</div>
 							{#if law.law_title}
-								<div class="text-xs text-gray-500">{law.law_title}</div>
+								<div class="truncate text-xs text-gray-500" title={law.law_title}>
+									{law.law_title}
+								</div>
 							{/if}
 						</td>
-						<td class="px-3 py-2 text-gray-700">{formatVersion(law)}</td>
-						<td class="px-3 py-2 text-gray-700">{formatDate(law.our_version_date)}</td>
-						<td class="hidden px-3 py-2 text-gray-700 md:table-cell">
+						<td class="px-3 py-2 text-right tabular-nums whitespace-nowrap text-gray-700">
+							{formatVersion(law)}
+						</td>
+						<td class="px-3 py-2 tabular-nums whitespace-nowrap text-gray-700">
+							{formatDate(law.our_version_date)}
+						</td>
+						<td class="hidden px-3 py-2 tabular-nums whitespace-nowrap text-gray-700 md:table-cell">
 							{#if law.latest_version_number != null}
 								v{law.latest_version_number}
-								<span class="text-xs text-gray-500">
-									{law.latest_version_date ? `(${law.latest_version_date})` : ''}
-								</span>
+								{#if law.latest_version_date}
+									<span class="text-xs text-gray-500">({law.latest_version_date})</span>
+								{/if}
 							{:else}
 								—
 							{/if}
 						</td>
-						<td class="hidden px-3 py-2 text-right tabular-nums text-gray-700 md:table-cell">
+						<td
+							class="hidden px-3 py-2 text-right tabular-nums whitespace-nowrap text-gray-700 md:table-cell"
+						>
 							{law.provisions_count ?? '—'}
 						</td>
 						<td class="px-3 py-2">
 							<span
-								class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {statusPillClass(
+								class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap {statusPillClass(
 									law.status
 								)}"
 								data-testid="status-pill"
@@ -240,7 +262,7 @@
 								{statusLabel(law.status)}
 							</span>
 							{#if law.status === 'fetch-failed' && law.fetch_error}
-								<p class="mt-1 max-w-xs truncate text-xs text-red-700" title={law.fetch_error}>
+								<p class="mt-1 truncate text-xs text-red-700" title={law.fetch_error}>
 									{law.fetch_error}
 								</p>
 							{/if}
