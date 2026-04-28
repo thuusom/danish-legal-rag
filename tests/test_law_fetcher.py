@@ -18,11 +18,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-from ingest import cache as cache_mod
-from ingest import law_fetcher as fetcher_mod
 from ingest.cache import LawSource, RetsinformationRef
 from ingest.law_fetcher import (
-    ApiLawResponse,
     FetcherError,
     LawTransformer,
     RateLimitExceeded,
@@ -417,7 +414,8 @@ class TestRetsinformationClient:
         }
         state_path = tmp_path / ".state.json"
         # Pre-plant a state file at today's date with count == limit.
-        from datetime import datetime as _dt, timezone as _tz
+        from datetime import datetime as _dt
+        from datetime import timezone as _tz
 
         today = _dt.now(_tz.utc).date().isoformat()
         state_path.write_text(json.dumps({"date": today, "count": 1}))
