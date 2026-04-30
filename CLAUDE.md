@@ -263,6 +263,10 @@ is invisible and uncoordinated.
   The PM agent tracks the parent; agents work the sub-issues.
 - **Agents must never pick up work that has no Issue.** If asked to do
   something ad-hoc, file the Issue first, then implement.
+- Issue templates live in `.github/ISSUE_TEMPLATE/`. For user-visible
+  features, the tester agent comments an Acceptance test plan on the
+  issue during spec review; the plan plus a `.spec.ts` under
+  `frontend/tests/e2e/` is part of the definition of done.
 
 ## Non-goals
 
