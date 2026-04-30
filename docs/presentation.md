@@ -103,6 +103,21 @@ Defined in `.claude/agents/*.md`. Loaded at session start.
 
 ---
 
+## Five agents now
+
+| Agent | Owns | Job |
+|---|---|---|
+| backend | `api/`, `ingest/`, `mcp/`, `shared/`, `tests/`, `contracts/` | Code, tests, OpenAPI |
+| frontend | `frontend/` | UI, types from contract |
+| pm | `docs/`, `reports/`, `Makefile`, compose, `.github/` | Plans, issues, docs, bug triage |
+| release | `VERSION`, `CHANGELOG`, `release.yml`, runbook | Version bumps, image publish |
+| tester | `frontend/tests/e2e/`, `reports/test-runs/` | Test design, run suites, file bugs |
+
+Phase 3 in flight: tester agent persona pending (Issue #79); Playwright
+harness already shipped in PR #87.
+
+---
+
 ## House rules (CLAUDE.md)
 
 - **Issue first** — no work without a tracked GitHub Issue
@@ -139,14 +154,18 @@ agent files it before any implementation begins.
 2. Claude proposes plan        ◀ scope, trade-offs, effort
 3. Human refines / approves    ◀ "use option B; go"
 4. PM files GitHub Issues      ◀ parent + sub-issues, owners
-5. Backend/frontend agents     ◀ implement against issues
+5. Tester comments test plan   ◀ NEW: positive/negative cases on issue
+6. Backend/frontend agents     ◀ implement against issues
    work in parallel            ◀ contract-first when API changes
-6. Each agent opens a PR       ◀ tests must pass; closes #N
-7. CI runs (GitHub Actions)    ◀ unit + integration + lint
+7. Each agent opens a PR       ◀ CI: unit + integration; closes #N
 8. Human reviews & merges      ◀ never agent-merged
-9. Release agent prepares      ◀ bump VERSION, update CHANGELOG
-10. Human pushes the tag       ◀ triggers release.yml
-11. Workflow builds + ships    ◀ GHCR images + GitHub Release
+9. Release agent prepares rc   ◀ auto-pushes branch + rc tag
+10. Tester runs regression     ◀ NEW: full Playwright on the rc deploy
+                               ◀ PASS/FAIL → bugs to PM if red
+11. If green: release agent    ◀ prepares final, consumes the rc
+    prepares final
+12. Human pushes the tag       ◀ triggers release.yml
+13. Workflow builds + ships    ◀ :X.Y.Z + :latest GHCR + GitHub Release
 ```
 
 ---

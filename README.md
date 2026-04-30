@@ -6,9 +6,25 @@ A fully working Retrieval-Augmented Generation (RAG) system for Danish tax, acco
 
 This is an AI-assisted project. Most code, docs, and infrastructure are
 produced through dialogue with Claude (an AI assistant), which distributes
-work across specialized agents — backend, frontend, pm, release — defined
-in [CLAUDE.md](CLAUDE.md). Humans set direction, review plans, approve
-work, and perform irreversible actions (merging, tagging, releasing).
+work across specialized agents — backend, frontend, pm, release, tester —
+defined in [CLAUDE.md](CLAUDE.md). Humans set direction, review plans,
+approve work, and perform irreversible actions (merging, tagging,
+releasing).
+
+The five agents:
+
+- **backend** — owns the FastAPI service, ingestion pipeline, MCP server,
+  and the OpenAPI contract.
+- **frontend** — owns the SvelteKit chat app and the generated TypeScript
+  client.
+- **pm** — owns issues, reports, docs, and cross-cutting infra files;
+  triages tester-filed bugs.
+- **release** — owns version bumps, image builds, GHCR pushes, and
+  CHANGELOG maintenance.
+- **tester** — defines acceptance test plans on issues, runs Playwright
+  suites against dev or full regression on a release candidate, and files
+  bugs with evidence for PM to triage. Persona definition pending
+  (Issue #79); Playwright harness already shipped in PR #87.
 
 For how humans engage with the workflow, see [human.md](human.md).
 For agent rules and ownership, see [CLAUDE.md](CLAUDE.md).
@@ -354,8 +370,9 @@ reactive — triggered by a human action or a code event.
 |---|---|---|---|
 | `check-law-currency.yml` | cron + manual | Daily 06:00 UTC | **Yes — only one** |
 | `ci.yml` | push to feat/*, PR to main | Per push | No (reactive) |
-| `release.yml` | tag push (human action) | On tag | No (reactive) |
+| `release.yml` | tag push (human for finals; auto for rc) | On tag | No (reactive) |
 | Claude Code agents | chat invocation | Interactive | **No — never autonomous** |
+| `tester` agent | chat command, after rc push, weekly cron (Issue #86 pending) | On invocation | No (reactive) |
 
 When the daily currency check finds a law that has been updated upstream,
 it opens a `Stale law: ...` GitHub Issue automatically (and auto-closes it
@@ -500,23 +517,50 @@ ollama pull llama3.3:70b
 
 ---
 
-## Running tests
+## Testing
+
+Three layers of automated tests live in the repo:
+
+| Layer | Tool | Where | Run |
+|---|---|---|---|
+| Backend unit + integration | pytest | `tests/` | `make test-integration`, `make test-embeddings`, `make coverage` |
+| Frontend unit | vitest | `frontend/src/**/*.test.ts` | `cd frontend && npm run test:unit` |
+| End-to-end (UI + backend) | Playwright | `frontend/tests/e2e/` | `make e2e`, `make e2e-suite SUITE=chat`, `make e2e-regression IMAGE_TAG=...`, `make e2e-report` |
+
+The Playwright harness landed in PR #87 with 9 first test cases (chat
+golden path, admin status, backend smoke). It runs on demand — by the
+human, by the tester agent in chat, or after an rc tag — never on every
+PR. CI today runs only the unit + integration layer; e2e is invoked
+explicitly.
+
+References:
+
+- [docs/test-strategy.md](docs/test-strategy.md) — coverage baselines and
+  e2e harness overview
+- [frontend/tests/e2e/README.md](frontend/tests/e2e/README.md) —
+  operator-level instructions for running the suite
+- [docs/test-runbook.md](docs/test-runbook.md) — tester runbook (Issue #81,
+  pending)
+
+### Running individual layers
 
 After `docker compose up`:
 
 ```bash
-# Integration tests (requires running services)
+# Backend integration tests (requires running services)
 docker compose exec api python -m pytest /app/tests/test_integration.py -v
 
-# Embedding unit tests (can run standalone)
+# Backend embedding unit tests (can run standalone)
 docker compose exec api python -m pytest /app/tests/test_embeddings.py -v
 
-# All tests
+# Full backend suite
 docker compose exec api python -m pytest /app/tests/ -v
 
-# Frontend tests
+# Frontend unit tests
 cd frontend && npm run test:unit
-cd frontend && npx playwright test
+
+# Playwright e2e against the local stack
+make e2e
 ```
 
 ---

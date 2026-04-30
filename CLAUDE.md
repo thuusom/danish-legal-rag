@@ -96,7 +96,11 @@ work" rule below.
 | `frontend/**`     | frontend agent   | read only                    |
 | `tickets/**`      | pm agent         | all read                     |
 | `reports/**`      | pm agent         | all read                     |
+| `reports/test-runs/**` | tester agent | all read                     |
 | `docs/**`         | pm agent         | all read; backend may draft  |
+| `docs/test-strategy.md` | tester agent (jointly with backend + frontend on coverage baselines) | all read |
+| `docs/test-runbook.md` (Issue #81, pending) | tester agent | all read |
+| `frontend/tests/e2e/**` | tester agent (frontend writes new specs alongside features; tester maintains the suite) | all read |
 | `scripts/**`      | backend or pm    | release agent owns `scripts/release.sh` |
 | `Makefile`        | pm agent         | release agent owns `release-*` targets; backend/frontend propose via ticket |
 | `docker-compose.yml` | pm agent      | backend/frontend propose via ticket |
@@ -141,8 +145,10 @@ finished.
    backend agent's first commit is the updated `contracts/openapi.yaml`.
    The frontend agent can start as soon as that commit lands.
 3. **One PR per ticket.** Each agent opens a PR against the feature branch.
-   The PR description references the Issue number. Tests must pass before
-   merge.
+   The PR description references the Issue number. Unit and integration
+   tests must pass before merge. For features that touch the user-visible
+   flow, the tester agent's regression suite must pass on the rc before
+   the final release is cut.
 
    **Auto-close syntax (important):** GitHub's auto-close parser requires the
    `Closes` (or `Fixes` / `Resolves`) keyword **repeated for each issue** in the
@@ -196,6 +202,13 @@ so every agent knows who does what:
   `.github/workflows/release.yml` takes over. **rc images are
   test-environment-only and never deployed to production**: rc bumps
   do not change the prod compose IMAGE_TAG default. See ADR-006.
+- **tester agent** — Owns test design and execution. Reviews features
+  during specification (writes acceptance test plans on issues),
+  maintains Playwright e2e specs in `frontend/tests/e2e/`, runs targeted
+  suites against dev or full regression on a release candidate, and
+  files bugs with evidence. Tester does NOT decide bug priority — that's
+  the PM agent's job. Persona definition is in flight (Issue #79); the
+  Playwright harness already shipped in PR #87.
 
 ## Standards
 
@@ -223,8 +236,15 @@ so every agent knows who does what:
 ### Testing
 - Backend: pytest, both unit (`test_embeddings.py`) and integration
   (`test_integration.py`) styles exist; match them
-- Frontend: vitest for unit, Playwright for E2E. E2E tests hit a running
-  stack via docker compose
+- Frontend: vitest for unit, Playwright for E2E. E2E tests live under
+  `frontend/tests/e2e/` and run via `make e2e`, `make e2e-suite SUITE=...`,
+  or `make e2e-regression IMAGE_TAG=...`. They hit a running stack via
+  docker compose; CI does not run them on every PR — they are invoked
+  explicitly (chat command, after rc push, or weekly cron once Issue #86
+  lands).
+- Tester agent owns the e2e suite's evolution and runs regression on rcs
+  before final release; see `docs/test-strategy.md` and (when filed)
+  `docs/test-runbook.md`.
 - Every PR must include or update a test; no PR merges on "looks fine"
 
 ## Issue tracking (mandatory)
