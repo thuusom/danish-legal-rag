@@ -30,11 +30,14 @@
 name: Check law currency
 
 on:
-  schedule:
-    # 06:00 UTC daily ≈ 07:00 Europe/Copenhagen (winter) / 08:00 (summer).
-    # Acceptance criterion 1 from #25 asked for 07:00 CPH; UTC cron is fine here
-    # — the exact minute doesn't matter, the next-day signal does.
-    - cron: '0 6 * * *'
+  # Schedule disabled — see Issue #94. The cron runs on an ephemeral runner
+  # with no law_cache volume, so it always sees the version-less seed JSONs
+  # as v0 and files false-positive "Stale law" issues for every source.
+  # Re-enable once the workflow queries a deployed /admin/status endpoint
+  # instead of running the fetcher locally.
+  #
+  #  schedule:
+  #    - cron: '0 6 * * *'
   workflow_dispatch:
 
 permissions:
