@@ -99,7 +99,7 @@ work" rule below.
 | `reports/test-runs/**` | tester agent | all read                     |
 | `docs/**`         | pm agent         | all read; backend may draft  |
 | `docs/test-strategy.md` | tester agent (jointly with backend + frontend on coverage baselines) | all read |
-| `docs/test-runbook.md` (Issue #81, pending) | tester agent | all read |
+| `docs/test-runbook.md` | tester agent | all read |
 | `frontend/tests/e2e/**` | tester agent (frontend writes new specs alongside features; tester maintains the suite) | all read |
 | `scripts/**`      | backend or pm    | release agent owns `scripts/release.sh` |
 | `Makefile`        | pm agent         | release agent owns `release-*` targets; backend/frontend propose via ticket |
@@ -207,8 +207,8 @@ so every agent knows who does what:
   maintains Playwright e2e specs in `frontend/tests/e2e/`, runs targeted
   suites against dev or full regression on a release candidate, and
   files bugs with evidence. Tester does NOT decide bug priority — that's
-  the PM agent's job. Persona definition is in flight (Issue #79); the
-  Playwright harness already shipped in PR #87.
+  the PM agent's job. See `.claude/agents/tester.md`,
+  `docs/test-runbook.md`, and `docs/test-strategy.md`.
 
 ## Standards
 

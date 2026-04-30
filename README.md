@@ -23,8 +23,9 @@ The five agents:
   CHANGELOG maintenance.
 - **tester** — defines acceptance test plans on issues, runs Playwright
   suites against dev or full regression on a release candidate, and files
-  bugs with evidence for PM to triage. Persona definition pending
-  (Issue #79); Playwright harness already shipped in PR #87.
+  bugs with evidence for PM to triage. Persona at
+  [`.claude/agents/tester.md`](.claude/agents/tester.md); runbook at
+  [`docs/test-runbook.md`](docs/test-runbook.md).
 
 For how humans engage with the workflow, see [human.md](human.md).
 For agent rules and ownership, see [CLAUDE.md](CLAUDE.md).

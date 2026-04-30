@@ -149,15 +149,17 @@ first test cases living in `frontend/tests/e2e/`. Run via:
 - `make e2e-regression IMAGE_TAG=X.Y.Z-rc.N` — regression on a deployed rc
 - `make e2e-report` — open the HTML report
 
-The tester agent (Issue #79, in flight) will:
+The tester agent (defined in [`.claude/agents/tester.md`](../.claude/agents/tester.md)):
 
-- Comment acceptance test plans on feature issues during spec review
-- Translate plans into executable `.spec.ts` files alongside the frontend
-  agent's feature work
-- Run regression on every rc and write reports under `reports/test-runs/`
-- File bugs (`test-failure`, `flaky-test`, `coverage-drop`) for PM to
+- Comments acceptance test plans on feature issues during spec review
+- Translates plans into executable `.spec.ts` files alongside the
+  frontend agent's feature work
+- Runs regression on every rc and writes reports under
+  `reports/test-runs/`
+- Files bugs (`test-failure`, `flaky-test`, `coverage-drop`) for PM to
   triage; PM owns the priority decision
-- Track coverage delta vs the baselines documented above (Issue #85)
+- Tracks coverage delta vs the baselines via `make coverage-delta` and
+  `scripts/coverage-delta.sh`
 
 E2E does not run in CI on every PR — the suite is invoked explicitly: by
 the human, by the tester agent in chat, after an rc tag, or by the
