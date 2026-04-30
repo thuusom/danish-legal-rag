@@ -27,6 +27,15 @@ export default ts.config(
 		}
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/', 'src/lib/api/schema.d.ts']
+		ignores: [
+			'build/',
+			'.svelte-kit/',
+			'dist/',
+			'coverage/',
+			'test-results/',
+			'playwright-report/',
+			'tests/e2e/',
+			'src/lib/api/schema.d.ts'
+		]
 	}
 );

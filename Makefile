@@ -155,3 +155,47 @@ deploy-test-down:
 
 deploy-test-reset:
 	@./scripts/deploy-test.sh reset
+
+# ─── End-to-end tests (Playwright) ──────────────────────────────────────────
+# Run against the local docker compose stack by default. Override the target
+# with E2E_BASE_URL=http://test.host:9240 to point at the test environment.
+#
+# Suite mode targets a single spec file:
+#   make e2e-suite SUITE=chat
+#   make e2e-suite SUITE=admin
+#   make e2e-suite SUITE=health
+#
+# Regression runs the whole suite against the test host with a given rc tag:
+#   make e2e-regression IMAGE_TAG=1.2.0-rc.1
+#
+# After any run, `make e2e-report` opens the HTML report.
+
+.PHONY: e2e e2e-suite e2e-regression e2e-report e2e-install
+
+e2e-install:
+	cd frontend && npx playwright install --with-deps chromium
+
+e2e:
+	cd frontend && npm run e2e
+
+e2e-suite:
+ifndef SUITE
+	@echo "Usage: make e2e-suite SUITE=<chat|admin|health>"; exit 1
+else
+	cd frontend && npx playwright test tests/e2e/$(SUITE).spec.ts
+endif
+
+e2e-regression:
+ifndef IMAGE_TAG
+	@echo "Usage: make e2e-regression IMAGE_TAG=<rc tag, e.g. 1.2.0-rc.1>"; exit 1
+else
+	@echo "1/3 deploying $(IMAGE_TAG) to test host..."
+	@IMAGE_TAG=$(IMAGE_TAG) ./scripts/deploy-test.sh up
+	@echo "2/3 running full e2e suite against test host..."
+	@TEST_HOSTNAME=$$(echo "$$TEST_HOST" | sed 's/.*@//'); \
+		cd frontend && E2E_BASE_URL=http://$$TEST_HOSTNAME:9240 npm run e2e
+	@echo "3/3 done. Run 'make e2e-report' to view results."
+endif
+
+e2e-report:
+	cd frontend && npm run e2e:report

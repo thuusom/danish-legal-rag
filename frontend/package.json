@@ -11,6 +11,9 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "e2e": "playwright test --config=playwright.config.ts",
+    "e2e:ui": "playwright test --config=playwright.config.ts --ui",
+    "e2e:report": "playwright show-report",
     "coverage": "vitest run --coverage",
     "lint": "eslint ."
   },
