@@ -7,6 +7,22 @@ Coverage is **informational** today. CI does not gate on a coverage
 threshold; this file is the single place where the team can see whether
 the trend is going in the right direction over time.
 
+## Baselines (machine-parseable)
+
+These two lines are parsed by `scripts/coverage-delta.sh` to compute the
+delta on each test run. Update them only when a new baseline is agreed
+(typically after a coordinated coverage push lands on `main`). Format is
+strict — keep the labels exactly as written.
+
+- Backend baseline: 57%
+- Frontend baseline: 66.75%
+
+The thresholds applied against the delta:
+
+- delta ≥ -2.0% → OK
+- -5.0% ≤ delta < -2.0% → WARN (tester files a `coverage-drop` issue)
+- delta < -5.0% → BLOCK (tester recommends not promoting the rc)
+
 ## Backend
 
 - Tooling: [pytest-cov](https://pytest-cov.readthedocs.io/) (coverage.py

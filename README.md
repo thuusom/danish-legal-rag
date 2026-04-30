@@ -320,6 +320,8 @@ make fetch-laws-dry  # Dry run of the live fetcher (no writes)
 make fetch-laws-force  # Force re-fetch all laws regardless of version
 make test-integration  # Run integration tests inside API container
 make test-embeddings   # Run embedding unit tests inside API container
+make coverage          # Run backend coverage (term + xml) inside API container
+make coverage-delta    # Compare backend + frontend coverage to baselines (tester agent uses this)
 make curl-test       # Quick curl test of primary question
 make contract        # Generate OpenAPI spec from FastAPI
 make contract-verify # Verify contract hasn't drifted
