@@ -53,7 +53,9 @@ test('chat: law filter scopes to single law', async ({ page }) => {
 	// Wait for filter to populate from /laws
 	const filter = page.getByTestId('law-filter-select');
 	await expect(filter).toBeEnabled({ timeout: 30_000 });
-	await filter.selectOption({ label: /Afskrivningsloven/i });
+	// LawFilter <option> values are law codes (e.g., "AFL"). selectOption
+	// doesn't take regex for label, so use the value directly.
+	await filter.selectOption('AFL');
 
 	await page.getByTestId('chat-input').fill('Hvad er reglerne?');
 	await page.getByTestId('send-button').click();

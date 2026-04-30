@@ -28,14 +28,16 @@ test('admin: status page lists all 12 laws', async ({ page }) => {
 
 test('admin: each law has a non-empty version', async ({ page }) => {
 	await page.goto('/admin');
-	// Wait for the table to render
-	await page.waitForSelector('table');
-	// Find rows; assert version cell (3rd column) is non-empty
-	const versionCells = await page.locator('tbody tr td:nth-child(3)').all();
-	expect(versionCells.length).toBeGreaterThanOrEqual(12);
-	for (const cell of versionCells) {
-		const text = (await cell.textContent())?.trim();
-		expect(text).toBeTruthy();
+	// Wait until at least 12 real law rows have rendered (loading/empty rows
+	// don't carry data-law-code).
+	await page.waitForFunction(() => document.querySelectorAll('[data-testid="law-row"]').length >= 12, { timeout: 30_000 });
+
+	const rows = page.locator('[data-testid="law-row"]');
+	const count = await rows.count();
+	for (let i = 0; i < count; i++) {
+		// Column 3 is the Version cell (Lov, Navn, Version, Snapshot, ...).
+		const versionText = (await rows.nth(i).locator('td').nth(2).textContent())?.trim();
+		expect(versionText, `law-row #${i} version cell should be non-empty`).toBeTruthy();
 	}
 });
 
