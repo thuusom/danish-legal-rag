@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `POST /admin/check-currency` returned 500 because the api service
+  mounted `law_cache` read-only. The endpoint legitimately writes a
+  `.fetcher_running` marker before spawning the fetcher subprocess.
+  Removed `:ro` from both dev and prod compose mounts (Issue #52).
+- `/admin` law table layout was cramped on typical laptop screens.
+  Reworked with `table-fixed` + explicit column widths, truncation
+  with tooltips, tabular numerals, and horizontal scroll on narrow
+  viewports (Issue #53).
+
 ### Security
 
 ## [1.1.0] - 2026-04-28
