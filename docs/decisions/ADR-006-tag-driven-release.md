@@ -60,3 +60,22 @@ Adopt a tag-driven release model with one human-controlled step.
 - **Trigger on GitHub Release creation instead of tag push.** Rejected as
   circular: the workflow itself authors the Release, so it cannot also be
   the trigger.
+
+## Amendment: pre-release flow (2026-04-30)
+
+Issue #57 extended this decision with a release-candidate (rc) flow:
+
+- `make release-rc` bumps VERSION to `X.Y.Z-rc.N` (scope inherited or
+  overridden via `RC_LEVEL`). The same human-pushes-tag rule applies.
+- `release.yml` detects the `-rc.N` suffix and:
+  - Pushes only `:X.Y.Z-rc.N` images (no `:latest` poisoning)
+  - Marks the GitHub Release as pre-release
+  - Falls back to a generic body when CHANGELOG has no matching section
+    (rc bumps deliberately do not promote `[Unreleased]`)
+- Final releases consume an in-flight rc: `make release-minor` while
+  VERSION is `X.Y.Z-rc.N` produces `X.Y.Z`, but the level must match the
+  rc's scope.
+
+The original decision (final-only flow) remains valid; this is an
+extension, not a supersession. See `docs/release-process.md` for the
+operator runbook.

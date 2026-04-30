@@ -9,6 +9,7 @@ __pycache__/
 # Environment
 .env
 .env.local
+.env.test
 
 # IDE
 .idea/
@@ -17,3 +18,10 @@ __pycache__/
 
 # Law cache (host-side dev default; Docker mounts a named volume here)
 law_cache/
+
+# Coverage artifacts (pytest-cov)
+.coverage
+coverage.xml
+htmlcov/
+tests/.coverage
+tests/coverage.xml

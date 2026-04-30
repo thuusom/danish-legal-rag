@@ -12,3 +12,4 @@ numpy>=1.26.0
 fastembed>=0.3.0
 pyyaml>=6.0
 pytest>=7.0
+pytest-cov>=5.0

@@ -15,6 +15,23 @@ export default defineConfig({
 		// Provide stubs for SvelteKit modules in unit tests
 		alias: {
 			$lib: '/src/lib'
+		},
+		coverage: {
+			provider: 'v8',
+			reporter: ['text', 'html', 'lcov'],
+			reportsDirectory: 'coverage',
+			include: ['src/**/*.{ts,svelte}'],
+			exclude: [
+				'**/*.test.ts',
+				'**/*.spec.ts',
+				'src/lib/api/schema.d.ts',
+				'src/app.d.ts',
+				'src/app.html',
+				'.svelte-kit/**',
+				'build/**',
+				'dist/**',
+				'node_modules/**'
+			]
 		}
 	}
 });

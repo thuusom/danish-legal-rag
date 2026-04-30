@@ -315,6 +315,18 @@ make prod-build      # Build production images tagged with VERSION
 make prod-push       # Push production images to GHCR
 make prod-up         # Start production stack (only port 80 exposed)
 make prod-down       # Stop production stack
+make deploy-test       # SSH to TEST_HOST and deploy IMAGE_TAG to test stack (requires TEST_HOST, IMAGE_TAG, .env.test)
+make deploy-test-down  # Stop the stack on TEST_HOST (volumes preserved)
+make deploy-test-reset # Stop the stack on TEST_HOST and remove named volumes (clean slate)
+```
+
+The `deploy-test*` targets push a published rc image (already on GHCR via
+`release.yml`) onto a remote test host over SSH. See
+[`scripts/deploy-test.sh`](scripts/deploy-test.sh) for preflight checks
+and failure modes. Example:
+
+```bash
+TEST_HOST=tc@test.example.local IMAGE_TAG=1.2.0-rc.1 make deploy-test
 ```
 
 ---

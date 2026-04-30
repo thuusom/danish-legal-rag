@@ -109,47 +109,85 @@ for the update-only model.
 
 **Trigger:** push of a tag matching `v*.*.*` to the repo. Branch pushes
 and PRs do not trigger it. The human is the only entity that pushes the
-tag — see `docs/release-process.md` and ADR-006 for the rationale.
+tag — see `docs/release-process.md` and ADR-006 (with its "Pre-release
+flow" amendment) for the rationale.
 
-**What it does:**
+**Two flows in one workflow.** The same job handles both final releases
+(e.g. `v1.2.0`) and release candidates (e.g. `v1.2.0-rc.1`). A single
+`Detect pre-release` step inspects the tag and switches behaviour:
+
+- Tag matches `-rc.N$` → pre-release flow.
+- Anything else under `v*.*.*` → final release flow.
+
+**What it does (shared steps):**
 
 1. Checkout with full history (so the CHANGELOG section can be extracted).
 2. **Verify VERSION matches the tag.** Strips the leading `v` from
    `github.ref_name` and compares to the contents of `VERSION`. If they
    disagree, the workflow fails hard before any image is built or pushed.
-   This is the safety net that catches a mis-tagged release.
-3. Set up Docker Buildx and log in to GHCR using `secrets.GHCR_TOKEN`.
-4. `make prod-build` — builds api, ingest, frontend at `:$(VERSION)`.
-5. `make prod-push` — pushes the three versioned tags to
+   This is the safety net that catches a mis-tagged release of either
+   kind.
+3. **Detect pre-release.** Sets `is_prerelease=true` if the tag ends in
+   `-rc.<digits>`, otherwise `false`.
+4. Set up Docker Buildx and log in to GHCR using `secrets.GHCR_TOKEN`.
+5. `make prod-build` — builds api, ingest, frontend at `:$(VERSION)`.
+6. `make prod-push` — pushes the three versioned tags to
    `ghcr.io/thuusom/danish-legal-rag-{api,ingest,frontend}`.
-6. Re-tag and push `:latest` for each of the three images.
-7. Extract the matching `## [X.Y.Z]` section from `CHANGELOG.md` (awk
+
+**Final release flow** (e.g. `v1.2.0`):
+
+7. Re-tag and push `:latest` for each of the three images. Final
+   releases are the only thing that ever moves `:latest`.
+8. Extract the matching `## [1.2.0]` section from `CHANGELOG.md` (awk
    block from the version header to the next `## [` line).
-8. Create a GitHub Release named after the tag with the extracted
+9. Create a GitHub Release named after the tag with the extracted
    CHANGELOG section as the body.
 
+**Pre-release flow** (e.g. `v1.2.0-rc.1`):
+
+7. The `:latest` tagging step is skipped (`if:
+   is_prerelease == 'false'`). Pre-release images live only at
+   `:1.2.0-rc.1` so deploys must be explicit.
+8. CHANGELOG extraction looks for `## [1.2.0-rc.1]`, which by design
+   does not exist (rc bumps don't promote `[Unreleased]`). The script
+   falls back to a generic body: "Pre-release of v1.2.0. See
+   [Unreleased] in CHANGELOG.md for in-flight changes."
+9. Create a GitHub Release with the `--prerelease` flag, so it is
+   visibly marked as a pre-release on the Releases page and is excluded
+   from "latest release" lookups.
+
 **Required secret:** `GHCR_TOKEN` — Personal Access Token with
-`write:packages` scope. One-time setup at github.com/settings/tokens; the
-token is added to the repo at Settings → Secrets and variables → Actions.
+`write:packages` scope. One-time setup at github.com/settings/tokens;
+the token is added to the repo at Settings → Secrets and variables →
+Actions.
 
 **Operator runbook:** `docs/release-process.md` is the canonical
-end-to-end guide (decide bump level → invoke release agent → review →
-PR → merge → push tag → verify). Always read it before cutting a release.
+end-to-end guide for both flows (cut rc → deploy to test → promote to
+final → push to prod). Always read it before cutting a release. The
+runbook also covers `make deploy-test` and the rc → final → latest
+choreography in detail.
 
 **Failure response (most common cases):**
 
 - *Tag does not match VERSION file* — the `Verify VERSION matches tag`
-  step failed. Delete the bad tag (`git tag -d` and `git push origin
-  --delete`), fix VERSION (or push the correct tag), re-push.
+  step failed for either an rc or final tag. Delete the bad tag
+  (`git tag -d` and `git push origin --delete`), make sure the
+  release-prep PR is merged to main, then re-push the tag.
 - *Image build failed* — reproduce locally with `make prod-build`. The
-  release agent should never be the discovery moment for a broken build.
-- *GHCR push failed (auth)* — `GHCR_TOKEN` is missing or expired. Rotate
-  at github.com/settings/tokens and update the repo secret. Re-tag.
-- *CHANGELOG section is empty* — the GitHub Release body will be blank.
-  Fix CHANGELOG.md on main, delete the bad release with `gh release
-  delete`, re-tag.
+  release agent should never be the discovery moment for a broken
+  build.
+- *GHCR push failed (auth)* — `GHCR_TOKEN` is missing or expired.
+  Rotate at github.com/settings/tokens and update the repo secret.
+  Re-tag.
+- *CHANGELOG section is empty (final release)* — the GitHub Release
+  body will be blank. Fix `CHANGELOG.md` on main, delete the bad
+  release with `gh release delete`, re-tag.
+- *CHANGELOG section is empty (rc)* — expected. The fallback body is
+  used; nothing to fix.
 
-See the troubleshooting section of `docs/release-process.md` for more.
+See the troubleshooting section of `docs/release-process.md` for more,
+including rc-specific failures (rc/final scope mismatches,
+`make deploy-test` SSH errors, missing rc images on GHCR).
 
 ---
 
