@@ -7,15 +7,62 @@ Coverage is **informational** today. CI does not gate on a coverage
 threshold; this file is the single place where the team can see whether
 the trend is going in the right direction over time.
 
-## Backend (placeholder)
+## Backend
 
-> Owner: backend agent (Issue #68). This section will be populated when the
-> backend coverage tooling lands. Frontend has filed its baseline below
-> ahead of that work.
+- Tooling: [pytest-cov](https://pytest-cov.readthedocs.io/) (coverage.py
+  under the hood), invoked via `make coverage`.
+- Run locally: `make coverage` from the repo root. Requires the dev
+  stack to be up (`make up`); the target executes
+  `pytest --cov` inside the `api` container where pytest is already
+  installed.
+- Reports: `term` (stdout) and `xml` (`/app/coverage.xml` inside the
+  container — not bind-mounted to the host today).
+- Coverage scope: `api/`, `ingest/`, `shared/`, `mcp/`. See the caveats
+  below for why the `api/*` and `mcp/*` numbers underrepresent reality.
 
-- Tooling: pytest + coverage.py (planned)
-- Headline coverage: _to be filled in by backend agent_
-- Date measured: _pending_
+### Headline (2026-04-30)
+
+| Metric     | Coverage |
+|------------|----------|
+| Statements | 57%      |
+
+125 tests collected; 120 passed, 5 skipped (skips are network-gated
+fetcher tests, not coverage-relevant).
+
+### Per-module breakdown
+
+| Module    | Statements | Coverage | Notes                                                                                                  |
+|-----------|-----------:|---------:|--------------------------------------------------------------------------------------------------------|
+| `api/`    | 497        | 23%      | Only `api/admin.py` (55%) is exercised in-process. See caveat #1 below.                                |
+| `ingest/` | 743        | 67%      | `law_fetcher.py` 77%, `cache.py` 100%, `chunker.py` 87%, `embedder.py` 80%. `fetcher.py` is 0%, see #2. |
+| `shared/` | 361        | 71%      | `models.py` 98%, `admin_state.py` 86%, `qdrant_utils.py` 44%, `sparse.py` 56%.                         |
+| `mcp/`    | n/a        | n/a      | Module not present in the api container — see caveat #3.                                               |
+
+### Caveats — why the headline understates real coverage
+
+1. **`api/main.py`, `api/rag.py`, `api/embeddings.py`, `api/models.py`
+   all report 0%** despite being exercised end-to-end by
+   `tests/test_integration.py`. The integration tests hit the live
+   uvicorn server in a separate process, and `pytest --cov` only
+   instruments the test runner's own process. Lifting these numbers
+   would require either FastAPI `TestClient` in-process tests or
+   running uvicorn under coverage — out of scope for this baseline.
+2. **`ingest/fetcher.py` is 0%** — that module is the legacy
+   retsinformation.dk HTML fetcher; the active code path is
+   `ingest/law_fetcher.py`. Candidate for deletion in a future cleanup.
+3. **`mcp/` is not copied into the api Docker image**, so `--cov=mcp`
+   emits a `module-not-imported` warning and contributes nothing. To
+   measure mcp coverage we either copy the package into the api image
+   or run a separate coverage pass in the mcp container.
+
+### Interpretation
+
+The 57% headline is a floor, not a ceiling. The api package looks much
+worse than it is because integration testing crosses a process boundary
+that coverage cannot follow. Treat this number as the "easy wins"
+indicator: when raising it, the highest-value targets are
+`shared/qdrant_utils.py` (pure functions, 44%) and the in-process
+testable parts of `api/admin.py` (already 55%).
 
 ## Frontend
 

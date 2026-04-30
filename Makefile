@@ -35,6 +35,16 @@ test-integration:
 test-embeddings:
 	docker compose exec api python -m pytest /app/tests/test_embeddings.py -v
 
+# Run the full backend test suite with coverage reporting.
+# Coverage is informational for now (no thresholds, no CI gating) — see
+# docs/test-strategy.md for the current baseline and policy.
+# Artifacts (coverage.xml, .coverage) are written inside the api container
+# at /app and are not bind-mounted to the host.
+coverage:
+	docker compose exec api python -m pytest /app/tests/ \
+		--cov=api --cov=ingest --cov=shared --cov=mcp \
+		--cov-report=term --cov-report=xml
+
 curl-test:
 	curl -s -X POST http://localhost:8000/ask \
 		-H "Content-Type: application/json" \
