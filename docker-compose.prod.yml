@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
 
   ingest:
-    image: ghcr.io/thuusom/danish-legal-rag-ingest:${IMAGE_TAG:-1.1.0}
+    image: ghcr.io/thuusom/danish-legal-rag-ingest:${IMAGE_TAG:-1.1.1}
     container_name: danish-legal-ingest
     env_file: .env
     environment:
@@ -37,7 +37,7 @@ services:
     restart: "no"
 
   api:
-    image: ghcr.io/thuusom/danish-legal-rag-api:${IMAGE_TAG:-1.1.0}
+    image: ghcr.io/thuusom/danish-legal-rag-api:${IMAGE_TAG:-1.1.1}
     container_name: danish-legal-api
     # NO ports exposed to host — only frontend can reach it via backend network
     env_file: .env
@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: ghcr.io/thuusom/danish-legal-rag-frontend:${IMAGE_TAG:-1.1.0}
+    image: ghcr.io/thuusom/danish-legal-rag-frontend:${IMAGE_TAG:-1.1.1}
     container_name: danish-legal-frontend
     ports:
       - "80:3000"

@@ -17,6 +17,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Security
+
+## [1.1.1] - 2026-04-30
+
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
 - `POST /admin/check-currency` returned 500 because the api service
   mounted `law_cache` read-only. The endpoint legitimately writes a
   `.fetcher_running` marker before spawning the fetcher subprocess.
@@ -124,6 +139,7 @@ for Danish tax and accounting law backed by retrieval-augmented generation.
   `ghcr.io/thuusom/danish-legal-rag-ingest:1.0.0`,
   `ghcr.io/thuusom/danish-legal-rag-frontend:1.0.0`.
 
-[Unreleased]: https://github.com/thuusom/danish-legal-rag/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/thuusom/danish-legal-rag/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/thuusom/danish-legal-rag/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/thuusom/danish-legal-rag/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/thuusom/danish-legal-rag/releases/tag/v1.0.0
