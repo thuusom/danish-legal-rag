@@ -13,6 +13,7 @@ const LLM_TIMEOUT_MS = Number(process.env.PLAYWRIGHT_LLM_TIMEOUT_MS ?? 60_000);
 test('chat: golden path — ask about Afskrivningsloven returns answer with citations', async ({
 	page
 }) => {
+	test.setTimeout(120_000);
 	await page.goto('/');
 
 	await page
@@ -25,8 +26,12 @@ test('chat: golden path — ask about Afskrivningsloven returns answer with cita
 		timeout: LLM_TIMEOUT_MS
 	});
 
-	// At least one citation reference should appear and link to retsinformation.dk
-	await expect(page.locator('a[href*="retsinformation.dk"]').first()).toBeVisible({
+	// At least one citation reference should appear and link to retsinformation.dk.
+	// Use toBeAttached() rather than toBeVisible() — the references panel is
+	// rendered collapsed by default; the links exist in the DOM with correct
+	// hrefs but are not visually shown until the user expands the panel.
+	// We're asserting that references were returned, not that they're expanded.
+	await expect(page.locator('a[href*="retsinformation.dk"]').first()).toBeAttached({
 		timeout: LLM_TIMEOUT_MS
 	});
 });
@@ -48,6 +53,7 @@ test('chat: streaming proof — partial text appears within 5s', async ({ page }
 });
 
 test('chat: law filter scopes to single law', async ({ page }) => {
+	test.setTimeout(120_000);
 	await page.goto('/');
 
 	// Wait for filter to populate from /laws
@@ -57,13 +63,21 @@ test('chat: law filter scopes to single law', async ({ page }) => {
 	// doesn't take regex for label, so use the value directly.
 	await filter.selectOption('AFL');
 
-	await page.getByTestId('chat-input').fill('Hvad er reglerne?');
+	// Concrete question that reliably elicits AFL citations.
+	// "Hvad er reglerne?" was too vague — LLM asked for clarification
+	// and produced no citations within the timeout.
+	await page
+		.getByTestId('chat-input')
+		.fill('Hvilke procentsatser gælder for afskrivning af driftsmidler?');
 	await page.getByTestId('send-button').click();
 
-	// Wait for citations to appear
-	await page.waitForSelector('a[href*="retsinformation.dk"]', { timeout: LLM_TIMEOUT_MS });
+	// Wait for citations to appear in the DOM (panel may be collapsed —
+	// see chat.golden_path comment about toBeAttached vs toBeVisible).
+	await expect(page.locator('a[href*="retsinformation.dk"]').first()).toBeAttached({
+		timeout: LLM_TIMEOUT_MS
+	});
 
-	// All visible citation links should reference AFL (LBK 2016/1147 or "afskrivning")
+	// All citation links should reference AFL (LBK 2016/1147 or "afskrivning")
 	const links = await page.locator('a[href*="retsinformation.dk"]').all();
 	expect(links.length).toBeGreaterThan(0);
 	for (const link of links) {
