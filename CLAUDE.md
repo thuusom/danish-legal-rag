@@ -57,13 +57,20 @@ supersedes it rather than silently changing behaviour.
 ## Where decisions live
 
 Architectural decisions made in chat are ephemeral. To survive past one
-conversation, they must land in one of three places:
+conversation, they must land in one of four places:
 
 | Tier | Lives in | What goes there |
 |------|----------|-----------------|
+| **Product intent** | `PRODUCT.md` | What the project is for, who it serves, what is in/out of scope, current capabilities and limitations, version history |
 | **Project conventions** | This file (`CLAUDE.md`) | One-line rules every agent must know on every task: ownership, contract-first, issue-first, file boundaries |
-| **Decisions** | `docs/decisions/ADR-NNN.md` | Substantive choices with reasoning and trade-offs: tech selection, strategic patterns, accepted invariants |
+| **Technical decisions** | `docs/decisions/ADR-NNN.md` | Substantive technical choices with reasoning and trade-offs: tech selection, strategic patterns, accepted invariants |
 | **Task instructions** | The agent prompt or the GitHub Issue | Task-specific detail: which files to edit, which test to write, which commits to reference |
+
+The PM agent owns `PRODUCT.md`. When the user defines or changes a goal,
+capability, or non-goal in chat, the PM agent updates `PRODUCT.md`
+before any implementation begins. The release agent updates the
+"Current capabilities", "Current limitations", and "Versions" sections
+as part of release prep.
 
 Rule of thumb when a decision is made in chat:
 
