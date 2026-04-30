@@ -1,9 +1,18 @@
-# Release publish (Issue #35).
+# Release publish — handles both final and pre-release tags.
 #
-# Triggered by a human pushing a v*.*.* tag to main. Verifies the tag matches
-# the VERSION file, builds and pushes 3 GHCR images (api, ingest, frontend)
-# at the version + :latest, then creates a GitHub Release with the matching
-# CHANGELOG section as the body.
+# Triggered by a human pushing a v*.*.* tag (final) or v*.*.*-rc.N tag (rc).
+# Verifies the tag matches the VERSION file before publishing anything.
+#
+# Final releases (e.g., v1.2.0):
+#   - Builds and pushes :1.2.0 images for api, ingest, frontend
+#   - Also tags and pushes :latest
+#   - GitHub Release uses the matching CHANGELOG section as body
+#
+# Pre-releases (e.g., v1.2.0-rc.1):
+#   - Builds and pushes :1.2.0-rc.1 images only (no :latest update)
+#   - GitHub Release marked as pre-release
+#   - CHANGELOG body falls back to "Pre-release of vX.Y.Z" if no matching
+#     section exists (rc bumps don't promote [Unreleased])
 #
 # Required secret: GHCR_TOKEN (PAT with write:packages scope).
 #
@@ -38,6 +47,15 @@ jobs:
             exit 1
           fi
 
+      - name: Detect pre-release
+        id: prerelease
+        run: |
+          if [[ "${GITHUB_REF_NAME}" =~ -rc\.[0-9]+$ ]]; then
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -54,7 +72,8 @@ jobs:
       - name: Push versioned images
         run: make prod-push
 
-      - name: Tag and push :latest
+      - name: Tag and push :latest (final releases only)
+        if: steps.prerelease.outputs.is_prerelease == 'false'
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           for svc in api ingest frontend; do
@@ -73,12 +92,21 @@ jobs:
             found && /^## \[/ { exit }
             found { print }
           ' CHANGELOG.md > /tmp/release_notes.md
+          if [ ! -s /tmp/release_notes.md ]; then
+            BASE_VERSION="${VERSION%-rc.*}"
+            echo "Pre-release of v${BASE_VERSION}. See [Unreleased] in CHANGELOG.md for in-flight changes." > /tmp/release_notes.md
+          fi
           echo "notes_path=/tmp/release_notes.md" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          PRERELEASE_FLAG=""
+          if [ "${{ steps.prerelease.outputs.is_prerelease }}" = "true" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
           gh release create "$GITHUB_REF_NAME" \
             --title "$GITHUB_REF_NAME" \
-            --notes-file "${{ steps.notes.outputs.notes_path }}"
+            --notes-file "${{ steps.notes.outputs.notes_path }}" \
+            $PRERELEASE_FLAG
