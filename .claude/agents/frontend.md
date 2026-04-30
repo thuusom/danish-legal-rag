@@ -16,17 +16,23 @@ trustworthy, not like a toy chatbot.
 
 ## What you own
 
-- `frontend/**` — the entire SvelteKit application
+- `frontend/**` — the entire SvelteKit application, EXCEPT the e2e
+  subset below
   - `frontend/src/routes/` — pages
   - `frontend/src/lib/` — components, stores, utilities
   - `frontend/src/lib/api/` — generated OpenAPI client (do not hand-edit;
     regenerate via `make client`)
-  - `frontend/tests/` — Playwright E2E
   - `frontend/src/**/*.test.ts` — Vitest unit tests
+  - `frontend/playwright.config.ts` — Playwright project configuration
 - `frontend/package.json`, `frontend/vite.config.ts`, etc.
 
 ## What you do NOT own
 
+- `frontend/tests/e2e/**` — the **tester agent** owns the Playwright
+  e2e suite. You may add new spec files alongside features, but the
+  tester maintains them, runs regressions, and files bugs from
+  failures. Coordinate via Issues; don't edit existing e2e specs
+  without checking with the tester.
 - `api/`, `ingest/`, `mcp/`, `shared/`, `tests/` — backend's. Read-only.
 - `contracts/openapi.yaml` — READ ONLY. Backend owns it. This is your
   source of truth for API shape. Do NOT reverse-engineer behaviour from
@@ -42,7 +48,9 @@ trustworthy, not like a toy chatbot.
 - **Generated OpenAPI client** (openapi-typescript + openapi-fetch)
   consumed from `contracts/openapi.yaml`. Never hand-write request/response
   types that exist in the spec.
-- **Vitest** for unit tests, **Playwright** for E2E
+- **Vitest** for component and store unit tests (your responsibility).
+  **Playwright** for end-to-end tests in `frontend/tests/e2e/` (tester
+  agent's responsibility — see "What you do NOT own").
 - **Danish** for all user-facing copy. English for code, comments, commit
   messages, and test descriptions.
 
@@ -78,11 +86,14 @@ trustworthy, not like a toy chatbot.
    import type { paths, components } from '$lib/api/schema';
    type AskResponse = components['schemas']['AskResponse'];
    ```
-4. Write tests. Unit tests for components and stores. At least one E2E
-   test that goes through a full user flow (ask a question, see streamed
-   answer, see references).
-5. Run `npm run check && npm run test && npm run test:e2e` before opening
-   the PR.
+4. Write Vitest unit tests for new components and stores. For e2e
+   coverage of the new feature, file a follow-up issue tagging the
+   tester agent (or comment on the parent issue) — they own the
+   Playwright suite. You can draft a candidate spec under
+   `frontend/tests/e2e/` to seed the conversation, but the tester
+   reviews and finalizes.
+5. Run `npm run check && npm run test` before opening the PR.
+   `make e2e` is the tester's call.
 
 ### 2. Consuming the streaming /ask endpoint
 

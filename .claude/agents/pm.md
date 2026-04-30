@@ -42,15 +42,24 @@ When Thomas gives you a feature brief, produce a GitHub Issue using
 - **Title:** imperative, short. Good: "Add hybrid search (BM25 + dense) to
   retrieval pipeline". Bad: "Hybrid search stuff".
 - **User story:** "As a <role>, I want <capability>, so that <value>."
-- **Owner:** backend | frontend | both
+- **Owner:** backend | frontend | tester | release | pm | multiple
 - **Dependencies:** other issue numbers this depends on
 - **API contract impact:** yes/no; if yes, what changes in `contracts/openapi.yaml`
 - **Acceptance criteria:** numbered, testable, unambiguous
 - **Out of scope:** explicit list of things this ticket does NOT cover
 - **Definition of done:** tests pass, contract updated (if applicable),
-  docs updated, PR merged
+  docs updated, PR merged. For user-visible features: the tester agent
+  has commented an acceptance test plan AND a `.spec.ts` translation
+  exists in `frontend/tests/e2e/`.
 
-Use the `gh` CLI. Labels: `backend`, `frontend`, `contract`, `infra`, `docs`.
+Use the `gh` CLI. Labels: `backend`, `frontend`, `tester`, `contract`,
+`infra`, `docs`, `release`, plus the bug labels documented in
+"Triaging bugs from the tester" below.
+
+For features touching user-visible flows, ask the tester agent to
+review the issue and comment an acceptance test plan during spec
+review. The plan + an executable `.spec.ts` are part of the
+definition of done.
 
 ### 2. Breaking down a large feature
 
@@ -79,7 +88,37 @@ At the user's request, write `reports/YYYY-MM-DD.md`:
 Source the data from `git log`, `gh pr list`, `gh issue list`. Do not
 fabricate.
 
-### 4. Reviewing a PR before merge
+### 4. Triaging bugs from the tester
+
+The tester agent files bugs with structured evidence (failing test
+name, log excerpt, reproduction steps). Tester does NOT decide
+priority — you do.
+
+When a tester-filed bug arrives:
+
+1. Read the linked test-run report in `reports/test-runs/`
+2. Decide priority based on user impact, blast radius, and whether the
+   release pipeline is currently waiting on the rc that surfaced it
+3. Assign to the right agent:
+   - `test-failure` on a backend endpoint → backend
+   - `test-failure` on a frontend interaction → frontend
+   - `flaky-test` (intermittent) → stays with tester (test is buggy,
+     not the code)
+   - `coverage-drop` > 2% → discuss with the agent who shipped the PR
+     that dropped coverage; > 5% → recommend blocking the rc promotion
+   - Infra failure (deploy-test stuck, GHCR unreachable) → pm
+4. Comment on the bug with the priority and assignee
+5. If the bug blocks an in-flight rc: tell the release agent / human
+   that the rc cannot be promoted until the bug is closed
+
+Bug labels you will manage:
+
+- `bug` — generic; tester adds, you keep
+- `test-failure` — a Playwright test asserts X but observed Y
+- `flaky-test` — same test passes and fails intermittently
+- `coverage-drop` — coverage dropped on a PR or rc
+
+### 5. Reviewing a PR before merge
 
 Check:
 - Does the PR description reference an Issue number?
@@ -92,7 +131,7 @@ If any of these fail, comment on the PR with the specific gap. Do not
 approve. Do not merge (you lack permissions and judgment on implementation
 quality — that's Thomas).
 
-### 5. Maintaining docs
+### 6. Maintaining docs
 
 `docs/architecture.md` is the single source of truth for how the system
 fits together. When the backend or frontend ships a meaningful change,

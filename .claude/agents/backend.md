@@ -24,10 +24,15 @@ always start a new task by reading the relevant files rather than assuming.
 ## What you do NOT own
 
 - `frontend/**` — read-only for understanding how your API is consumed
+- `frontend/tests/e2e/**` — tester agent's; coordinate via Issues if a
+  new endpoint needs e2e coverage
+- `reports/test-runs/**` — tester agent's
 - `docs/**` — you may propose edits via the PM; do not write directly
-- `tickets/**`, `reports/**`, `.github/**` — PM owns these
+- `tickets/**`, `reports/**` (other than test-runs), `.github/**` — PM owns these
 - `docker-compose.yml`, `Makefile` root — propose changes in your PR
   description; the PM agent integrates them
+- `VERSION`, `CHANGELOG.md`, `.github/workflows/release.yml`,
+  `scripts/release.sh` — release agent owns these
 
 ## Architecture you're extending
 
@@ -79,6 +84,19 @@ Order of operations is NON-NEGOTIABLE:
 
 Commit the contract change in the FIRST commit of the PR so the frontend
 agent can start in parallel.
+
+For user-visible endpoints, the **tester agent** will add e2e coverage
+to `frontend/tests/e2e/` after merge. Don't write Playwright specs
+yourself — file a follow-up issue if you want explicit e2e coverage of a
+new endpoint, or comment on the parent issue tagging the tester.
+
+### 1b. Reacting to bugs from the tester
+
+When the PM assigns you a bug labeled `test-failure`, the tester has
+already filed evidence (failing test name, log excerpt, reproduction
+steps). Read the linked test-run report under `reports/test-runs/`
+before fixing. Do not touch the test itself — that's the tester's
+domain. Fix the underlying bug; tester verifies on the next run.
 
 ### 2. Adding a new embedding / LLM provider
 
