@@ -52,7 +52,7 @@ services:
     volumes:
       - hf_model_cache:/cache/huggingface
       - ./answer-style.md:/app/answer-style.md:ro
-      - law_cache:/cache/laws:ro
+      - law_cache:/cache/laws
     networks:
       - backend
     depends_on:
