@@ -1,0 +1,92 @@
+# Test compose — pre-release validation on the test host.
+# Mirrors docker-compose.prod.yml but with:
+#   - port range 9220-9290 (no collisions with prod or dev on the same host)
+#   - container/network/volume names suffixed `-test`
+#   - IMAGE_TAG required (no default) — deploys must be explicit about which rc
+#   - no restart policy — failures should be visible, not auto-recovered
+#
+# See docs/decisions/ADR-007-test-environment.md for the rationale.
+#
+# Usage on the test host:
+#   cp .env.test.example .env.test     # then fill in IMAGE_TAG and secrets
+#   docker compose -f docker-compose.test.yml --env-file .env.test up -d
+#
+# Reset (wipe state, re-ingest from scratch):
+#   docker compose -f docker-compose.test.yml --env-file .env.test down -v
+#   docker compose -f docker-compose.test.yml --env-file .env.test up -d
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: danish-legal-qdrant-test
+    ports:
+      - "9220:6333"
+      - "9221:6334"
+    volumes:
+      - qdrant_data_test:/qdrant/storage
+    networks:
+      - backend-test
+
+  ingest:
+    image: ghcr.io/thuusom/danish-legal-rag-ingest:${IMAGE_TAG}
+    container_name: danish-legal-ingest-test
+    env_file: .env.test
+    environment:
+      - QDRANT_HOST=qdrant-test
+      - QDRANT_PORT=6333
+      - HF_HOME=/cache/huggingface
+      - TRANSFORMERS_CACHE=/cache/huggingface/hub
+      - LAW_CACHE_DIR=/cache/laws
+    volumes:
+      - hf_model_cache_test:/cache/huggingface
+      - law_cache_test:/cache/laws
+    networks:
+      - backend-test
+    depends_on:
+      - qdrant
+    restart: "no"
+
+  api:
+    image: ghcr.io/thuusom/danish-legal-rag-api:${IMAGE_TAG}
+    container_name: danish-legal-api-test
+    ports:
+      - "9230:8000"
+    env_file: .env.test
+    environment:
+      - QDRANT_HOST=qdrant-test
+      - QDRANT_PORT=6333
+      - HF_HOME=/cache/huggingface
+      - TRANSFORMERS_CACHE=/cache/huggingface/hub
+      # Read-only access to the law cache so /admin/sources/status (#24) can
+      # report last-cached version dates. The fetcher/ingest own writes.
+      - LAW_CACHE_DIR=/cache/laws
+    volumes:
+      - hf_model_cache_test:/cache/huggingface
+      - ./answer-style.md:/app/answer-style.md:ro
+      - law_cache_test:/cache/laws
+    networks:
+      - backend-test
+    depends_on:
+      - qdrant
+
+  frontend:
+    image: ghcr.io/thuusom/danish-legal-rag-frontend:${IMAGE_TAG}
+    container_name: danish-legal-frontend-test
+    ports:
+      - "9240:3000"
+    environment:
+      - API_INTERNAL_URL=http://api-test:8000
+    networks:
+      - frontend-test
+      - backend-test
+    depends_on:
+      - api
+
+networks:
+  frontend-test:
+  backend-test:
+
+volumes:
+  qdrant_data_test:
+  hf_model_cache_test:
+  law_cache_test:
