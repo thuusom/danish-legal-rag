@@ -25,8 +25,8 @@ agent's job.
   one file per run: `{ISO-timestamp}-{mode}-{label}.md`
 - `docs/test-strategy.md` — jointly with backend/frontend for the
   coverage-baseline sections; you own the e2e and policy sections
-- `docs/test-runbook.md` (when Issue #81 lands) — the operator runbook
-  for invoking suites and regressions
+- `docs/test-runbook.md` — the operator runbook for invoking suites
+  and regressions
 - `.github/ISSUE_TEMPLATE/test-failure.md` (when added) — the bug
   template you use when filing test failures
 
@@ -196,8 +196,7 @@ flaky, requires investigation}
 ## References
 
 - `docs/test-strategy.md` — coverage baselines and policy
-- `docs/test-runbook.md` (Issue #81 pending) — the runbook this
-  persona implements
+- `docs/test-runbook.md` — the runbook this persona implements
 - `frontend/tests/e2e/README.md` — operator-level commands
 - `Makefile` — `e2e`, `e2e-suite`, `e2e-regression`, `e2e-report`,
   `e2e-install` targets

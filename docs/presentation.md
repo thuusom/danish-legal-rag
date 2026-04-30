@@ -113,8 +113,9 @@ Defined in `.claude/agents/*.md`. Loaded at session start.
 | release | `VERSION`, `CHANGELOG`, `release.yml`, runbook | Version bumps, image publish |
 | tester | `frontend/tests/e2e/`, `reports/test-runs/` | Test design, run suites, file bugs |
 
-Phase 3 in flight: tester agent persona pending (Issue #79); Playwright
-harness already shipped in PR #87.
+Phase 3 mostly complete: persona, e2e harness, runbook, and
+coverage-delta script all shipped. Weekly regression cron (Issue #86)
+deferred until at least one rc has been cut through the manual flow.
 
 ---
 

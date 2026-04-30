@@ -113,8 +113,9 @@ Se `docs/user-guide.md` for brugsvejledning.
 - Playwright e2e harness with 9 first test cases (chat golden path,
   admin status, backend smoke) covering the user-visible flow. Run via
   `make e2e*` against dev or against an rc on the test environment.
-  See [`docs/test-strategy.md`](docs/test-strategy.md). Tester agent
-  persona in flight (Issue #79).
+  See [`docs/test-strategy.md`](docs/test-strategy.md) and
+  [`docs/test-runbook.md`](docs/test-runbook.md). Tester agent
+  persona at [`.claude/agents/tester.md`](.claude/agents/tester.md).
 
 ## Current limitations (kept current)
 
@@ -131,10 +132,10 @@ Se `docs/user-guide.md` for brugsvejledning.
   currency check can be triggered from the page).
 - Retsinformation-api.dk is a third-party service; if it goes down, the
   fetcher pauses cleanly but no fresh updates flow until it returns.
-- Tester agent persona (Issue #79), tester runbook (Issue #81), coverage
-  delta tracking (Issue #85), and the weekly regression cron (Issue #86)
-  are still pending. The Playwright harness exists; the autonomous
-  invocation, reporting, and bug-filing flow does not yet.
+- Weekly regression cron (Issue #86) still pending. The tester persona,
+  runbook, e2e harness, and coverage-delta script are in place; only
+  scheduled regression-on-rc against a remote test host has not been
+  wired up yet.
 
 ## Versions
 
