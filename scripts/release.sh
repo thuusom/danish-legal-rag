@@ -199,7 +199,11 @@ echo "  Date:         $TODAY"
 echo
 echo "Files to update:"
 echo "  - $VERSION_FILE         ($CURRENT_VERSION -> $NEW_VERSION)"
-echo "  - $COMPOSE_FILE         (IMAGE_TAG default: $CURRENT_VERSION -> $NEW_VERSION)"
+if [ "$IS_RC" -eq 1 ]; then
+  echo "  - $COMPOSE_FILE         (left as-is; rc is test-only, never changes prod default)"
+else
+  echo "  - $COMPOSE_FILE         (IMAGE_TAG default: $CURRENT_VERSION -> $NEW_VERSION)"
+fi
 if [ -f "$CHANGELOG_FILE" ]; then
   if [ "$PROMOTE_CHANGELOG" -eq 1 ]; then
     echo "  - $CHANGELOG_FILE             ([Unreleased] -> [$NEW_VERSION] - $TODAY)"
@@ -228,9 +232,13 @@ printf '%s\n' "$NEW_VERSION" > "$VERSION_FILE"
 echo "Updated $VERSION_FILE"
 
 # 2. docker-compose.prod.yml — replace IMAGE_TAG default for all services.
-# Match `${IMAGE_TAG:-OLD}` literally and replace OLD with NEW. Always update,
-# even for rc bumps, so `docker compose up` defaults to the in-flight rc.
-if [ -f "$COMPOSE_FILE" ]; then
+# Final releases only. Release candidates are test-environment-only and
+# must NOT change the prod default; prod stays pinned to the last final
+# release. Test deploys pass IMAGE_TAG=X.Y.Z-rc.N explicitly to
+# `make deploy-test`.
+if [ "$IS_RC" -eq 1 ]; then
+  echo "Skipping $COMPOSE_FILE (rc bumps don't change prod default — rc is test-only)."
+elif [ -f "$COMPOSE_FILE" ]; then
   # macOS/BSD sed and GNU sed both accept `-i.bak` then we remove the backup.
   sed -i.bak "s|\${IMAGE_TAG:-${CURRENT_VERSION}}|\${IMAGE_TAG:-${NEW_VERSION}}|g" "$COMPOSE_FILE"
   rm -f "${COMPOSE_FILE}.bak"
@@ -327,9 +335,26 @@ git commit -m "Bump version to ${NEW_VERSION} for release"
 
 echo
 echo "Release prep committed on branch '$CURRENT_BRANCH'."
-echo
-echo "Next steps:"
-echo "  1. Push the branch and open a PR:    git push -u origin $CURRENT_BRANCH"
-echo "  2. After PR merges to main:          git checkout main && git pull"
-echo "  3. Tag the release commit:           git tag $TAG"
-echo "  4. Push the tag to trigger publish:  git push origin $TAG"
+
+# 5. Tag and push — automatic for rc, human-only for final.
+if [ "$IS_RC" -eq 1 ]; then
+  echo
+  echo "Auto-publishing rc (rc tags are agent-owned per ADR-006 amendment)..."
+  git tag "$TAG"
+  git push -u origin "$CURRENT_BRANCH" "$TAG"
+  echo
+  echo "Pushed branch '$CURRENT_BRANCH' and tag '$TAG'."
+  echo "release.yml will publish :$NEW_VERSION images shortly."
+  echo
+  echo "Next steps (operator):"
+  echo "  1. Wait for release.yml to finish on GitHub Actions"
+  echo "  2. Deploy to test:    IMAGE_TAG=$NEW_VERSION make deploy-test"
+  echo "  3. When green, cut the matching final with release-{patch,minor,major}"
+else
+  echo
+  echo "Next steps (final release — tag push is human-only):"
+  echo "  1. Push the branch and open a PR:    git push -u origin $CURRENT_BRANCH"
+  echo "  2. After PR merges to main:          git checkout main && git pull"
+  echo "  3. Tag the release commit:           git tag $TAG"
+  echo "  4. Push the tag to trigger publish:  git push origin $TAG"
+fi

@@ -50,7 +50,7 @@ do NOT proceed past any of these on their own initiative:
 | **Branch creation for a major effort** | Before starting a multi-issue feature branch | Branch naming and scope deserve a human eye; small fixes on existing branches don't need this |
 | **Scope expansion mid-work** | When the agent finds the work is bigger than the original plan | Prevents silent scope creep |
 | **Cross-boundary edits** | When a change requires touching files outside the agent's owned paths | Per `CLAUDE.md` ownership; the agent writes a note, the right agent or human edits |
-| **Pushing the release tag** | When a release commit is merged | The only step that triggers `release.yml` and publishes images |
+| **Pushing a final release tag** | When a final release commit is merged | The step that publishes `:X.Y.Z` + `:latest` images and reaches prod consumers. **rc tags are auto-pushed by the release agent** — they only publish pre-release images, never `:latest`, and never reach prod. |
 | **Merging PRs to main** | After review | The agent never merges its own PR |
 | **Closing issues that were not auto-closed** | When manual cleanup is needed | Human decides whether the work actually satisfied the acceptance criteria |
 | **Force-push, branch deletion, history rewrites** | Always | Destructive git operations |

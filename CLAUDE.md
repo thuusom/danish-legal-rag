@@ -166,10 +166,15 @@ finished.
    when backend and frontend individually merge.
 5. **Reporting.** The PM agent writes daily reports to `reports/YYYY-MM-DD.md`
    summarising git activity, open PRs, ticket status, and blockers.
-6. **Tag push is human-only.** No agent runs `git tag` or `git push --tags`.
-   The release agent prepares the release commit; the human reviews the PR,
-   merges, and runs `git push origin v{X.Y.Z}` to trigger the publish
-   workflow. See `docs/release-process.md`.
+6. **Final tag push is human-only. rc tag push is automated.**
+   - **Final releases** (major/minor/patch): no agent runs `git tag` or
+     `git push --tags` for finals. The release agent prepares the commit;
+     the human reviews the PR, merges, and runs `git push origin v{X.Y.Z}`.
+   - **Release candidates** (rc): the release agent auto-pushes the branch
+     and tag via `scripts/release.sh`. Safe because rc images can't reach
+     prod (Issue #75), don't update `:latest`, and the consistency check
+     still gates them. No PR required for an rc.
+   See `docs/release-process.md` and ADR-006 amendment.
 
 ## Agent roles
 
@@ -188,7 +193,9 @@ so every agent knows who does what:
   editing VERSION, CHANGELOG, and `docker-compose.prod.yml` `IMAGE_TAG`
   defaults; commits on a release branch. NEVER pushes git tags — that
   is always a human action. After the human pushes the tag,
-  `.github/workflows/release.yml` takes over.
+  `.github/workflows/release.yml` takes over. **rc images are
+  test-environment-only and never deployed to production**: rc bumps
+  do not change the prod compose IMAGE_TAG default. See ADR-006.
 
 ## Standards
 
