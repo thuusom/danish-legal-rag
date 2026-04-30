@@ -72,10 +72,15 @@ Issue #57 extended this decision with a release-candidate (rc) flow:
   - Marks the GitHub Release as pre-release
   - Falls back to a generic body when CHANGELOG has no matching section
     (rc bumps deliberately do not promote `[Unreleased]`)
+- **rc images are test-environment-only and never deployed to
+  production.** The release script does NOT update the
+  `docker-compose.prod.yml` `IMAGE_TAG` default on rc bumps. Prod stays
+  pinned to the last final release. Test deploys pass
+  `IMAGE_TAG=X.Y.Z-rc.N` explicitly to `make deploy-test`.
 - Final releases consume an in-flight rc: `make release-minor` while
   VERSION is `X.Y.Z-rc.N` produces `X.Y.Z`, but the level must match the
   rc's scope.
 
 The original decision (final-only flow) remains valid; this is an
 extension, not a supersession. See `docs/release-process.md` for the
-operator runbook.
+operator runbook and ADR-007 for the test environment definition.

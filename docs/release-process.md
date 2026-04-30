@@ -57,9 +57,11 @@ when going from a final version to its first rc.
 3. Run `make release-rc`. Defaults to a minor scope; override with e.g.
    `RC_LEVEL=patch make release-rc` or `RC_LEVEL=major make release-rc`.
 
-   The script bumps `VERSION`, updates `IMAGE_TAG` defaults in
-   `docker-compose.prod.yml`, and commits — but does NOT push the tag.
-   `CHANGELOG.md` is intentionally left as-is (rc bumps do not promote
+   The script bumps `VERSION` and commits — but does NOT push the tag.
+   `docker-compose.prod.yml` is intentionally left untouched: **rc images
+   are test-environment-only and never deployed to production**, so the
+   prod compose default stays pinned to the last final release.
+   `CHANGELOG.md` is also left as-is (rc bumps do not promote
    `[Unreleased]`).
 
 4. Open a PR, review, merge to main.

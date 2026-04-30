@@ -64,9 +64,29 @@ release PR.
 
 5. **One PR per release.** Don't bundle "release prep" with feature work.
 
+6. **Release candidates are test-environment-only.** rc images
+   (`X.Y.Z-rc.N`) deploy to the test host via `make deploy-test`. They
+   NEVER go to production. `scripts/release.sh` enforces this by NOT
+   updating `docker-compose.prod.yml` `IMAGE_TAG` default on rc bumps;
+   prod stays pinned to the last final release. Promote an rc to prod
+   only via the matching final release (`make release-{minor,patch,major}`
+   that consumes the rc).
+
 ## Standard release flow
 
-When the human says "release minor" (or major / patch):
+When the human says **"release rc"**:
+
+1. Verify clean working tree.
+2. Verify on a release branch (e.g., `release/v1.2.0-rc.1`).
+3. Run `make release-rc` (or set `RC_LEVEL=patch|minor|major` to override
+   the default minor scope on the first rc from a final).
+4. Inspect the commit. VERSION bumps; CHANGELOG `[Unreleased]` is NOT
+   promoted; `docker-compose.prod.yml` is NOT touched.
+5. Open the PR; after merge, tell the human: "Push the rc tag with
+   `git push origin v{X.Y.Z}-rc.N`. Then deploy to test with
+   `IMAGE_TAG={X.Y.Z}-rc.N make deploy-test`."
+
+When the human says **"release minor"** (or major / patch):
 
 1. Verify clean working tree (`git status`). If dirty, stop and report.
 2. Verify on a release branch (e.g., `release/v1.1.0`). If on main,

@@ -199,7 +199,11 @@ echo "  Date:         $TODAY"
 echo
 echo "Files to update:"
 echo "  - $VERSION_FILE         ($CURRENT_VERSION -> $NEW_VERSION)"
-echo "  - $COMPOSE_FILE         (IMAGE_TAG default: $CURRENT_VERSION -> $NEW_VERSION)"
+if [ "$IS_RC" -eq 1 ]; then
+  echo "  - $COMPOSE_FILE         (left as-is; rc is test-only, never changes prod default)"
+else
+  echo "  - $COMPOSE_FILE         (IMAGE_TAG default: $CURRENT_VERSION -> $NEW_VERSION)"
+fi
 if [ -f "$CHANGELOG_FILE" ]; then
   if [ "$PROMOTE_CHANGELOG" -eq 1 ]; then
     echo "  - $CHANGELOG_FILE             ([Unreleased] -> [$NEW_VERSION] - $TODAY)"
@@ -228,9 +232,13 @@ printf '%s\n' "$NEW_VERSION" > "$VERSION_FILE"
 echo "Updated $VERSION_FILE"
 
 # 2. docker-compose.prod.yml — replace IMAGE_TAG default for all services.
-# Match `${IMAGE_TAG:-OLD}` literally and replace OLD with NEW. Always update,
-# even for rc bumps, so `docker compose up` defaults to the in-flight rc.
-if [ -f "$COMPOSE_FILE" ]; then
+# Final releases only. Release candidates are test-environment-only and
+# must NOT change the prod default; prod stays pinned to the last final
+# release. Test deploys pass IMAGE_TAG=X.Y.Z-rc.N explicitly to
+# `make deploy-test`.
+if [ "$IS_RC" -eq 1 ]; then
+  echo "Skipping $COMPOSE_FILE (rc bumps don't change prod default — rc is test-only)."
+elif [ -f "$COMPOSE_FILE" ]; then
   # macOS/BSD sed and GNU sed both accept `-i.bak` then we remove the backup.
   sed -i.bak "s|\${IMAGE_TAG:-${CURRENT_VERSION}}|\${IMAGE_TAG:-${NEW_VERSION}}|g" "$COMPOSE_FILE"
   rm -f "${COMPOSE_FILE}.bak"

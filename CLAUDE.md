@@ -188,7 +188,9 @@ so every agent knows who does what:
   editing VERSION, CHANGELOG, and `docker-compose.prod.yml` `IMAGE_TAG`
   defaults; commits on a release branch. NEVER pushes git tags — that
   is always a human action. After the human pushes the tag,
-  `.github/workflows/release.yml` takes over.
+  `.github/workflows/release.yml` takes over. **rc images are
+  test-environment-only and never deployed to production**: rc bumps
+  do not change the prod compose IMAGE_TAG default. See ADR-006.
 
 ## Standards
 
