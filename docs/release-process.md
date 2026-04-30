@@ -57,23 +57,16 @@ when going from a final version to its first rc.
 3. Run `make release-rc`. Defaults to a minor scope; override with e.g.
    `RC_LEVEL=patch make release-rc` or `RC_LEVEL=major make release-rc`.
 
-   The script bumps `VERSION` and commits — but does NOT push the tag.
-   `docker-compose.prod.yml` is intentionally left untouched: **rc images
-   are test-environment-only and never deployed to production**, so the
-   prod compose default stays pinned to the last final release.
-   `CHANGELOG.md` is also left as-is (rc bumps do not promote
+   The script bumps `VERSION`, commits, and **automatically pushes the
+   branch + tag** to origin — no PR, no human tag push. This is safe
+   because rc images can't reach prod and don't update `:latest`
+   (Issue #75 / ADR-006 amendment).
+
+   `docker-compose.prod.yml` is intentionally left untouched (rc is
+   test-only). `CHANGELOG.md` is also left as-is (rc bumps do not promote
    `[Unreleased]`).
 
-4. Open a PR, review, merge to main.
-
-5. Push the rc tag (the only human-only step):
-
-   ```bash
-   git checkout main && git pull
-   git push origin v1.2.0-rc.1
-   ```
-
-   This triggers `release.yml`, which:
+4. The tag push triggers `release.yml`, which:
 
    - Builds and pushes `ghcr.io/thuusom/danish-legal-rag-{api,ingest,frontend}:1.2.0-rc.1`
    - Does NOT push `:latest`

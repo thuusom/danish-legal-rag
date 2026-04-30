@@ -66,7 +66,11 @@ Adopt a tag-driven release model with one human-controlled step.
 Issue #57 extended this decision with a release-candidate (rc) flow:
 
 - `make release-rc` bumps VERSION to `X.Y.Z-rc.N` (scope inherited or
-  overridden via `RC_LEVEL`). The same human-pushes-tag rule applies.
+  overridden via `RC_LEVEL`). **The release script auto-pushes the
+  branch and the rc tag** — no human-in-the-loop for rc, because rc
+  images can't reach prod and don't update `:latest`. The consistency
+  check in `release.yml` still gates the build. (Final releases retain
+  the human-only tag-push rule from the original decision.)
 - `release.yml` detects the `-rc.N` suffix and:
   - Pushes only `:X.Y.Z-rc.N` images (no `:latest` poisoning)
   - Marks the GitHub Release as pre-release

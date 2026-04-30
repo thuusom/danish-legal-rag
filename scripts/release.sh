@@ -335,9 +335,26 @@ git commit -m "Bump version to ${NEW_VERSION} for release"
 
 echo
 echo "Release prep committed on branch '$CURRENT_BRANCH'."
-echo
-echo "Next steps:"
-echo "  1. Push the branch and open a PR:    git push -u origin $CURRENT_BRANCH"
-echo "  2. After PR merges to main:          git checkout main && git pull"
-echo "  3. Tag the release commit:           git tag $TAG"
-echo "  4. Push the tag to trigger publish:  git push origin $TAG"
+
+# 5. Tag and push — automatic for rc, human-only for final.
+if [ "$IS_RC" -eq 1 ]; then
+  echo
+  echo "Auto-publishing rc (rc tags are agent-owned per ADR-006 amendment)..."
+  git tag "$TAG"
+  git push -u origin "$CURRENT_BRANCH" "$TAG"
+  echo
+  echo "Pushed branch '$CURRENT_BRANCH' and tag '$TAG'."
+  echo "release.yml will publish :$NEW_VERSION images shortly."
+  echo
+  echo "Next steps (operator):"
+  echo "  1. Wait for release.yml to finish on GitHub Actions"
+  echo "  2. Deploy to test:    IMAGE_TAG=$NEW_VERSION make deploy-test"
+  echo "  3. When green, cut the matching final with release-{patch,minor,major}"
+else
+  echo
+  echo "Next steps (final release — tag push is human-only):"
+  echo "  1. Push the branch and open a PR:    git push -u origin $CURRENT_BRANCH"
+  echo "  2. After PR merges to main:          git checkout main && git pull"
+  echo "  3. Tag the release commit:           git tag $TAG"
+  echo "  4. Push the tag to trigger publish:  git push origin $TAG"
+fi
