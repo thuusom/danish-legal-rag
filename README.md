@@ -13,6 +13,17 @@ work, and perform irreversible actions (merging, tagging, releasing).
 For how humans engage with the workflow, see [human.md](human.md).
 For agent rules and ownership, see [CLAUDE.md](CLAUDE.md).
 
+## Documentation
+
+- [docs/user-guide.md](docs/user-guide.md) — brugsvejledning på dansk
+  for slutbrugere af chatten (skatterådgivere, revisorer, lægfolk).
+- [PRODUCT.md](PRODUCT.md) — what the system is, who it is for, scope
+  and limitations.
+- [docs/decisions/](docs/decisions/) — architectural decision records.
+- [docs/release-process.md](docs/release-process.md) — release runbook.
+- [docs/github-workflows.md](docs/github-workflows.md) — CI, cron and
+  release workflows reference.
+
 ## Architecture
 
 ```

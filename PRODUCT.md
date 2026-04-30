@@ -80,6 +80,8 @@ decides.
 
 ## Current capabilities (kept current)
 
+Se `docs/user-guide.md` for brugsvejledning.
+
 - 12 legal sources covering core Danish tax and accounting law
   (Afskrivningsloven, Årsregnskabsloven, Bogføringsloven,
   Selskabsskatteloven, Momsloven, Ligningsloven, Skattekontrolloven,
