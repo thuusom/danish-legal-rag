@@ -15,28 +15,47 @@ The `chat.spec.ts` golden-path test requires a real LLM provider — `mock`
 won't produce citations to retsinformation.dk. Set `LLM_PROVIDER` in your
 compose env accordingly.
 
-## Run all tests
+## First-time setup
 
 ```bash
-cd frontend && npm run e2e
+make e2e-install         # installs Chromium for Playwright (~90 MB)
+```
+
+## Run all tests (local stack)
+
+```bash
+make e2e
 ```
 
 ## Run a specific suite
 
 ```bash
-cd frontend && npx playwright test ../tests/e2e/chat.spec.ts
+make e2e-suite SUITE=chat
+make e2e-suite SUITE=admin
+make e2e-suite SUITE=health
 ```
 
 ## Against a remote test environment
 
 ```bash
-cd frontend && E2E_BASE_URL=http://test.example.local:9240 npm run e2e
+E2E_BASE_URL=http://test.example.local:9240 make e2e
 ```
+
+## Full regression on a release candidate
+
+Requires `TEST_HOST` set and rc images on GHCR.
+
+```bash
+TEST_HOST=tc@test.example.local make e2e-regression IMAGE_TAG=1.2.0-rc.1
+```
+
+Deploys the rc to the test host via `make deploy-test`, then runs the
+full Playwright suite against `http://test.example.local:9240`.
 
 ## View HTML report
 
 ```bash
-cd frontend && npm run e2e:report
+make e2e-report          # opens browser
 ```
 
 ## Tuning timeouts
