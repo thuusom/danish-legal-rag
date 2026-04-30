@@ -12,6 +12,7 @@ Decision, Consequences.
 | [ADR-004](ADR-004-update-only-fetcher-with-seed.md) | Update-only fetcher with in-repo seed | Accepted | 2026-04-27 |
 | [ADR-005](ADR-005-idempotent-reingestion.md) | Idempotent re-ingestion via per-law delete-then-insert | Accepted | 2026-04-27 |
 | [ADR-006](ADR-006-tag-driven-release.md) | Tag-driven release with human-in-the-loop | Accepted | 2026-04-28 |
+| [ADR-007](ADR-007-test-environment.md) | Test environment definition (remote host, compose, port range 9220-9290) | Accepted | 2026-04-30 |
 
 ## Writing a new ADR
 
