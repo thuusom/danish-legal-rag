@@ -96,7 +96,21 @@ when going from a final version to its first rc.
    - Frontend is reachable at `http://$TEST_HOST:9240`
    - Run any smoke or e2e checks you would gate the release on
 
-4. If broken: fix the issue on a feature branch, merge to main, then
+4. Run regression. From the repo root:
+
+   ```bash
+   make e2e-regression IMAGE_TAG=1.2.0-rc.1
+   ```
+
+   Or invoke the tester agent in chat ("regression on v1.2.0-rc.1") once
+   the persona ships (Issue #79). The full Playwright suite under
+   `frontend/tests/e2e/` runs against the test host. PASS gates promotion
+   to a final release. FAIL: the tester writes a report under
+   `reports/test-runs/` and files bugs (`test-failure`, `flaky-test`,
+   `coverage-drop`) for PM to triage. Cut the next rc once the bugs are
+   fixed and merged.
+
+5. If broken: fix the issue on a feature branch, merge to main, then
    produce the next rc:
 
    ```bash

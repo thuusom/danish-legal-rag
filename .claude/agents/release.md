@@ -91,11 +91,16 @@ When the human says **"release rc"** or "do a release candidate":
    `[Unreleased]`).
 5. Tell the human: "rc pushed. release.yml is publishing
    `:{X.Y.Z}-rc.N` images. Once green, deploy to test with
-   `IMAGE_TAG={X.Y.Z}-rc.N make deploy-test`."
+   `IMAGE_TAG={X.Y.Z}-rc.N make deploy-test`, then ask the tester
+   agent to run regression: `make e2e-regression IMAGE_TAG={X.Y.Z}-rc.N`."
 
 No PR is needed for rc — the commit lives on the release branch only.
-When testing passes, a fresh release branch off main produces the final
-release via the standard human-gated flow below.
+
+The tester agent then runs full regression against the deployed rc and
+writes a report to `reports/test-runs/`. If the verdict is PASS, you
+prepare the matching final release (see below). If FAIL, the tester
+files bugs to the PM agent for triage; cut another rc once the
+underlying bugs are fixed.
 
 When the human says **"release minor"** (or major / patch):
 

@@ -122,3 +122,30 @@ When raising frontend coverage, prioritise in this order:
   against a live `docker compose` stack and is the primary check for the
   chat flow, streaming, and references rendering.
 - Visual regression. Out of scope for this baseline.
+
+## End-to-end testing (Playwright)
+
+Since 2026-04-30 (PR #87), the project has a Playwright harness with 9
+first test cases living in `frontend/tests/e2e/`. Run via:
+
+- `make e2e` — full suite against the local stack
+- `make e2e-suite SUITE=chat` — single suite (chat | admin | health)
+- `make e2e-regression IMAGE_TAG=X.Y.Z-rc.N` — regression on a deployed rc
+- `make e2e-report` — open the HTML report
+
+The tester agent (Issue #79, in flight) will:
+
+- Comment acceptance test plans on feature issues during spec review
+- Translate plans into executable `.spec.ts` files alongside the frontend
+  agent's feature work
+- Run regression on every rc and write reports under `reports/test-runs/`
+- File bugs (`test-failure`, `flaky-test`, `coverage-drop`) for PM to
+  triage; PM owns the priority decision
+- Track coverage delta vs the baselines documented above (Issue #85)
+
+E2E does not run in CI on every PR — the suite is invoked explicitly: by
+the human, by the tester agent in chat, after an rc tag, or by the
+weekly cron once Issue #86 lands. See
+[`frontend/tests/e2e/README.md`](../frontend/tests/e2e/README.md) for
+operator instructions and (when filed) `docs/test-runbook.md` for the
+tester's runbook.

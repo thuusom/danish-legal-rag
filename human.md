@@ -51,6 +51,8 @@ do NOT proceed past any of these on their own initiative:
 | **Scope expansion mid-work** | When the agent finds the work is bigger than the original plan | Prevents silent scope creep |
 | **Cross-boundary edits** | When a change requires touching files outside the agent's owned paths | Per `CLAUDE.md` ownership; the agent writes a note, the right agent or human edits |
 | **Pushing a final release tag** | When a final release commit is merged | The step that publishes `:X.Y.Z` + `:latest` images and reaches prod consumers. **rc tags are auto-pushed by the release agent** — they only publish pre-release images, never `:latest`, and never reach prod. |
+| **Invoking a regression run on an rc** | After an rc tag is published and deployed to the test host | ~3-5 minutes. Say "regression on v1.2.0-rc.1" in chat (tester agent, when persona lands) or run `make e2e-regression IMAGE_TAG=1.2.0-rc.1`. PASS gates promotion to a final release. |
+| **Triaging a tester-filed bug** | When the tester agent files an issue with `test-failure`, `flaky-test`, or `coverage-drop` labels | PM owns the priority decision; humans confirm priority for significant bugs. The tester provides evidence (test name, run report, logs, reproduction); it does not assign priority. |
 | **Merging PRs to main** | After review | The agent never merges its own PR |
 | **Closing issues that were not auto-closed** | When manual cleanup is needed | Human decides whether the work actually satisfied the acceptance criteria |
 | **Force-push, branch deletion, history rewrites** | Always | Destructive git operations |
@@ -72,6 +74,9 @@ Agents handle the mechanical and structured work:
 - Run multi-step processes (release prep, ingestion checks, contract regeneration)
 - Maintain documentation that follows from decisions already made
 - Run tests, lint, type-check before reporting "done"
+- Tester agent (when invoked) runs Playwright suites, monitors logs and
+  browser behaviour, writes test-run reports under `reports/test-runs/`,
+  and files bugs with evidence for PM to triage
 
 Agents NEVER:
 

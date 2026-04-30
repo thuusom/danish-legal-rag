@@ -110,6 +110,11 @@ Se `docs/user-guide.md` for brugsvejledning.
 - Tag-driven release pipeline: `make release-{patch,minor,major}`,
   human pushes the tag, GitHub Actions builds and publishes images to
   GHCR.
+- Playwright e2e harness with 9 first test cases (chat golden path,
+  admin status, backend smoke) covering the user-visible flow. Run via
+  `make e2e*` against dev or against an rc on the test environment.
+  See [`docs/test-strategy.md`](docs/test-strategy.md). Tester agent
+  persona in flight (Issue #79).
 
 ## Current limitations (kept current)
 
@@ -126,6 +131,10 @@ Se `docs/user-guide.md` for brugsvejledning.
   currency check can be triggered from the page).
 - Retsinformation-api.dk is a third-party service; if it goes down, the
   fetcher pauses cleanly but no fresh updates flow until it returns.
+- Tester agent persona (Issue #79), tester runbook (Issue #81), coverage
+  delta tracking (Issue #85), and the weekly regression cron (Issue #86)
+  are still pending. The Playwright harness exists; the autonomous
+  invocation, reporting, and bug-filing flow does not yet.
 
 ## Versions
 
