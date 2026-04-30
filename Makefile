@@ -45,6 +45,14 @@ coverage:
 		--cov=api --cov=ingest --cov=shared --cov=mcp \
 		--cov-report=term --cov-report=xml
 
+# Compute backend + frontend coverage delta against baselines in
+# docs/test-strategy.md. Used by the tester agent during regression to
+# decide whether to file coverage-drop issues or recommend blocking the rc.
+# Exit codes: 0 OK, 1 WARN (-2%..-5%), 2 BLOCK (< -5%).
+.PHONY: coverage-delta
+coverage-delta:
+	@bash ./scripts/coverage-delta.sh
+
 curl-test:
 	curl -s -X POST http://localhost:8000/ask \
 		-H "Content-Type: application/json" \
