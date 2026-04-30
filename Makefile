@@ -120,3 +120,20 @@ release-dry:
 # `[Unreleased]` before running release-{major,minor,patch}.
 release-notes:
 	@git log $$(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD --pretty=format:"- %s" --no-merges
+
+# =============================================================================
+# Test environment deploy targets — SSH to the test host, deploy a pre-release.
+# Requires TEST_HOST and IMAGE_TAG env vars; reads .env.test from repo root.
+# See scripts/deploy-test.sh for full behavior.
+# =============================================================================
+
+.PHONY: deploy-test deploy-test-down deploy-test-reset
+
+deploy-test:
+	@./scripts/deploy-test.sh up
+
+deploy-test-down:
+	@./scripts/deploy-test.sh down
+
+deploy-test-reset:
+	@./scripts/deploy-test.sh reset
